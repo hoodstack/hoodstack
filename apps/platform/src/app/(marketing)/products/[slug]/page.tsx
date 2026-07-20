@@ -40,9 +40,11 @@ function moduleForSlug(slug: string): ModuleDefinition | undefined {
 export function generateStaticParams(): Params[] {
   return [
     ...PRODUCT_LIST.map((product) => ({ slug: product.id })),
-    ...getPublicModules().map((module) => ({
-      slug: module.publicHref!.replace("/products/", ""),
-    })),
+    ...getPublicModules()
+      .map((module) => ({ slug: module.publicHref!.replace("/products/", "") }))
+      // token-utility has a dedicated static route that overrides this one; don't
+      // also generate it here, to avoid a conflicting-path build error.
+      .filter((param) => param.slug !== "token-utility"),
   ];
 }
 
