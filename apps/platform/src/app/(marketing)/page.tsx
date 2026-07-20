@@ -1,15 +1,11 @@
 import { PRODUCT_LIST, SURFACE_LABELS, getProductModules } from "@hoodstack/config";
 import { robinhood, robinhoodTestnet } from "@hoodstack/network";
-import Image from "next/image";
 import Link from "next/link";
 
 import { ExecutionTrace } from "@/components/execution-trace";
+import { HeroStack } from "@/components/hero-stack";
 import { Reveal } from "@/components/reveal";
 import { StackDiagram } from "@/components/stack-diagram";
-
-// Static import: Next reads the real dimensions and generates a blur placeholder
-// at build time, so there is no layout shift and a smooth blur-up on load.
-import heroImg from "../../../public/hero.webp";
 import {
   ButtonLink,
   CodeBlock,
@@ -130,18 +126,9 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* Hero illustration on the right. Static import gives Next the real
-                dimensions and a build-time blur placeholder; the optimizer then
-                serves an AVIF/WebP sized to each device via `sizes`. */}
+            {/* Hero illustration: a hand-built, scalable isometric HoodStack. */}
             <Reveal delay={120}>
-              <Image
-                src={heroImg}
-                alt="Fragmented legacy infrastructure consolidating into the HoodStack stack, built for Robinhood Chain"
-                priority
-                placeholder="blur"
-                sizes="(min-width: 1024px) 48vw, 100vw"
-                className="mx-auto h-auto w-full max-w-xl lg:max-w-none"
-              />
+              <HeroStack />
             </Reveal>
           </div>
         </Container>
