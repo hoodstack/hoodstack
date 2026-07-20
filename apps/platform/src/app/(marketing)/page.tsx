@@ -92,54 +92,54 @@ export default function HomePage() {
         />
 
         <Container className="relative">
-          <div className="max-w-3xl pt-14 lg:pt-20">
-            <p className="hs-mono-label mb-6 flex items-center gap-2">
-              <span
-                aria-hidden="true"
-                className="inline-block size-1.5 rounded-pill bg-brand"
-              />
-              Robinhood Chain developer infrastructure
-            </p>
+          <div className="grid items-center gap-10 pt-14 lg:grid-cols-[1fr_1fr] lg:gap-12 lg:pt-20">
+            <div className="max-w-2xl">
+              <p className="hs-mono-label mb-6 flex items-center gap-2">
+                <span
+                  aria-hidden="true"
+                  className="inline-block size-1.5 rounded-pill bg-brand"
+                />
+                Robinhood Chain developer infrastructure
+              </p>
 
-            <h1 className="hs-display text-[3.25rem] leading-[0.95] text-content sm:text-6xl lg:text-[4.75rem]">
-              Build anything on Robinhood&nbsp;Chain.
-            </h1>
-            <p className="hs-display mt-3 text-3xl text-content-tertiary lg:text-[2.5rem]">
-              Everything else is infrastructure.
-            </p>
+              <h1 className="hs-display text-[3.25rem] leading-[0.95] text-content sm:text-6xl lg:text-[4.5rem]">
+                Build anything on Robinhood&nbsp;Chain.
+              </h1>
+              <p className="hs-display mt-3 text-3xl text-content-tertiary lg:text-[2.375rem]">
+                Everything else is infrastructure.
+              </p>
 
-            <p className="mt-8 max-w-xl text-lg text-content-secondary">
-              Stop rebuilding accounts, execution, gas, assets, automation, and tooling
-              for every project. Adopt one stack and write the part that makes your
-              application different.
-            </p>
+              <p className="mt-8 max-w-xl text-lg text-content-secondary">
+                Stop rebuilding accounts, execution, gas, assets, automation, and tooling
+                for every project. Adopt one stack and write the part that makes your
+                application different.
+              </p>
 
-            <div className="mt-10 flex flex-wrap items-center gap-3">
-              <ButtonLink href="/docs/quickstart">Start building</ButtonLink>
-              <ButtonLink href="/products" variant="secondary">
-                Explore the stack
-              </ButtonLink>
-              <ButtonLink href="https://github.com/hoodstack" variant="ghost" external>
-                View GitHub
-              </ButtonLink>
+              <div className="mt-10 flex flex-wrap items-center gap-3">
+                <ButtonLink href="/docs/quickstart">Start building</ButtonLink>
+                <ButtonLink href="/products" variant="secondary">
+                  Explore the stack
+                </ButtonLink>
+                <ButtonLink href="https://github.com/hoodstack" variant="ghost" external>
+                  View GitHub
+                </ButtonLink>
+              </div>
             </div>
-          </div>
 
-          {/* Hero illustration: the legacy → HoodStack scene. next/image optimizes
-              and resizes the source PNG; the intrinsic dimensions avoid layout shift. */}
-          <Reveal delay={120}>
-            <div className="mt-12 overflow-hidden rounded-surface lg:mt-16">
+            {/* Hero illustration on the right. next/image optimizes and resizes the
+                source PNG; intrinsic dimensions avoid layout shift. */}
+            <Reveal delay={120}>
               <Image
                 src="/hero.png"
                 alt="Fragmented legacy infrastructure consolidating into the HoodStack stack, built for Robinhood Chain"
                 width={1619}
                 height={972}
                 priority
-                sizes="(min-width: 1280px) 1216px, 100vw"
-                className="h-auto w-full"
+                sizes="(min-width: 1024px) 48vw, 100vw"
+                className="mx-auto h-auto w-full max-w-xl lg:max-w-none"
               />
-            </div>
-          </Reveal>
+            </Reveal>
+          </div>
         </Container>
 
         {/* Proof strip: honest facts, not fake logos. Anchors the hero and states
