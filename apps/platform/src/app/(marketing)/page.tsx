@@ -4,6 +4,7 @@ import Link from "next/link";
 
 import { ExecutionTrace } from "@/components/execution-trace";
 import { HoodStackTransform } from "@/components/hoodstack-transform";
+import { Mascot } from "@/components/mascot";
 import { Reveal } from "@/components/reveal";
 import { StackDiagram } from "@/components/stack-diagram";
 import {
@@ -92,41 +93,46 @@ export default function HomePage() {
         />
 
         <Container className="relative">
-          <div className="max-w-3xl pt-14 lg:pt-20">
-            <p className="hs-mono-label mb-6 flex items-center gap-2">
-              <span
-                aria-hidden="true"
-                className="inline-block size-1.5 rounded-pill bg-brand"
-              />
-              Robinhood Chain developer infrastructure
-            </p>
+          <div className="grid items-center gap-8 pt-14 lg:grid-cols-[1.1fr_0.9fr] lg:gap-10 lg:pt-20">
+            <div className="max-w-2xl">
+              <p className="hs-mono-label mb-6 flex items-center gap-2">
+                <span
+                  aria-hidden="true"
+                  className="inline-block size-1.5 rounded-pill bg-brand"
+                />
+                Robinhood Chain developer infrastructure
+              </p>
 
-            <h1 className="hs-display text-[3.25rem] leading-[0.95] text-content sm:text-6xl lg:text-[5.25rem]">
-              Build anything on Robinhood&nbsp;Chain.
-            </h1>
-            <p className="hs-display mt-3 text-3xl text-content-tertiary lg:text-[2.75rem]">
-              Everything else is infrastructure.
-            </p>
+              <h1 className="hs-display text-[3.25rem] leading-[0.95] text-content sm:text-6xl lg:text-[4.75rem]">
+                Build anything on Robinhood&nbsp;Chain.
+              </h1>
+              <p className="hs-display mt-3 text-3xl text-content-tertiary lg:text-[2.5rem]">
+                Everything else is infrastructure.
+              </p>
 
-            <p className="mt-8 max-w-xl text-lg text-content-secondary">
-              Stop rebuilding accounts, execution, gas, assets, automation, and tooling
-              for every project. Adopt one stack and write the part that makes your
-              application different.
-            </p>
+              <p className="mt-8 max-w-xl text-lg text-content-secondary">
+                Stop rebuilding accounts, execution, gas, assets, automation, and tooling
+                for every project. Adopt one stack and write the part that makes your
+                application different.
+              </p>
 
-            <div className="mt-10 flex flex-wrap items-center gap-3">
-              <ButtonLink href="/docs/quickstart">Start building</ButtonLink>
-              <ButtonLink href="/products" variant="secondary">
-                Explore the stack
-              </ButtonLink>
-              <ButtonLink href="https://github.com/hoodstack" variant="ghost" external>
-                View GitHub
-              </ButtonLink>
+              <div className="mt-10 flex flex-wrap items-center gap-3">
+                <ButtonLink href="/docs/quickstart">Start building</ButtonLink>
+                <ButtonLink href="/products" variant="secondary">
+                  Explore the stack
+                </ButtonLink>
+                <ButtonLink href="https://github.com/hoodstack" variant="ghost" external>
+                  View GitHub
+                </ButtonLink>
+              </div>
+
+              <p className="mt-6 hs-mono-label">
+                Six concerns, rebuilt every time → one stack
+              </p>
             </div>
 
-            <p className="mt-6 hs-mono-label">
-              Six concerns, rebuilt every time → one stack
-            </p>
+            {/* Mascot — right on desktop, centered and smaller on mobile. */}
+            <Mascot className="mx-auto w-56 sm:w-72 lg:w-full lg:max-w-md" />
           </div>
 
           {/* The transformation: fragmented legacy consolidating into HoodStack. */}

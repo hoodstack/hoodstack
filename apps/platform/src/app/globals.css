@@ -67,6 +67,34 @@
   }
 
   /**
+   * Theme-conditional visibility.
+   *
+   * Shows one asset in dark mode and another in light, following the same
+   * resolution order as the design tokens: an explicit `data-theme` wins,
+   * otherwise the system preference applies. Used to swap the dark/light mascot.
+   */
+  .hs-dark-only {
+    display: block;
+  }
+  .hs-light-only {
+    display: none;
+  }
+  :root[data-theme="light"] .hs-dark-only {
+    display: none;
+  }
+  :root[data-theme="light"] .hs-light-only {
+    display: block;
+  }
+  @media (prefers-color-scheme: light) {
+    :root:not([data-theme]) .hs-dark-only {
+      display: none;
+    }
+    :root:not([data-theme]) .hs-light-only {
+      display: block;
+    }
+  }
+
+  /**
    * Display headline treatment.
    *
    * Robinhood's rebrand pairs a warm serif headline with technical sans body to

@@ -88,7 +88,10 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           synchronous - deferring it reintroduces the flash it exists to prevent.
           Allowed by the CSP via both its nonce and its pinned hash (middleware).
         */}
-        <script nonce={nonce} dangerouslySetInnerHTML={{ __html: THEME_BOOTSTRAP_SCRIPT }} />
+        <script
+          nonce={nonce}
+          dangerouslySetInnerHTML={{ __html: THEME_BOOTSTRAP_SCRIPT }}
+        />
       </head>
       <body>
         <a

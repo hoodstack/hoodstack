@@ -71,7 +71,8 @@ export const config = {
     // Run on documents; skip static assets, the image optimizer, and icons —
     // they are not HTML and do not carry inline scripts.
     {
-      source: "/((?!_next/static|_next/image|favicon.ico|icon.svg|robots.txt|sitemap.xml).*)",
+      source:
+        "/((?!_next/static|_next/image|favicon.ico|icon.svg|robots.txt|sitemap.xml).*)",
     },
   ],
 };
