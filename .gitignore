@@ -1,0 +1,95 @@
+# ── dependencies ─────────────────────────────────────────────────────────────
+node_modules/
+.pnpm-store/
+
+# ── build output ─────────────────────────────────────────────────────────────
+dist/
+build/
+out/
+.next/
+.vercel/
+.turbo/
+*.tsbuildinfo
+
+# ── test and coverage ────────────────────────────────────────────────────────
+coverage/
+.vitest/
+playwright-report/
+test-results/
+.nyc_output/
+
+# ── environment and secrets ──────────────────────────────────────────────────
+# Nothing holding a credential belongs in version control. `.env.example`
+# is the sole exception and must contain placeholders only.
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+*.keystore
+*.mnemonic
+*.secret
+secrets/
+credentials/
+private/
+
+# ── blockchain deployment material ───────────────────────────────────────────
+# Broadcast logs record deployment transactions and signer addresses.
+contracts/out/
+contracts/cache/
+contracts/broadcast/
+broadcast/
+cache/
+deployments/private/
+
+# ── local data volumes ───────────────────────────────────────────────────────
+docker-data/
+postgres-data/
+redis-data/
+*.sqlite
+*.sqlite3
+*.db
+
+# ── editors and OS ───────────────────────────────────────────────────────────
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.example.json
+.idea/
+.DS_Store
+Thumbs.db
+
+# ── logs ─────────────────────────────────────────────────────────────────────
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-error.log*
+
+# ── operational material that must never become public ───────────────────────
+#
+# The categories below are excluded by policy, not convenience. Each has caused
+# a real breach or a real legal problem for some project that committed it.
+#
+#   provider credentials         — grants access to paid infrastructure
+#   deployment signing material  — grants the ability to deploy as us
+#   database and customer exports— contains personal data
+#   incident documents           — describes unpatched weaknesses
+#   unpublished audits           — describes unfixed findings
+#   legal documents              — privileged, and often contractual
+#   token launch operations      — market-sensitive
+#   treasury and multisig data   — identifies signers and holdings
+#   production snapshots         — contains live tenant data
+#
+# Anything in these categories lives outside the repository entirely. This list
+# is a backstop, not the control.
+/ops/private/
+/legal/
+/incidents/
+/audits/private/
+/treasury/
+/token-launch/
+*.export.json
+*.dump
+*.sql.gz

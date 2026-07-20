@@ -1,0 +1,12 @@
+{
+  "extends": "@hoodstack/tsconfig/library.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "dist",
+    // DOM supplies the web-standard fetch/AbortController types this package uses.
+    // Those APIs are native in Node 20+ and in browsers, so the package stays
+    // runtime-agnostic without depending on @types/node.
+    "lib": ["ES2022", "DOM"]
+  },
+  "include": ["src/**/*"]
+}

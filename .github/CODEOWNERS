@@ -1,0 +1,23 @@
+# Default owner for everything.
+* @hoodstack/maintainers
+
+# Security-critical surfaces get explicit review. A mistake in any of these is
+# not recoverable by a follow-up patch.
+/SECURITY.md                      @hoodstack/maintainers
+/docs/security/                   @hoodstack/maintainers
+/docs/adr/                        @hoodstack/maintainers
+/.github/workflows/               @hoodstack/maintainers
+/.gitignore                       @hoodstack/maintainers
+/.env.example                     @hoodstack/maintainers
+
+# Chain correctness. A wrong chain ID or a retried broadcast costs real money.
+/packages/network/                @hoodstack/maintainers
+/packages/accounts/               @hoodstack/maintainers
+/packages/transactions/           @hoodstack/maintainers
+/packages/gas/                    @hoodstack/maintainers
+
+# The registry is the single gate on availability claims.
+/packages/config/src/modules.ts   @hoodstack/maintainers
+
+# Contracts custody funds and cannot be patched once deployed.
+/contracts/                       @hoodstack/maintainers

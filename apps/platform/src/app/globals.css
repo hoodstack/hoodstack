@@ -1,0 +1,283 @@
+@import "@hoodstack/design-tokens/tokens.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/**
+ * Bind the self-hosted typefaces (next/font, see app/layout.tsx) into the design
+ * tokens. Declared after the token import so these win. Fallbacks keep the page
+ * readable during font swap and if a face fails to load.
+ */
+:root {
+  --hs-font-sans:
+    var(--font-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  --hs-font-display:
+    var(--font-display), Georgia, "Times New Roman", "Iowan Old Style", serif;
+  --hs-font-mono:
+    var(--font-mono), ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+}
+
+@layer components {
+  /**
+   * Background field.
+   *
+   * A sparse coordinate grid built from two repeating linear gradients - no
+   * raster asset, no generated art. It reads as engineering graph paper rather
+   * than decoration, and it costs nothing to render.
+   */
+  .hs-grid-field {
+    background-image:
+      linear-gradient(to right, var(--hs-border) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--hs-border) 1px, transparent 1px);
+    background-size: 64px 64px;
+    /* Fades the grid out toward the edges so it never competes with content. */
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 40%, transparent 100%);
+    -webkit-mask-image: radial-gradient(
+      ellipse 80% 60% at 50% 0%,
+      #000 40%,
+      transparent 100%
+    );
+  }
+
+  /* A single hairline rule, used to separate structural bands. */
+  .hs-rule {
+    border-top: 1px solid var(--hs-border);
+  }
+
+  .hs-mono-label {
+    font-family: var(--hs-font-mono);
+    font-size: var(--hs-text-xs);
+    letter-spacing: var(--hs-tracking-eyebrow);
+    text-transform: uppercase;
+    color: var(--hs-text-tertiary);
+  }
+
+  /**
+   * Display headline treatment.
+   *
+   * Robinhood's rebrand pairs a warm serif headline with technical sans body to
+   * escape "fintech sameness". We cannot ship their licensed serif, so the
+   * distinction is carried by an editorial grotesk: oversized, tightly tracked,
+   * with a lowered optical weight so a large size does not read as shouting.
+   */
+  .hs-display {
+    font-family: var(--hs-font-display);
+    font-weight: var(--hs-weight-medium);
+    font-optical-sizing: auto;
+    letter-spacing: -0.015em;
+    line-height: 1;
+    text-wrap: balance;
+  }
+
+  /**
+   * Coordinate tick.
+   *
+   * The mono micro-label used along the axes of the signal visual and as the
+   * numeric index in the product ledger. Reads as an instrument readout.
+   */
+  .hs-tick {
+    font-family: var(--hs-font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.04em;
+    color: var(--hs-text-tertiary);
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   Motion.
+
+   Every animation here is gated behind prefers-reduced-motion. The signal
+   visual is designed so its *static* final frame is the meaningful one — a fully
+   drawn trace with every state confirmed — so disabling motion loses nothing but
+   the reveal.
+   ──────────────────────────────────────────────────────────────────────────── */
+
+/* Scroll reveal. The `is-visible` class is added by an IntersectionObserver. */
+.hs-reveal {
+  opacity: 0;
+  transform: translateY(12px);
+  transition:
+    opacity 600ms var(--hs-ease-out),
+    transform 600ms var(--hs-ease-out);
+  transition-delay: var(--hs-reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+.hs-reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* Signal: the trace draws itself once on reveal. */
+.hs-signal-draw {
+  stroke-dasharray: var(--len);
+  stroke-dashoffset: var(--len);
+  animation: hs-draw 2000ms var(--hs-ease-out) forwards;
+}
+
+/* Signal: a bright short dash travels the same path, endlessly. The comet. */
+.hs-signal-comet {
+  stroke-dasharray: 3 999;
+  stroke-dashoffset: 999;
+  animation: hs-comet 3600ms linear infinite;
+  animation-delay: 1600ms;
+}
+
+/* Signal: state nodes light in sequence as the comet passes. Each node sets
+   its own animation-delay inline so the sequence tracks the travelling dash. */
+.hs-signal-node {
+  animation: hs-node-pulse 3600ms ease-in-out infinite;
+}
+
+@keyframes hs-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes hs-comet {
+  from {
+    stroke-dashoffset: 999;
+  }
+  to {
+    /* 999 (dash+gap) minus the path length (~540) so the dash exits at the end. */
+    stroke-dashoffset: 459;
+  }
+}
+
+/* A brief flare as the comet passes, then back to the resting fill. The bulk of
+   the cycle is spent dim so only one node is lit at a time. */
+@keyframes hs-node-pulse {
+  0%,
+  8%,
+  100% {
+    fill: var(--hs-surface-3);
+    stroke: var(--hs-border-strong);
+  }
+  2%,
+  5% {
+    fill: var(--hs-brand);
+    stroke: var(--hs-brand);
+  }
+}
+
+/* Blinking caret on the receipt readout. */
+.hs-caret {
+  animation: hs-blink 1100ms step-end infinite;
+}
+@keyframes hs-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+/* Confirmed node: a soft, slow breath so the endpoint reads as "live". */
+.hs-signal-live {
+  transform-origin: center;
+  transform-box: fill-box;
+  animation: hs-breath 2600ms ease-in-out infinite;
+}
+@keyframes hs-breath {
+  0%,
+  100% {
+    opacity: 0.35;
+    r: 5;
+  }
+  50% {
+    opacity: 0.9;
+    r: 8;
+  }
+}
+
+/* Floating navigation: a short settle on first paint. */
+.hs-nav-in {
+  animation: hs-nav-in 500ms var(--hs-ease-out) both;
+}
+@keyframes hs-nav-in {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}
+
+/**
+ * Animated link underline.
+ *
+ * The rule wipes in from the left on hover and on the active route, rather than
+ * snapping. Uses a pseudo-element so it never shifts layout.
+ */
+.hs-link {
+  position: relative;
+}
+.hs-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -3px;
+  height: 1.5px;
+  background: var(--hs-brand);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 220ms var(--hs-ease-standard);
+}
+.hs-link:hover::after,
+.hs-link[data-active="true"]::after {
+  transform: scaleX(1);
+}
+
+/* Hover lift for framed surfaces (signal panel, code blocks). */
+.hs-lift {
+  transition:
+    transform 220ms var(--hs-ease-standard),
+    border-color 220ms var(--hs-ease-standard);
+}
+.hs-lift:hover {
+  transform: translateY(-3px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hs-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .hs-signal-draw {
+    stroke-dashoffset: 0;
+    animation: none;
+  }
+  .hs-signal-comet {
+    display: none;
+  }
+  .hs-signal-node,
+  .hs-signal-live {
+    animation: none;
+  }
+  .hs-caret,
+  .hs-nav-in {
+    animation: none;
+  }
+  .hs-link::after {
+    transition: none;
+  }
+  .hs-lift {
+    transition: none;
+  }
+  .hs-lift:hover {
+    transform: none;
+  }
+}

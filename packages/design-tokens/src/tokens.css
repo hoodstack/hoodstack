@@ -1,0 +1,356 @@
+/**
+ * HoodStack design tokens.
+ *
+ * Dark is the primary identity; light is a real theme, not an afterthought.
+ * Resolution order: explicit `data-theme` on <html> wins, otherwise the system
+ * preference applies. The explicit attribute is written by the theme toggle and
+ * by a blocking inline script before first paint, so the theme never flashes.
+ *
+ * Components must consume the SEMANTIC tokens (`--hs-bg-surface`,
+ * `--hs-text-primary`, `--hs-status-danger`), never the raw scales
+ * (`--hs-lime-500`, `--hs-neutral-800`). The raw scales are the palette; the
+ * semantic layer is the contract that makes theming work.
+ */
+
+:root {
+  /* ── raw palette: chartreuse ─────────────────────────────────────────────
+     Brand only. Never used to signal status - see the status tokens below. */
+  --hs-lime-50: #f8ffd9;
+  --hs-lime-100: #eeff9b;
+  --hs-lime-200: #e2ff5c;
+  --hs-lime-300: #d7ff29;
+  --hs-lime-400: #d0ff0d;
+  --hs-lime-500: #ccfe00;
+  --hs-lime-600: #a7d000;
+  --hs-lime-700: #789600;
+  --hs-lime-800: #4e6200;
+  --hs-lime-900: #2a3500;
+
+  /* ── raw palette: neutrals ─────────────────────────────────────────────── */
+  --hs-black: #050605;
+  --hs-surface-0: #080a08;
+  --hs-surface-1: #0d100d;
+  --hs-surface-2: #121612;
+  --hs-surface-3: #181d18;
+  --hs-surface-4: #1f251f;
+  --hs-white: #ffffff;
+
+  /* ── typography ────────────────────────────────────────────────────────── */
+  --hs-font-sans:
+    "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  --hs-font-mono:
+    "JetBrains Mono", ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
+    "Liberation Mono", monospace;
+
+  --hs-text-xs: 0.75rem;
+  --hs-text-sm: 0.8125rem;
+  --hs-text-base: 0.9375rem;
+  --hs-text-md: 1rem;
+  --hs-text-lg: 1.125rem;
+  --hs-text-xl: 1.375rem;
+  --hs-text-2xl: 1.75rem;
+  --hs-text-3xl: 2.25rem;
+  --hs-text-4xl: 3rem;
+  --hs-text-5xl: 3.75rem;
+
+  --hs-leading-tight: 1.15;
+  --hs-leading-snug: 1.35;
+  --hs-leading-normal: 1.6;
+  --hs-leading-relaxed: 1.75;
+
+  --hs-tracking-tight: -0.02em;
+  --hs-tracking-normal: 0;
+  --hs-tracking-wide: 0.02em;
+  --hs-tracking-eyebrow: 0.08em;
+
+  --hs-weight-normal: 400;
+  --hs-weight-medium: 500;
+  --hs-weight-semibold: 600;
+
+  /* ── spacing (4px base) ────────────────────────────────────────────────── */
+  --hs-space-0: 0;
+  --hs-space-1: 0.25rem;
+  --hs-space-2: 0.5rem;
+  --hs-space-3: 0.75rem;
+  --hs-space-4: 1rem;
+  --hs-space-5: 1.25rem;
+  --hs-space-6: 1.5rem;
+  --hs-space-8: 2rem;
+  --hs-space-10: 2.5rem;
+  --hs-space-12: 3rem;
+  --hs-space-16: 4rem;
+  --hs-space-20: 5rem;
+  --hs-space-24: 6rem;
+  --hs-space-32: 8rem;
+
+  /* ── layout ────────────────────────────────────────────────────────────── */
+  --hs-container-max: 1280px;
+  --hs-sidebar-width: 248px;
+  --hs-topbar-height: 56px;
+
+  /* ── radii ─────────────────────────────────────────────────────────────── */
+  --hs-radius-control: 4px;
+  --hs-radius-card: 6px;
+  --hs-radius-surface: 8px;
+  --hs-radius-pill: 999px;
+
+  /* ── motion ────────────────────────────────────────────────────────────────
+     Motion communicates state change. Durations are short on purpose: an
+     interface that animates slowly feels slow, not polished. */
+  --hs-duration-fast: 120ms;
+  --hs-duration-base: 150ms;
+  --hs-duration-slow: 180ms;
+  --hs-ease-standard: cubic-bezier(0.2, 0, 0.13, 1);
+  --hs-ease-out: cubic-bezier(0, 0, 0.2, 1);
+
+  /* ── z-index ───────────────────────────────────────────────────────────── */
+  --hs-z-base: 0;
+  --hs-z-sticky: 10;
+  --hs-z-dropdown: 20;
+  --hs-z-overlay: 30;
+  --hs-z-modal: 40;
+  --hs-z-toast: 50;
+
+  /* ── semantic: dark (default) ──────────────────────────────────────────── */
+  --hs-bg-canvas: var(--hs-black);
+  --hs-bg-surface: var(--hs-surface-1);
+  --hs-bg-surface-raised: var(--hs-surface-2);
+  --hs-bg-surface-overlay: var(--hs-surface-3);
+  --hs-bg-inset: var(--hs-surface-0);
+  --hs-bg-hover: rgb(255 255 255 / 0.04);
+  --hs-bg-active: rgb(255 255 255 / 0.07);
+  --hs-bg-selected: rgb(204 254 0 / 0.09);
+
+  --hs-text-primary: #f4f7f2;
+  --hs-text-secondary: #a6ada3;
+  --hs-text-tertiary: #70786d;
+  --hs-text-disabled: #4a5147;
+  --hs-text-inverse: var(--hs-black);
+  --hs-text-brand: var(--hs-lime-500);
+
+  --hs-border: rgb(255 255 255 / 0.09);
+  --hs-border-strong: rgb(255 255 255 / 0.16);
+  --hs-border-brand: var(--hs-lime-500);
+  /* Chartreuse edges with alpha baked in. Used directly (not via a Tailwind
+     `/opacity` modifier, which does not work on var()-based colors). */
+  --hs-border-brand-soft: rgb(204 254 0 / 0.14);
+  --hs-border-brand-strong: rgb(204 254 0 / 0.3);
+  /* Translucent surfaces for the floating nav, so it stays legible over any
+     section rather than relying on backdrop-blur alone. */
+  --hs-nav-bg: rgb(13 16 13 / 0.72);
+  --hs-nav-bg-scrolled: rgb(13 16 13 / 0.9);
+
+  --hs-brand: var(--hs-lime-500);
+  --hs-brand-hover: var(--hs-lime-400);
+  --hs-brand-active: var(--hs-lime-600);
+  --hs-brand-subtle: rgb(204 254 0 / 0.12);
+  --hs-on-brand: var(--hs-black);
+
+  /* Status colors are deliberately NOT chartreuse. Brand and state must be
+     distinguishable at a glance, and a green-yellow "success" next to a
+     green-yellow brand is unreadable. Never rely on color alone: pair every
+     status with an icon or text. */
+  --hs-status-success: #3fb950;
+  --hs-status-success-bg: rgb(63 185 80 / 0.14);
+  --hs-status-warning: #d29922;
+  --hs-status-warning-bg: rgb(210 153 34 / 0.14);
+  --hs-status-danger: #f85149;
+  --hs-status-danger-bg: rgb(248 81 73 / 0.14);
+  --hs-status-info: #58a6ff;
+  --hs-status-info-bg: rgb(88 166 255 / 0.14);
+  --hs-status-pending: #a371f7;
+  --hs-status-pending-bg: rgb(163 113 247 / 0.14);
+  --hs-status-neutral: var(--hs-text-tertiary);
+  --hs-status-neutral-bg: rgb(255 255 255 / 0.06);
+
+  --hs-focus-ring: var(--hs-lime-500);
+  --hs-focus-ring-offset: var(--hs-bg-canvas);
+
+  --hs-shadow-sm: 0 1px 2px rgb(0 0 0 / 0.3);
+  --hs-shadow-md: 0 4px 12px rgb(0 0 0 / 0.35);
+  --hs-shadow-lg: 0 12px 32px rgb(0 0 0 / 0.45);
+
+  /* Code syntax highlighting */
+  --hs-code-bg: var(--hs-surface-0);
+  --hs-code-plain: #d6dcd2;
+  --hs-code-comment: #6b7268;
+  --hs-code-keyword: var(--hs-lime-300);
+  --hs-code-string: #9ecbff;
+  --hs-code-number: #f0a868;
+  --hs-code-function: #d2a8ff;
+  --hs-code-punctuation: #7d857a;
+
+  color-scheme: dark;
+}
+
+/* ── semantic: light ─────────────────────────────────────────────────────────
+   Chartreuse on white fails contrast badly as a text or accent color, so light
+   mode uses a darkened brand for anything text-sized and reserves the pure
+   chartreuse for fills that carry dark text on top. */
+:root[data-theme="light"] {
+  --hs-bg-canvas: #ffffff;
+  --hs-bg-surface: #fbfcfa;
+  --hs-bg-surface-raised: #f4f6f2;
+  --hs-bg-surface-overlay: #ffffff;
+  --hs-bg-inset: #f0f2ee;
+  --hs-bg-hover: rgb(5 6 5 / 0.04);
+  --hs-bg-active: rgb(5 6 5 / 0.07);
+  --hs-bg-selected: rgb(120 150 0 / 0.1);
+
+  --hs-text-primary: #10140f;
+  --hs-text-secondary: #4b5348;
+  --hs-text-tertiary: #6d7569;
+  --hs-text-disabled: #a3aa9e;
+  --hs-text-inverse: #ffffff;
+  --hs-text-brand: var(--hs-lime-700);
+
+  --hs-border: rgb(5 6 5 / 0.12);
+  --hs-border-strong: rgb(5 6 5 / 0.22);
+  --hs-border-brand: var(--hs-lime-700);
+  --hs-border-brand-soft: rgb(120 150 0 / 0.25);
+  --hs-border-brand-strong: rgb(120 150 0 / 0.45);
+  --hs-nav-bg: rgb(251 252 250 / 0.72);
+  --hs-nav-bg-scrolled: rgb(251 252 250 / 0.92);
+
+  --hs-brand: var(--hs-lime-500);
+  --hs-brand-hover: var(--hs-lime-400);
+  --hs-brand-active: var(--hs-lime-600);
+  --hs-brand-subtle: rgb(204 254 0 / 0.2);
+  --hs-on-brand: var(--hs-black);
+
+  --hs-status-success: #1a7f37;
+  --hs-status-success-bg: rgb(26 127 55 / 0.1);
+  --hs-status-warning: #9a6700;
+  --hs-status-warning-bg: rgb(154 103 0 / 0.1);
+  --hs-status-danger: #cf222e;
+  --hs-status-danger-bg: rgb(207 34 46 / 0.1);
+  --hs-status-info: #0969da;
+  --hs-status-info-bg: rgb(9 105 218 / 0.1);
+  --hs-status-pending: #8250df;
+  --hs-status-pending-bg: rgb(130 80 223 / 0.1);
+  --hs-status-neutral: var(--hs-text-tertiary);
+  --hs-status-neutral-bg: rgb(5 6 5 / 0.06);
+
+  --hs-focus-ring: var(--hs-lime-700);
+  --hs-focus-ring-offset: var(--hs-bg-canvas);
+
+  --hs-shadow-sm: 0 1px 2px rgb(5 6 5 / 0.06);
+  --hs-shadow-md: 0 4px 12px rgb(5 6 5 / 0.08);
+  --hs-shadow-lg: 0 12px 32px rgb(5 6 5 / 0.12);
+
+  --hs-code-bg: #f6f8f4;
+  --hs-code-plain: #1c211a;
+  --hs-code-comment: #6d7569;
+  --hs-code-keyword: #6a8a00;
+  --hs-code-string: #0a3069;
+  --hs-code-number: #953800;
+  --hs-code-function: #6639ba;
+  --hs-code-punctuation: #57606a;
+
+  color-scheme: light;
+}
+
+/* System preference, only when no explicit choice has been made. */
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) {
+    --hs-bg-canvas: #ffffff;
+    --hs-bg-surface: #fbfcfa;
+    --hs-bg-surface-raised: #f4f6f2;
+    --hs-bg-surface-overlay: #ffffff;
+    --hs-bg-inset: #f0f2ee;
+    --hs-bg-hover: rgb(5 6 5 / 0.04);
+    --hs-bg-active: rgb(5 6 5 / 0.07);
+    --hs-bg-selected: rgb(120 150 0 / 0.1);
+
+    --hs-text-primary: #10140f;
+    --hs-text-secondary: #4b5348;
+    --hs-text-tertiary: #6d7569;
+    --hs-text-disabled: #a3aa9e;
+    --hs-text-inverse: #ffffff;
+    --hs-text-brand: var(--hs-lime-700);
+
+    --hs-border: rgb(5 6 5 / 0.12);
+    --hs-border-strong: rgb(5 6 5 / 0.22);
+    --hs-border-brand: var(--hs-lime-700);
+    --hs-border-brand-soft: rgb(120 150 0 / 0.4);
+    --hs-border-brand-strong: rgb(120 150 0 / 0.7);
+    --hs-nav-bg: rgb(251 252 250 / 0.72);
+    --hs-nav-bg-scrolled: rgb(251 252 250 / 0.92);
+    --hs-brand-subtle: rgb(204 254 0 / 0.2);
+
+    --hs-status-success: #1a7f37;
+    --hs-status-success-bg: rgb(26 127 55 / 0.1);
+    --hs-status-warning: #9a6700;
+    --hs-status-warning-bg: rgb(154 103 0 / 0.1);
+    --hs-status-danger: #cf222e;
+    --hs-status-danger-bg: rgb(207 34 46 / 0.1);
+    --hs-status-info: #0969da;
+    --hs-status-info-bg: rgb(9 105 218 / 0.1);
+    --hs-status-pending: #8250df;
+    --hs-status-pending-bg: rgb(130 80 223 / 0.1);
+    --hs-status-neutral-bg: rgb(5 6 5 / 0.06);
+
+    --hs-focus-ring: var(--hs-lime-700);
+
+    --hs-shadow-sm: 0 1px 2px rgb(5 6 5 / 0.06);
+    --hs-shadow-md: 0 4px 12px rgb(5 6 5 / 0.08);
+    --hs-shadow-lg: 0 12px 32px rgb(5 6 5 / 0.12);
+
+    --hs-code-bg: #f6f8f4;
+    --hs-code-plain: #1c211a;
+    --hs-code-comment: #6d7569;
+    --hs-code-keyword: #6a8a00;
+    --hs-code-string: #0a3069;
+    --hs-code-number: #953800;
+    --hs-code-function: #6639ba;
+    --hs-code-punctuation: #57606a;
+
+    color-scheme: light;
+  }
+}
+
+/* ── base ────────────────────────────────────────────────────────────────── */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--hs-bg-canvas);
+  color: var(--hs-text-primary);
+  font-family: var(--hs-font-sans);
+  font-size: var(--hs-text-base);
+  line-height: var(--hs-leading-normal);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* A visible focus indicator is a hard accessibility requirement. Never remove
+   this without an equivalent replacement. */
+:focus-visible {
+  outline: 2px solid var(--hs-focus-ring);
+  outline-offset: 2px;
+  border-radius: var(--hs-radius-control);
+}
+
+::selection {
+  background: var(--hs-brand-subtle);
+  color: var(--hs-text-primary);
+}
+
+/* Respect a user's stated preference. Motion sensitivity is a medical
+   condition, not a style preference. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

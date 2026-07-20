@@ -1,0 +1,15 @@
+# Normalize line endings to LF in the repository, regardless of contributor OS.
+# Keeps diffs clean and avoids the CRLF churn Windows checkouts otherwise cause.
+* text=auto eol=lf
+
+# Binary assets: never touch.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.woff2 binary
+*.ico binary
+*.pdf binary
+
+# Generated / vendored files are not counted in language stats or diffs.
+pnpm-lock.yaml linguist-generated=true -diff
