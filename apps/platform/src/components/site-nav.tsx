@@ -10,7 +10,7 @@ import { ButtonLink, cx } from "@/components/ui";
 
 const NAV = [
   { href: "/products", label: "Products" },
-  { href: "/products/token-utility", label: "Token utility" },
+  { href: "/token-utility", label: "Token utility" },
   // Docs is its own site (separate chrome); open it in a new tab.
   { href: "/docs", label: "Docs", newTab: true },
   { href: "/changelog", label: "Changelog" },

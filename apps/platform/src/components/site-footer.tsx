@@ -25,7 +25,7 @@ const COLUMNS = [
       { href: "/products", label: "Products" },
       { href: "/products/developer", label: "SDKs" },
       { href: "/products/developer", label: "CLI" },
-      { href: "/products/token-utility", label: "Token utility" },
+      { href: "/token-utility", label: "Token utility" },
     ],
   },
   {

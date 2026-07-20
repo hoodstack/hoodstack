@@ -40,11 +40,11 @@ function moduleForSlug(slug: string): ModuleDefinition | undefined {
 export function generateStaticParams(): Params[] {
   return [
     ...PRODUCT_LIST.map((product) => ({ slug: product.id })),
+    // Only modules whose marketing page lives under /products/ are handled by
+    // this route. Token utility is canonical at /token-utility, so it is excluded.
     ...getPublicModules()
-      .map((module) => ({ slug: module.publicHref!.replace("/products/", "") }))
-      // token-utility has a dedicated static route that overrides this one; don't
-      // also generate it here, to avoid a conflicting-path build error.
-      .filter((param) => param.slug !== "token-utility"),
+      .filter((module) => module.publicHref!.startsWith("/products/"))
+      .map((module) => ({ slug: module.publicHref!.replace("/products/", "") })),
   ];
 }
 

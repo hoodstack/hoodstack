@@ -73,6 +73,18 @@ const nextConfig = {
   // unrelated lockfile outside the repository as the trace root.
   outputFileTracingRoot: new URL("../../", import.meta.url).pathname,
 
+  async redirects() {
+    return [
+      // Token utility has one canonical home. Any older /products/token-utility
+      // link (or app module link) resolves to it permanently.
+      {
+        source: "/products/token-utility",
+        destination: "/token-utility",
+        permanent: true,
+      },
+    ];
+  },
+
   async headers() {
     return [
       {

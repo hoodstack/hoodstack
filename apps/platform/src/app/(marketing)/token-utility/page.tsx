@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   description:
     "How a future HoodStack token would coordinate infrastructure capacity — " +
     "and the hard boundaries it will never cross. Technical architecture, not an offer.",
-  alternates: { canonical: "/products/token-utility" },
+  alternates: { canonical: "/token-utility" },
 };
 
 /** The capacity model: credits are the abstraction; the token is one funding source. */
@@ -106,25 +106,7 @@ export default function TokenUtilityPage() {
       {/* Hero. */}
       <Container>
         <div className="border-b border-line py-20 lg:py-24">
-          <nav aria-label="Breadcrumb" className="mb-6 flex items-center gap-2 text-sm">
-            <Link
-              href="/products"
-              className="text-content-tertiary transition-colors hover:text-content-brand"
-            >
-              Products
-            </Link>
-            <span aria-hidden="true" className="text-content-tertiary">
-              /
-            </span>
-            <Link
-              href="/products/network"
-              className="text-content-tertiary transition-colors hover:text-content-brand"
-            >
-              Network
-            </Link>
-          </nav>
-
-          <p className="hs-mono-label mb-4">Token utility</p>
+          <p className="hs-mono-label mb-4">Network · Token utility</p>
           <h1 className="hs-display max-w-3xl text-4xl text-content lg:text-5xl">
             Coordinate capacity. Never gate safety.
           </h1>
@@ -300,8 +282,8 @@ export default function TokenUtilityPage() {
             <div className="grid gap-10 lg:grid-cols-[22rem_1fr] lg:gap-16">
               <SectionHeading
                 eyebrow="How it evolves"
-                title="Same routes, before and after."
-                lead="Nothing about this changes URLs or breaks what already works."
+                title="Same route, before and after."
+                lead="Nothing about this changes the URL or breaks what already works."
               />
               <div className="space-y-6">
                 <div className="border-l-2 border-line pl-5">
@@ -318,13 +300,10 @@ export default function TokenUtilityPage() {
                   <p className="text-sm text-content-secondary">
                     A token entitlement adapter translates verified stake, token-funded
                     credits, and operator bonds into the same credits, reconciled only
-                    against finalized chain state. The routes{" "}
-                    <code className="font-mono text-xs">/products/token-utility</code> and{" "}
-                    <code className="font-mono text-xs">
-                      /app/[projectId]/token-utility
-                    </code>{" "}
-                    deepen in place. Token accounting stays separate from auth, wallet
-                    ownership, recovery, and user balances.
+                    against finalized chain state. The route{" "}
+                    <code className="font-mono text-xs">/token-utility</code> deepens in
+                    place. Token accounting stays separate from auth, wallet ownership,
+                    recovery, and user balances.
                   </p>
                 </div>
               </div>
@@ -356,9 +335,13 @@ export default function TokenUtilityPage() {
                 <ButtonLink href="/products/network" variant="secondary">
                   How capacity works
                 </ButtonLink>
-                <ButtonLink href="/docs" variant="ghost">
-                  Documentation
-                </ButtonLink>
+                <Link
+                  href="/products"
+                  className="inline-flex items-center gap-1.5 self-center text-sm text-content-brand hover:underline"
+                >
+                  Explore the stack
+                  <span aria-hidden="true">→</span>
+                </Link>
               </div>
             </div>
           </Reveal>

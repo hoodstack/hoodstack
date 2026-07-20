@@ -41,7 +41,9 @@ describe("registry integrity", () => {
       expect(module.appHref("p"), module.id).toMatch(/^\/app\//);
       expect(module.docsHref, module.id).toMatch(/^\/docs/);
       if (module.publicHref !== undefined) {
-        expect(module.publicHref, module.id).toMatch(/^\/products\//);
+        // Modules live under /products/, with one deliberate exception: token
+        // utility is canonical at the top-level /token-utility.
+        expect(module.publicHref, module.id).toMatch(/^(\/products\/|\/token-utility$)/);
       }
     }
   });
@@ -201,7 +203,7 @@ describe("navigation", () => {
       "/products/security",
       "/products/sdk",
       "/products/cli",
-      "/products/token-utility",
+      "/token-utility",
     ]) {
       expect(published, `missing public route ${href}`).toContain(href);
     }
