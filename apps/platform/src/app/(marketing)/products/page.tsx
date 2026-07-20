@@ -44,8 +44,8 @@ export default function ProductsPage() {
               Eight products. One stack.
             </h1>
             <p className="mt-5 text-lg text-content-secondary">
-              Every product is delivered through several surfaces — SDKs, REST, CLI,
-              dashboard — and every module has a permanent route from the first release.
+              Every product is delivered through several surfaces - SDKs, REST, CLI,
+              dashboard - and every module has a permanent route from the first release.
             </p>
           </div>
 
@@ -64,7 +64,7 @@ export default function ProductsPage() {
         <section key={product.id} className="border-b border-line">
           <Container>
             <div className="grid gap-10 py-14 lg:grid-cols-[19rem_1fr] lg:gap-16 lg:py-16">
-              {/* Intro — sticks while its modules scroll past. */}
+              {/* Intro - sticks while its modules scroll past. */}
               <div className="lg:sticky lg:top-24 lg:self-start">
                 <span className="hs-tick tabular-nums text-content-tertiary">
                   {String(index + 1).padStart(2, "0")}
@@ -95,7 +95,7 @@ export default function ProductsPage() {
                 </Link>
               </div>
 
-              {/* Modules — self-contained cards; empty slots stay clean. */}
+              {/* Modules - self-contained cards; empty slots stay clean. */}
               <ul className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
                 {getProductModules(product.id).map((module, i) => (
                   <Reveal as="li" key={module.id} delay={i * 40}>
@@ -145,6 +145,6 @@ function ModuleCard({ module }: { module: ModuleDefinition }) {
     );
   }
 
-  // Solid tokens only — Tailwind `/opacity` modifiers do not work on var() colors.
+  // Solid tokens only - Tailwind `/opacity` modifiers do not work on var() colors.
   return <div className={`${base} border-line bg-surface-inset`}>{body}</div>;
 }

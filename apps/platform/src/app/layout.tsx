@@ -28,7 +28,7 @@ const display = Fraunces({
   variable: "--font-display",
   display: "swap",
   // Variable font: the weight axis stays fluid (set in CSS), and these optional
-  // axes add optical sizing and the soft-terminal character. No `weight` here —
+  // axes add optical sizing and the soft-terminal character. No `weight` here -
   // next/font forbids fixed weights alongside custom axes.
   axes: ["opsz", "SOFT"],
 });

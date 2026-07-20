@@ -41,10 +41,10 @@ const ENTRIES: Entry[] = [
         label: "Added",
         tone: "success",
         items: [
-          "@hoodstack/errors — normalized error taxonomy with stable HS_ codes, construction-time redaction, and wire round-trip.",
-          "@hoodstack/network — Robinhood Chain definitions, chain validation, explorer helpers, RPC health probes, and endpoint fallback.",
-          "@hoodstack/config — typed product and module registry driving navigation, routing, and fail-closed availability gating.",
-          "@hoodstack/design-tokens — themed token system with dark and light modes and self-hosted typography.",
+          "@hoodstack/errors - normalized error taxonomy with stable HS_ codes, construction-time redaction, and wire round-trip.",
+          "@hoodstack/network - Robinhood Chain definitions, chain validation, explorer helpers, RPC health probes, and endpoint fallback.",
+          "@hoodstack/config - typed product and module registry driving navigation, routing, and fail-closed availability gating.",
+          "@hoodstack/design-tokens - themed token system with dark and light modes and self-hosted typography.",
           "Platform application: landing page, product catalog, docs subsite, and the preview-route system.",
         ],
       },
@@ -135,7 +135,7 @@ export default function ChangelogPage() {
                       </div>
                       <ul className="mt-4 space-y-3">
                         {group.items.map((item) => {
-                          const parts = item.split(" — ");
+                          const parts = item.split(" - ");
                           const pkg = parts[0] ?? item;
                           const rest = parts.slice(1);
                           const hasPkg = rest.length > 0 && pkg.startsWith("@");
@@ -144,8 +144,8 @@ export default function ChangelogPage() {
                               {hasPkg ? (
                                 <>
                                   <code className="font-mono text-content">{pkg}</code>
-                                  {" — "}
-                                  {rest.join(" — ")}
+                                  {" - "}
+                                  {rest.join(" - ")}
                                 </>
                               ) : (
                                 item

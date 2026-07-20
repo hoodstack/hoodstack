@@ -5,7 +5,7 @@ import type { CSSProperties } from "react";
  *
  * Robinhood's brand language is "technical illustration inspired by financial
  * graphs", and their signature is the rising line with a soft area fill. This is
- * that idea made literal and honest — the five states an actual
+ * that idea made literal and honest - the five states an actual
  * `@hoodstack/transactions` object moves through, plotted on a dot-matrix field
  * with a gradient trace, plotted-point drop lines, a finality threshold, a
  * travelling pulse, and a breathing endpoint.
@@ -13,8 +13,8 @@ import type { CSSProperties } from "react";
  * It fabricates nothing. No hash, no block number, no amount. The nodes are the
  * real state machine; the threshold is the real finality rule
  * (`confirmations >= chain.finality.defaultConfirmations`); the readout shows the
- * state *schema*, not a pretend receipt. The static final frame — fully drawn,
- * confirmed, past finality — is the meaningful one, so the motion is pure
+ * state *schema*, not a pretend receipt. The static final frame - fully drawn,
+ * confirmed, past finality - is the meaningful one, so the motion is pure
  * enhancement (globals.css disables all of it under prefers-reduced-motion).
  *
  * Pure SVG and CSS. No canvas, no library, no raster asset.
@@ -56,8 +56,8 @@ export function ExecutionTrace() {
       >
         <title id="trace-title">Transaction lifecycle</title>
         <desc id="trace-desc">
-          A transaction rising through five states — created, simulated, sponsored,
-          submitted, and confirmed — crossing the finality threshold at confirmation.
+          A transaction rising through five states - created, simulated, sponsored,
+          submitted, and confirmed - crossing the finality threshold at confirmation.
         </desc>
 
         <defs>
@@ -82,7 +82,7 @@ export function ExecutionTrace() {
           </linearGradient>
         </defs>
 
-        {/* Dot-matrix plot field — an instrument grid, not spreadsheet lines. */}
+        {/* Dot-matrix plot field - an instrument grid, not spreadsheet lines. */}
         <rect
           x={PLOT.left}
           y={PLOT.top}
@@ -92,7 +92,7 @@ export function ExecutionTrace() {
           opacity="0.55"
         />
 
-        {/* Finality threshold — the real rule, drawn. */}
+        {/* Finality threshold - the real rule, drawn. */}
         <line
           x1={PLOT.left}
           y1={THRESHOLD_Y}
@@ -294,7 +294,7 @@ export function ExecutionTrace() {
       </svg>
 
       {/* Control-room readout. Shows the state schema, never a fabricated
-          receipt — the placeholders are types, not pretend data. */}
+          receipt - the placeholders are types, not pretend data. */}
       <figcaption className="mt-4 overflow-x-auto rounded-card border border-line bg-surface-inset px-4 py-3">
         <code className="block whitespace-pre font-mono text-xs leading-relaxed text-content-secondary">
           {`tx.state         "confirmed"

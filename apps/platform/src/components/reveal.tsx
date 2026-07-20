@@ -8,7 +8,7 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
  * A restrained entrance, not a spectacle: a short rise and fade, once, the first
  * time the element is seen. Motion is fully suppressed under
  * `prefers-reduced-motion` by the `.hs-reveal` styles, so this is progressive
- * enhancement — the content is present and styled regardless of JavaScript.
+ * enhancement - the content is present and styled regardless of JavaScript.
  */
 export function Reveal({
   children,

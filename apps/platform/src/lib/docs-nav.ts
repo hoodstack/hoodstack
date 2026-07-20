@@ -1,7 +1,7 @@
 /**
  * Documentation navigation.
  *
- * The docs are a single, honest page for now — most guides are not written yet
+ * The docs are a single, honest page for now - most guides are not written yet
  * (see the docs home). Internal items are in-page anchors, so nothing 404s; the
  * "Repository" group links to the architecture and security documents that
  * genuinely exist in the repo.

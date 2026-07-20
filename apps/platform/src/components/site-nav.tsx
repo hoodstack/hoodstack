@@ -52,7 +52,7 @@ export function SiteNav() {
           aria-label="Main"
           className={cx(
             "hs-nav-in mt-3 flex items-center justify-between gap-4 rounded-full border px-3 py-2 transition-all duration-slow ease-standard sm:px-4",
-            // Chartreuse-tinted edge — the Robinhood accent, kept low-alpha so it
+            // Chartreuse-tinted edge - the Robinhood accent, kept low-alpha so it
             // frames the pill rather than glowing. Firms up on scroll, when the
             // background also turns more opaque. Alpha is baked into the tokens,
             // because Tailwind's `/opacity` modifier does not work on var() colors.

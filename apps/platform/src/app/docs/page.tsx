@@ -20,7 +20,7 @@ const NETWORK_USAGE = `import {
   getExplorerTxUrl,
 } from "@hoodstack/network";
 
-// Chain definitions extend viem's Chain — hand them straight to
+// Chain definitions extend viem's Chain - hand them straight to
 // createPublicClient, wagmi, or any viem-compatible tooling.
 const chain = robinhoodTestnet; // testnet is the default everywhere
 
@@ -53,7 +53,7 @@ try {
   await hoodstack.transactions.send(input);
 } catch (error) {
   if (isHoodStackError(error)) {
-    error.code;      // e.g. "HS_CHAIN_MISMATCH" — branch on this
+    error.code;      // e.g. "HS_CHAIN_MISMATCH" - branch on this
     error.retryable; // whether retrying may help
     error.docsUrl;   // where to read more
     error.requestId; // correlate with server logs
@@ -122,7 +122,7 @@ export default function DocsHomePage() {
           tooling, delivered through SDKs, a REST API, a CLI, and a dashboard.
         </p>
         <p>
-          It is non-custodial by design — HoodStack cannot move user funds — and testnet
+          It is non-custodial by design - HoodStack cannot move user funds - and testnet
           is the default everywhere. See the{" "}
           <Link href="/products" className="text-content-brand hover:underline">
             product catalog
@@ -189,7 +189,7 @@ export default function DocsHomePage() {
       <DocSection id="quickstart" title="Quickstart">
         <p>
           Wrap your application in the provider once, then use the hooks and clients
-          throughout. This API is forthcoming — the React SDK is in development:
+          throughout. This API is forthcoming - the React SDK is in development:
         </p>
         <CodeBlock code={QUICKSTART} label="app/providers.tsx · forthcoming" />
       </DocSection>

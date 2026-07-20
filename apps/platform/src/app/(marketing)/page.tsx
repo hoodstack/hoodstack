@@ -3,6 +3,7 @@ import { robinhood, robinhoodTestnet } from "@hoodstack/network";
 import Link from "next/link";
 
 import { ExecutionTrace } from "@/components/execution-trace";
+import { HoodStackTransform } from "@/components/hoodstack-transform";
 import { Reveal } from "@/components/reveal";
 import { StackDiagram } from "@/components/stack-diagram";
 import {
@@ -78,72 +79,62 @@ const SECURITY_POSTURE = [
 export default function HomePage() {
   return (
     <>
-      {/* ── hero: fills the viewport, signal as instrument ──────────────── */}
+      {/* ── hero: headline, then the legacy → HoodStack transform ────────── */}
       <section className="relative overflow-hidden">
-        {/* Depth: a single soft radial behind the signal. Not a gradient blob —
-            it is anchored to the instrument and barely there. */}
+        {/* Depth: a single soft radial anchored behind the unified stack. */}
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute right-[-10%] top-[-10%] hidden h-[640px] w-[640px] rounded-full lg:block"
+          className="pointer-events-none absolute right-[-6%] top-[8%] hidden h-[600px] w-[600px] rounded-full lg:block"
           style={{
             background:
-              "radial-gradient(circle, var(--hs-brand-subtle) 0%, transparent 62%)",
+              "radial-gradient(circle, var(--hs-brand-subtle) 0%, transparent 60%)",
           }}
         />
 
         <Container className="relative">
-          <div className="grid min-h-[calc(100dvh-6rem)] items-center gap-12 py-16 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16">
-            <div>
-              <p className="hs-mono-label mb-6 flex items-center gap-2">
-                <span
-                  aria-hidden="true"
-                  className="inline-block size-1.5 rounded-pill bg-brand"
-                />
-                Robinhood Chain developer infrastructure
-              </p>
+          <div className="max-w-3xl pt-14 lg:pt-20">
+            <p className="hs-mono-label mb-6 flex items-center gap-2">
+              <span
+                aria-hidden="true"
+                className="inline-block size-1.5 rounded-pill bg-brand"
+              />
+              Robinhood Chain developer infrastructure
+            </p>
 
-              <h1 className="hs-display text-[3.25rem] leading-[0.95] text-content sm:text-6xl lg:text-[5.25rem]">
-                Build anything on Robinhood&nbsp;Chain.
-              </h1>
-              <p className="hs-display mt-3 text-3xl text-content-tertiary lg:text-[2.75rem]">
-                Everything else is infrastructure.
-              </p>
+            <h1 className="hs-display text-[3.25rem] leading-[0.95] text-content sm:text-6xl lg:text-[5.25rem]">
+              Build anything on Robinhood&nbsp;Chain.
+            </h1>
+            <p className="hs-display mt-3 text-3xl text-content-tertiary lg:text-[2.75rem]">
+              Everything else is infrastructure.
+            </p>
 
-              <p className="mt-8 max-w-xl text-lg text-content-secondary">
-                Accounts, execution, gas, assets, automation, and developer tooling, so
-                you write the part that makes your application different.
-              </p>
+            <p className="mt-8 max-w-xl text-lg text-content-secondary">
+              Stop rebuilding accounts, execution, gas, assets, automation, and tooling
+              for every project. Adopt one stack and write the part that makes your
+              application different.
+            </p>
 
-              <div className="mt-10 flex flex-wrap items-center gap-3">
-                <ButtonLink href="/docs/quickstart">Start building</ButtonLink>
-                <ButtonLink href="/products" variant="secondary">
-                  Explore the stack
-                </ButtonLink>
-                <ButtonLink href="https://github.com/hoodstack" variant="ghost" external>
-                  View GitHub
-                </ButtonLink>
-              </div>
+            <div className="mt-10 flex flex-wrap items-center gap-3">
+              <ButtonLink href="/docs/quickstart">Start building</ButtonLink>
+              <ButtonLink href="/products" variant="secondary">
+                Explore the stack
+              </ButtonLink>
+              <ButtonLink href="https://github.com/hoodstack" variant="ghost" external>
+                View GitHub
+              </ButtonLink>
             </div>
 
-            {/* The signal, framed as a live instrument panel. */}
-            <Reveal delay={120}>
-              <div className="hs-lift rounded-surface border border-line bg-surface shadow-lg hover:border-line-strong">
-                <div className="flex items-center justify-between border-b border-line px-4 py-2.5">
-                  <span className="hs-mono-label">Transaction lifecycle</span>
-                  <span className="flex items-center gap-1.5">
-                    <span
-                      aria-hidden="true"
-                      className="inline-block size-1.5 rounded-pill bg-brand"
-                    />
-                    <span className="hs-tick">robinhood-testnet</span>
-                  </span>
-                </div>
-                <div className="p-4">
-                  <ExecutionTrace />
-                </div>
-              </div>
-            </Reveal>
+            <p className="mt-6 hs-mono-label">
+              Six concerns, rebuilt every time → one stack
+            </p>
           </div>
+
+          {/* The transformation: fragmented legacy consolidating into HoodStack. */}
+          <Reveal delay={120}>
+            <div className="py-14 lg:py-20">
+              <HoodStackTransform />
+            </div>
+          </Reveal>
         </Container>
 
         {/* Proof strip: honest facts, not fake logos. Anchors the hero and states
@@ -278,6 +269,36 @@ export default function HomePage() {
             />
             <div className="mt-12">
               <StackDiagram />
+            </div>
+          </Reveal>
+        </Container>
+      </Section>
+
+      {/* ── transaction lifecycle: the signal instrument ────────────────── */}
+      <Section>
+        <Container>
+          <Reveal>
+            <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
+              <SectionHeading
+                eyebrow="Execution"
+                title="Watch a transaction settle."
+                lead="Every transaction moves through the same states - created, simulated, sponsored, submitted, confirmed - and is only reported confirmed once a receipt satisfies the configured finality depth. Nothing is a fabricated metric; this is the real state machine."
+              />
+              <div className="hs-lift rounded-surface border border-line bg-surface shadow-lg hover:border-line-strong">
+                <div className="flex items-center justify-between border-b border-line px-4 py-2.5">
+                  <span className="hs-mono-label">Transaction lifecycle</span>
+                  <span className="flex items-center gap-1.5">
+                    <span
+                      aria-hidden="true"
+                      className="inline-block size-1.5 rounded-pill bg-brand"
+                    />
+                    <span className="hs-tick">robinhood-testnet</span>
+                  </span>
+                </div>
+                <div className="p-4">
+                  <ExecutionTrace />
+                </div>
+              </div>
             </div>
           </Reveal>
         </Container>

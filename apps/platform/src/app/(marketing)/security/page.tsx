@@ -205,8 +205,8 @@ export default function SecurityPage() {
                   Good-faith research under our disclosure policy is protected by safe
                   harbour. There is no funded bounty at this time, and we will not imply
                   otherwise to attract reports. The findings we most want are ones where
-                  something we claim — tenant isolation, chain validation, redaction,
-                  non-custody — does not actually hold.
+                  something we claim - tenant isolation, chain validation, redaction,
+                  non-custody - does not actually hold.
                 </p>
               </div>
               <div className="mt-8 flex flex-wrap gap-3">
