@@ -12,6 +12,14 @@ const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
 
+  images: {
+    // Serve AVIF first (smallest for photographic renders), WebP as fallback.
+    // The optimizer resizes per device via each <Image>'s `sizes`.
+    formats: ["image/avif", "image/webp"],
+    // Cache optimized variants at the edge for a year.
+    minimumCacheTTL: 31536000,
+  },
+
   // Pin the workspace root. Next.js otherwise walks up and can select an
   // unrelated lockfile outside the repository as the trace root.
   outputFileTracingRoot: new URL("../../", import.meta.url).pathname,

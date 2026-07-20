@@ -6,6 +6,10 @@ import Link from "next/link";
 import { ExecutionTrace } from "@/components/execution-trace";
 import { Reveal } from "@/components/reveal";
 import { StackDiagram } from "@/components/stack-diagram";
+
+// Static import: Next reads the real dimensions and generates a blur placeholder
+// at build time, so there is no layout shift and a smooth blur-up on load.
+import heroImg from "../../../public/hero.webp";
 import {
   ButtonLink,
   CodeBlock,
@@ -126,15 +130,15 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* Hero illustration on the right. next/image optimizes and resizes the
-                source PNG; intrinsic dimensions avoid layout shift. */}
+            {/* Hero illustration on the right. Static import gives Next the real
+                dimensions and a build-time blur placeholder; the optimizer then
+                serves an AVIF/WebP sized to each device via `sizes`. */}
             <Reveal delay={120}>
               <Image
-                src="/hero.png"
+                src={heroImg}
                 alt="Fragmented legacy infrastructure consolidating into the HoodStack stack, built for Robinhood Chain"
-                width={1619}
-                height={972}
                 priority
+                placeholder="blur"
                 sizes="(min-width: 1024px) 48vw, 100vw"
                 className="mx-auto h-auto w-full max-w-xl lg:max-w-none"
               />
@@ -145,7 +149,7 @@ export default function HomePage() {
         {/* Proof strip: honest facts, not fake logos. Anchors the hero and states
             the value proposition in five words each. Gaps (not dividers) keep the
             items from crowding each other at any width. */}
-        <div className="hs-rule">
+        <div className="hs-rule mt-16 border-t border-line lg:mt-20">
           <Container>
             <dl className="grid grid-cols-2 gap-x-8 gap-y-6 py-8 sm:grid-cols-3 lg:grid-cols-5">
               {[
