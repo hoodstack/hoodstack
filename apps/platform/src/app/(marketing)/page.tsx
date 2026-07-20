@@ -143,26 +143,26 @@ export default function HomePage() {
         </Container>
 
         {/* Proof strip: honest facts, not fake logos. Anchors the hero and states
-            the value proposition in five words each. */}
+            the value proposition in five words each. Gaps (not dividers) keep the
+            items from crowding each other at any width. */}
         <div className="hs-rule">
           <Container>
-            <ul className="grid grid-cols-2 divide-line md:grid-cols-4 lg:grid-cols-5 lg:divide-x">
+            <dl className="grid grid-cols-2 gap-x-8 gap-y-6 py-8 sm:grid-cols-3 lg:grid-cols-5">
               {[
                 ["Open source", "Apache-2.0, public repo"],
                 ["Testnet-first", "Mainnet writes off by default"],
                 ["ERC-4337 native", "Smart accounts, sponsored gas"],
                 ["Non-custodial", "HoodStack cannot move funds"],
                 ["viem-compatible", "Drops into existing tooling"],
-              ].map(([title, sub], i) => (
-                <li
-                  key={title}
-                  className={`px-1 py-6 lg:px-6 ${i >= 4 ? "hidden lg:block" : ""}`}
-                >
-                  <p className="text-sm font-medium text-content">{title}</p>
-                  <p className="mt-1 text-xs text-content-tertiary">{sub}</p>
-                </li>
+              ].map(([title, sub]) => (
+                <div key={title}>
+                  <dt className="text-sm font-medium text-content">{title}</dt>
+                  <dd className="mt-1 text-xs leading-relaxed text-content-tertiary">
+                    {sub}
+                  </dd>
+                </div>
               ))}
-            </ul>
+            </dl>
           </Container>
         </div>
       </section>
