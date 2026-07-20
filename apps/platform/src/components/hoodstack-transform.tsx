@@ -120,34 +120,41 @@ export function HoodStackTransform() {
         </ul>
       </div>
 
-      {/* ── Flow: energy converging left → right ─────────────────────────── */}
-      <div className="relative hidden h-full min-h-[19rem] items-center justify-center lg:flex">
+      {/* ── Flow: six traces converging left → right ─────────────────────────
+          One trace per legacy concern, fanning symmetrically into a single
+          arrowhead. `meet` scales the SVG uniformly (no non-square stretch), so
+          the curves stay smooth and the marching dashes animate evenly. */}
+      <div className="relative hidden items-center justify-center lg:flex">
         <svg
-          viewBox="0 0 112 300"
-          preserveAspectRatio="none"
-          className="h-full w-full"
+          viewBox="0 0 120 300"
+          preserveAspectRatio="xMidYMid meet"
+          className="w-full"
           aria-hidden="true"
         >
-          {[36, 96, 150, 204, 264].map((y, i) => (
-            <g key={y}>
-              <path
-                d={`M0 ${y} C 46 ${y}, 58 150, 104 150`}
-                fill="none"
-                stroke="var(--hs-border-strong)"
-                strokeWidth="1"
-              />
-              <path
-                d={`M0 ${y} C 46 ${y}, 58 150, 104 150`}
-                fill="none"
-                stroke="var(--hs-brand)"
-                strokeWidth="1.5"
-                className="hs-flow"
-                style={{ animationDelay: `${i * 120}ms` } as CSSProperties}
-              />
-            </g>
-          ))}
-          {/* Arrowhead into the stack. */}
-          <path d="M100 143 L112 150 L100 157 Z" fill="var(--hs-brand)" />
+          {[40, 84, 128, 172, 216, 260].map((y, i) => {
+            const d = `M0 ${y} C 44 ${y}, 64 150, 106 150`;
+            return (
+              <g key={y}>
+                <path
+                  d={d}
+                  fill="none"
+                  stroke="var(--hs-border-strong)"
+                  strokeWidth="1"
+                />
+                <path
+                  d={d}
+                  fill="none"
+                  stroke="var(--hs-brand)"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  className="hs-flow"
+                  style={{ animationDelay: `${i * 100}ms` } as CSSProperties}
+                />
+              </g>
+            );
+          })}
+          {/* Single arrowhead at the convergence point. */}
+          <path d="M104 143 L120 150 L104 157 Z" fill="var(--hs-brand)" />
         </svg>
       </div>
 
