@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Fraunces, Inter, JetBrains_Mono } from "next/font/google";
+import { headers } from "next/headers";
 
 import { THEME_BOOTSTRAP_SCRIPT } from "@/lib/theme";
 
@@ -68,7 +69,13 @@ export const viewport: Viewport = {
   ],
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  // Reading the per-request nonce (set by middleware) does two things: it opts
+  // rendering into per-request mode, which is what lets Next stamp the nonce onto
+  // its streamed scripts so the strict CSP allows them; and it lets us nonce the
+  // theme bootstrap below.
+  const nonce = (await headers()).get("x-nonce") ?? undefined;
+
   return (
     <html
       lang="en"
@@ -79,9 +86,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {/*
           Applies the stored theme before first paint. Must stay inline and
           synchronous - deferring it reintroduces the flash it exists to prevent.
-          Its SHA-256 is pinned in the CSP; see next.config.mjs.
+          Allowed by the CSP via both its nonce and its pinned hash (middleware).
         */}
-        <script dangerouslySetInnerHTML={{ __html: THEME_BOOTSTRAP_SCRIPT }} />
+        <script nonce={nonce} dangerouslySetInnerHTML={{ __html: THEME_BOOTSTRAP_SCRIPT }} />
       </head>
       <body>
         <a
