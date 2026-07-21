@@ -208,7 +208,7 @@ is worse than none - it converts a private report into a public disclosure.
 
 **5. Deployment target** - affects Dockerfiles and CI.
 
-**6. Token ticker.** `$HOOD` is treated as provisional per §14 and appears in no
+**6. Token ticker.** `$STACK` is treated as provisional per §14 and appears in no
 user-facing surface.
 
 ---

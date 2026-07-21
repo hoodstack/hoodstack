@@ -48,7 +48,7 @@ Marketing site, docs subsite, and the authenticated app shell — one deployable
 - **Token utility** — single canonical page at **`/token-utility`**
   (`/products/token-utility` 308-redirects here). Credits-first capacity model,
   seven utility pillars each with its constraint, hard boundaries, before/after
-  evolution, `$HOOD` as a provisional identifier only.
+  evolution, `$STACK` as a provisional identifier only.
 - **Security** — posture-first editorial page (numbered guarantees, "what we do
   not claim", reporting scope, disclosure).
 - **Changelog** — versioned timeline mirroring `CHANGELOG.md`.

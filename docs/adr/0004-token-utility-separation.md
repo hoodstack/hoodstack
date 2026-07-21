@@ -75,7 +75,7 @@ Prohibited on every surface: price predictions, market-cap targets, guaranteed
 buybacks, APY promises, revenue-sharing promises, exchange listings, countdowns,
 and fabricated staking figures.
 
-`$HOOD` is a provisional internal identifier only. Ticker, supply, allocation,
+`$STACK` is a provisional internal identifier only. Ticker, supply, allocation,
 vesting, launch date, deployment address, liquidity strategy, and exchange plans
 are undetermined and must not appear anywhere until explicitly supplied.
 

@@ -320,7 +320,7 @@ export default function TokenUtilityPage() {
               <h3 className="text-sm font-medium text-content">On naming</h3>
               <p className="mt-3 max-w-3xl text-sm text-content-secondary">
                 Internally we refer to a future token as{" "}
-                <code className="font-mono text-content">$HOOD</code>. This is a
+                <code className="font-mono text-content">$STACK</code>. This is a
                 provisional working identifier, not a final ticker. Nothing about the
                 name, supply, allocation, vesting, price, liquidity, or listing is
                 decided, and none of it appears anywhere on this site.
