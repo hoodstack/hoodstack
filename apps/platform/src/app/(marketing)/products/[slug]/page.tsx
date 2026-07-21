@@ -14,6 +14,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
+import { ogImages } from "@/lib/og";
+
 import {
   ButtonLink,
   Container,
@@ -60,6 +62,7 @@ export async function generateMetadata({
       title: product.name,
       description: product.description,
       alternates: { canonical: product.href },
+      openGraph: { images: ogImages(product.name) },
     };
   }
 
@@ -69,6 +72,7 @@ export async function generateMetadata({
     title: module.name,
     description: module.shortDescription,
     alternates: { canonical: module.publicHref! },
+    openGraph: { images: ogImages(module.name) },
   };
 }
 
@@ -219,7 +223,7 @@ function ModulePage({ module }: { module: ModuleDefinition }) {
             <ButtonLink href={module.docsHref} variant="secondary">
               Documentation
             </ButtonLink>
-            <ButtonLink href="/docs/quickstart" variant="ghost">
+            <ButtonLink href="/docs#quickstart" variant="ghost">
               Quickstart
             </ButtonLink>
           </div>

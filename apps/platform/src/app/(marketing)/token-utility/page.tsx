@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { ogImages } from "@/lib/og";
 import Link from "next/link";
 
 import { Reveal } from "@/components/reveal";
@@ -6,6 +7,7 @@ import { ButtonLink, Container, Section, SectionHeading } from "@/components/ui"
 
 export const metadata: Metadata = {
   title: "Token utility",
+  openGraph: { images: ogImages("Token utility") },
   description:
     "How a future HoodStack token would coordinate infrastructure capacity — " +
     "and the hard boundaries it will never cross. Technical architecture, not an offer.",

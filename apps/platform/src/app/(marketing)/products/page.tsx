@@ -6,6 +6,7 @@ import {
   type ModuleDefinition,
 } from "@hoodstack/config";
 import type { Metadata } from "next";
+import { ogImages } from "@/lib/og";
 import Link from "next/link";
 
 import { Reveal } from "@/components/reveal";
@@ -13,6 +14,7 @@ import { Container, Eyebrow } from "@/components/ui";
 
 export const metadata: Metadata = {
   title: "Products",
+  openGraph: { images: ogImages("Products") },
   description:
     "The eight HoodStack products for Robinhood Chain: identity, execution, " +
     "assets, connectivity, automation, security, developer platform, and network.",

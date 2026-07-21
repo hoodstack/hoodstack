@@ -1,11 +1,13 @@
 import { robinhood, robinhoodTestnet } from "@hoodstack/network";
 import type { Metadata } from "next";
+import { ogImages } from "@/lib/og";
 import Link from "next/link";
 
 import { CodeBlock } from "@/components/ui";
 
 export const metadata: Metadata = {
   title: "Documentation",
+  openGraph: { images: ogImages("Documentation") },
   description:
     "Guides and reference for building on Robinhood Chain with HoodStack. " +
     "Architecture and security docs are complete; product guides are in progress.",

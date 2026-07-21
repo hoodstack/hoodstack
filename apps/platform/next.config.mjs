@@ -33,6 +33,15 @@ const nextConfig = {
         destination: "/token-utility",
         permanent: true,
       },
+      // Per-module doc pages (/docs/gas, /docs/accounts, …) do not exist yet —
+      // the docs are a single page. Resolve any /docs/* sub-path to it rather
+      // than 404. Temporary: removed as those pages are built. `:path+` matches
+      // one or more segments, so it never touches /docs itself.
+      {
+        source: "/docs/:path+",
+        destination: "/docs",
+        permanent: false,
+      },
     ];
   },
 

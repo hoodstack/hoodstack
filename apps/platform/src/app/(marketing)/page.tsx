@@ -116,7 +116,7 @@ export default function HomePage() {
               </p>
 
               <div className="mt-10 flex flex-wrap items-center gap-3">
-                <ButtonLink href="/docs/quickstart">Start building</ButtonLink>
+                <ButtonLink href="/docs#quickstart">Start building</ButtonLink>
                 <ButtonLink href="/products" variant="secondary">
                   Explore the stack
                 </ButtonLink>
@@ -465,7 +465,7 @@ export default function HomePage() {
                 </p>
               </div>
               <div className="flex flex-wrap gap-3">
-                <ButtonLink href="/docs/quickstart">Read the quickstart</ButtonLink>
+                <ButtonLink href="/docs#quickstart">Read the quickstart</ButtonLink>
                 <ButtonLink
                   href="https://github.com/hoodstack"
                   variant="secondary"

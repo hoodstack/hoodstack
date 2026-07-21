@@ -72,7 +72,7 @@ export const config = {
     // they are not HTML and do not carry inline scripts.
     {
       source:
-        "/((?!_next/static|_next/image|favicon.ico|icon.svg|robots.txt|sitemap.xml).*)",
+        "/((?!api|_next/static|_next/image|favicon.ico|icon.svg|robots.txt|sitemap.xml).*)",
     },
   ],
 };

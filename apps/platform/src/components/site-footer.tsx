@@ -103,7 +103,7 @@ export function SiteFooter() {
               Testnet is the default. No token required.
             </p>
             <div className="mt-5">
-              <ButtonLink href="/docs/quickstart">Start building</ButtonLink>
+              <ButtonLink href="/docs#quickstart">Start building</ButtonLink>
             </div>
           </div>
 

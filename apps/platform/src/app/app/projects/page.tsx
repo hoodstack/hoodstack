@@ -22,7 +22,7 @@ export default function ProjectsPage() {
       <header className="border-b border-line">
         <div className="mx-auto flex h-14 max-w-container items-center justify-between px-6">
           <Wordmark href="/" />
-          <ButtonLink href="/docs/quickstart" variant="secondary">
+          <ButtonLink href="/docs#quickstart" variant="secondary">
             Documentation
           </ButtonLink>
         </div>

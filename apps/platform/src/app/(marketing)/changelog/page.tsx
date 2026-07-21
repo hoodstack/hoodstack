@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
+import { ogImages } from "@/lib/og";
 
 import { Reveal } from "@/components/reveal";
 import { Container, StatusBadge } from "@/components/ui";
 
 export const metadata: Metadata = {
   title: "Changelog",
+  openGraph: { images: ogImages("Changelog") },
   description: "Notable changes to HoodStack.",
 };
 

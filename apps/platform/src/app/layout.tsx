@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Fraunces, Inter, JetBrains_Mono } from "next/font/google";
 import { headers } from "next/headers";
 
+import { ogImages } from "@/lib/og";
 import { THEME_BOOTSTRAP_SCRIPT } from "@/lib/theme";
 
 import "./globals.css";
@@ -57,7 +58,9 @@ export const metadata: Metadata = {
     description:
       "Developer infrastructure for Robinhood Chain: accounts, execution, gas, " +
       "assets, automation, and tooling for production applications.",
+    images: ogImages("Infrastructure built to scale."),
   },
+  // Twitter/X falls back to og:image, which is set per page, so no images here.
   twitter: { card: "summary_large_image", site: "@hoodstack_" },
   robots: { index: true, follow: true },
 };

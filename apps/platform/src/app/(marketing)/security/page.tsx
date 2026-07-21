@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
+import { ogImages } from "@/lib/og";
 
 import { Reveal } from "@/components/reveal";
 import { ButtonLink, Container, Section, SectionHeading } from "@/components/ui";
 
 export const metadata: Metadata = {
   title: "Security",
+  openGraph: { images: ogImages("Security") },
   description:
     "HoodStack's security posture, the properties the codebase is built around, " +
     "and how to report a vulnerability.",
