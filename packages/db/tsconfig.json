@@ -1,0 +1,10 @@
+{
+  "extends": "@hoodstack/tsconfig/library.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "dist",
+    // The client reads process.env and the Postgres driver targets Node.
+    "types": ["node"]
+  },
+  "include": ["src/**/*"]
+}

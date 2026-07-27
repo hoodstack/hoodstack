@@ -1,5 +1,5 @@
 import Link from "next/link";
-import type { ReactNode } from "react";
+import type { ButtonHTMLAttributes, ReactNode } from "react";
 
 /**
  * Shared primitives for the platform application.
@@ -124,6 +124,31 @@ export function ButtonLink({
     <Link href={href} className={classes}>
       {children}
     </Link>
+  );
+}
+
+/**
+ * A real `<button>` in the same visual language as ButtonLink.
+ *
+ * Used for actions that mutate state (submit a form, mint or revoke a key) where
+ * a link would be wrong. Shares the button base and variants so the two stay
+ * indistinguishable to the eye.
+ */
+export function Button({
+  variant = "primary",
+  className,
+  children,
+  ...props
+}: {
+  variant?: ButtonVariant;
+} & ButtonHTMLAttributes<HTMLButtonElement>) {
+  return (
+    <button
+      className={cx(buttonBase, buttonVariants[variant], "h-9 px-4", className)}
+      {...props}
+    >
+      {children}
+    </button>
   );
 }
 
