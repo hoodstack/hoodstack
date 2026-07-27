@@ -34,9 +34,13 @@ const THEME_SCRIPT_HASH = "'sha256-rqkRcavrYl2kObMvX5rLUxbQwuaaNVDz0K3oq1YJEHs='
 
 /**
  * Origins the Privy SDK (and its WalletConnect/Reown wallet plumbing) must reach
- * for auth, embedded wallets, and the wallet picker. These loosen the policy, so
- * they are added only on the authenticated `/app` subtree — the marketing site
- * keeps the tight default policy with no third-party origins.
+ * for auth, embedded wallets, and the wallet picker.
+ *
+ * These are applied to every document, not just `/app`. CSP is fixed on the HTML
+ * document when it is served; a client-side navigation into `/app` keeps the
+ * originating page's policy, so scoping these to `/app` would break auth whenever
+ * the user arrives via an in-app link. The marketing pages never call these
+ * origins, so allowing them is additive permission with no behavioural change.
  */
 const PRIVY_CONNECT = [
   "https://auth.privy.io",
@@ -67,7 +71,6 @@ const PRIVY_IMG = [
 
 export function middleware(request: NextRequest) {
   const isDev = process.env.NODE_ENV === "development";
-  const isApp = request.nextUrl.pathname.startsWith("/app");
   const nonce = btoa(crypto.randomUUID());
 
   // Development: the Next dev server uses inline scripts and eval for HMR that a
@@ -76,21 +79,17 @@ export function middleware(request: NextRequest) {
   // in production (dev's 'unsafe-eval' already covers it).
   const scriptSrc = isDev
     ? "script-src 'self' 'unsafe-inline' 'unsafe-eval'"
-    : `script-src 'self' 'nonce-${nonce}' 'strict-dynamic' ${THEME_SCRIPT_HASH}${
-        isApp ? " 'wasm-unsafe-eval'" : ""
-      }`;
+    : `script-src 'self' 'nonce-${nonce}' 'strict-dynamic' ${THEME_SCRIPT_HASH} 'wasm-unsafe-eval'`;
 
   const csp = [
     "default-src 'self'",
     scriptSrc,
     "style-src 'self' 'unsafe-inline'",
-    `img-src 'self' data: blob:${isApp ? " " + PRIVY_IMG : ""}`,
+    `img-src 'self' data: blob: ${PRIVY_IMG}`,
     "font-src 'self' data:",
-    `connect-src 'self' ${ROBINHOOD_ENDPOINTS}${isDev ? " ws: wss:" : ""}${
-      isApp ? " " + PRIVY_CONNECT : ""
-    }`,
-    `frame-src 'self'${isApp ? " " + PRIVY_FRAME : ""}`,
-    ...(isApp ? ["worker-src 'self' blob:"] : []),
+    `connect-src 'self' ${ROBINHOOD_ENDPOINTS} ${PRIVY_CONNECT}${isDev ? " ws: wss:" : ""}`,
+    `frame-src 'self' ${PRIVY_FRAME}`,
+    "worker-src 'self' blob:",
     "frame-ancestors 'none'",
     "base-uri 'self'",
     "form-action 'self'",

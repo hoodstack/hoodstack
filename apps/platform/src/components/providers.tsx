@@ -20,7 +20,6 @@ export function Providers({ children }: { children: React.ReactNode }) {
         appearance: {
           theme: "dark",
           accentColor: "#ccfe00",
-          logo: "https://www.hoodstack.io/logo.png",
         },
         loginMethods: ["email", "google", "github", "wallet"],
         embeddedWallets: { createOnLogin: "users-without-wallets" },
