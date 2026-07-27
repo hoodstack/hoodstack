@@ -1,9 +1,4 @@
-import {
-  getExplorerTokenUrl,
-  readToken,
-  robinhood,
-  type TokenSummary,
-} from "@hoodstack/network";
+import { getExplorerTokenUrl, robinhood } from "@hoodstack/network";
 import type { Metadata } from "next";
 import { ogImages } from "@/lib/og";
 import Link from "next/link";
@@ -11,7 +6,7 @@ import Link from "next/link";
 import { Reveal } from "@/components/reveal";
 import { ButtonLink, Container, Section, SectionHeading } from "@/components/ui";
 import { HSTACK } from "@/lib/hstack";
-import { rpcUrlsForEnvironment } from "@/server/chain";
+import { readHstack } from "@/server/hstack";
 
 export const metadata: Metadata = {
   title: "Token utility",
@@ -25,20 +20,6 @@ export const metadata: Metadata = {
 
 // Read the token live from the chain on each request.
 export const dynamic = "force-dynamic";
-
-async function readHstack(): Promise<TokenSummary | null> {
-  try {
-    return await readToken(
-      rpcUrlsForEnvironment("live"),
-      robinhood,
-      HSTACK.address,
-      undefined,
-      { timeoutMs: 10_000 },
-    );
-  } catch {
-    return null;
-  }
-}
 
 /** The capacity model: credits are the abstraction; the token is one funding source. */
 const CAPACITY_FLOW = [
