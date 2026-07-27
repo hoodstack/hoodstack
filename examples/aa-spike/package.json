@@ -1,0 +1,19 @@
+{
+  "name": "@hoodstack/example-aa-spike",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Account-abstraction spike: derive a Kernel account and send one UserOperation on Robinhood testnet.",
+  "type": "module",
+  "scripts": {
+    "derive": "tsx src/derive.ts",
+    "spike": "tsx src/spike.ts"
+  },
+  "dependencies": {
+    "@hoodstack/network": "workspace:*",
+    "permissionless": "^0.2.10",
+    "viem": "^2.21.0"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.2"
+  }
+}

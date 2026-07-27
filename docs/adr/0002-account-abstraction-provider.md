@@ -1,7 +1,7 @@
 # ADR 0002: Account abstraction through a provider adapter
 
-- **Status:** Accepted; provider recommended 2026-07-27 (pending owner sign-off)
-- **Date:** 2026-07-19 (evaluation appended 2026-07-27)
+- **Status:** Accepted; **Kernel + Pimlico approved 2026-07-27**. Spike in progress.
+- **Date:** 2026-07-19 (evaluation appended and provider approved 2026-07-27)
 
 ## Context
 
@@ -198,3 +198,27 @@ Consequence #1 above says HoodStack operates no bundler or paymaster. The hosted
 path keeps that true. The self-hosted path does not: we would then operate a bundler
 and hold paymaster liquidity, and the marketing and docs must say so. Choose this
 deliberately with the provider decision.
+
+---
+
+## Decision and spike (2026-07-27)
+
+**Approved: Kernel account + Pimlico bundler/paymaster**, signer = Privy embedded
+wallet, with self-hosted Alto as the fallback. See the recommendation above.
+
+The spike lives in [`examples/aa-spike`](../../examples/aa-spike). Its first half
+is verified live on Robinhood testnet:
+
+- A Kernel v3 smart account was derived deterministically for a test owner and
+  confirmed counterfactual (not yet deployed).
+- Robinhood-specific finding: the Kernel **meta-factory** is not deployed on
+  chain, but the Kernel **factory** is, so accounts are addressed with
+  `useMetaFactory: false`. This is exactly the kind of chain detail the spike
+  exists to surface, and it is now handled.
+
+The second half, sending one sponsored UserOperation, is coded and ready. It
+needs a bundler+paymaster endpoint for chain 46630 (hosted Pimlico or a local
+Alto) and a funded paymaster, which are provisioning steps, not code. One
+confirmed UserOperation validates EntryPoint + Kernel + bundler + paymaster; then
+the `SmartAccountAdapter` and the write-path modules (Accounts, Transactions,
+Gas, Sessions) wire up in order.

@@ -174,12 +174,13 @@ Robinhood Chain already has the ERC-4337 EntryPoint and the Kernel, Safe, and
 SimpleAccount factories deployed on both networks, so only a bundler and a
 paymaster remain.
 
-> **Your call to make:** approve **Kernel + Pimlico** (with the self-host
-> fallback)? If yes, the first step is the spike, one sponsored UserOperation on
-> testnet behind a feature flag, which is the concrete proof before any real
-> module work or spend. That single confirmed UserOp validates EntryPoint +
-> Kernel + bundler + paymaster, and then Accounts, Transactions, Gas, and Sessions
-> wire up in order.
+**Approved (2026-07-27): Kernel + Pimlico**, with the self-host Alto fallback.
+The spike is underway in `examples/aa-spike`. Its first half is verified live: a
+Kernel account derives deterministically on Robinhood testnet (using the direct
+factory, since the meta-factory is not deployed there). The second half, one
+sponsored UserOperation, is coded and waiting on a bundler+paymaster endpoint for
+chain 46630. One confirmed UserOp then unblocks Authentication, Sessions, signed
+Transactions, Gas sponsorship, and Automation.
 
 Other backlog dependencies, tracked separately:
 
