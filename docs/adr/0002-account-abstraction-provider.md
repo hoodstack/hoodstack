@@ -1,7 +1,7 @@
 # ADR 0002: Account abstraction through a provider adapter
 
-- **Status:** Accepted (provider selection deferred)
-- **Date:** 2026-07-19
+- **Status:** Accepted; provider recommended 2026-07-27 (pending owner sign-off)
+- **Date:** 2026-07-19 (evaluation appended 2026-07-27)
 
 ## Context
 
@@ -79,3 +79,122 @@ of accounts, and whether accounts remain usable if HoodStack disappears.
 
 That last criterion is a hard requirement. A user's account must not become
 inaccessible because we stopped operating.
+
+---
+
+## Evaluation and recommendation (2026-07-27)
+
+This resolves the open question above. It is grounded in live reads against
+Robinhood Chain, not vendor marketing.
+
+### On-chain findings (verified via RPC, both networks)
+
+The standard ERC-4337 stack is **already deployed** on Robinhood Chain, testnet
+(46630) and mainnet (4663):
+
+| Contract | Testnet 46630 | Mainnet 4663 |
+| --- | --- | --- |
+| EntryPoint v0.6 / v0.7 / v0.8 | deployed | v0.6 + v0.7 deployed |
+| SimpleAccountFactory v0.7 | deployed | deployed |
+| Kernel v3 factory (ZeroDev) | deployed | deployed |
+| Safe 4337 Module + Proxy Factory | deployed | deployed |
+| Deterministic deployer, Multicall3 | deployed | (deployer assumed) |
+
+**Implication.** We do not deploy or self-host an EntryPoint, and we do not need
+to deploy an account factory: Kernel, Safe, and SimpleAccount are all live. The
+account layer is turnkey. The only infrastructure left is a **bundler** and a
+**paymaster**.
+
+### What is actually left to build
+
+1. **Bundler** - submits UserOperations to the EntryPoint. Either a hosted
+   bundler that supports chain 46630/4663, or a self-hosted open-source bundler
+   (Pimlico Alto or Alchemy Rundler) pointed at the Robinhood RPC. Because the
+   EntryPoint is on-chain, self-hosting always works as a fallback.
+2. **Paymaster** - sponsors gas for the Gas module. Either a hosted paymaster, or
+   a verifying paymaster we deploy and fund with ETH, with sponsorship gated by
+   the **Policies** module we already shipped.
+3. **Adapter** - implement the `SmartAccountAdapter` above for the chosen account,
+   normalizing errors to `HS_` codes, then wire it to the modules.
+
+### Options - account layer
+
+- **Kernel v3 (ZeroDev) - recommended.** Deployed on both networks; the strongest
+  session-key and permissions story of the three, which is exactly what the
+  Sessions and Automation modules need; multiple audits; a standard, widely
+  supported implementation, so an account stays operable by any 4337 tooling.
+- **Safe (4337 Module).** Deployed; the most battle-tested custody contract; heavier
+  and multi-sig oriented; session keys come via add-on modules. A strong choice if
+  we later target treasury-grade accounts.
+- **SimpleAccount.** Deployed; minimal and cheap, but no session keys, so it cannot
+  back Sessions or Automation. Not sufficient.
+
+### Options - bundler and paymaster
+
+- **Pimlico (Alto bundler + verifying paymaster) - recommended.** Account-agnostic
+  via permissionless.js (works with Kernel). Alto is open source and self-hostable,
+  so we are never locked out by hosted chain-support gaps - the decisive factor for
+  the "usable if HoodStack disappears" requirement.
+- **ZeroDev (bundler + paymaster + Kernel).** Most integrated for Kernel with
+  excellent DX; leans on hosted infrastructure; verify Robinhood support.
+- **Alchemy Account Kit / Rundler.** Rundler (Rust) is open source and self-hostable;
+  Alchemy's hosted service is unlikely to support a niche chain.
+- **Fully self-hosted (Alto or Rundler + our own verifying paymaster).** Maximum
+  control, maximum ops. The guaranteed-to-work fallback since the EntryPoint is live.
+
+### Recommendation
+
+- **Signer:** the Privy embedded wallet we already run. It owns the smart account
+  and its key is exportable, which preserves user access if we disappear.
+- **Account:** Kernel v3 (on-chain, session keys, audited, standard).
+- **Bundler + paymaster:** Pimlico - hosted if it supports 46630/4663, otherwise
+  self-host Alto and deploy a verifying paymaster funded in ETH, with sponsorship
+  bounded by the Policies module.
+- **Adapter:** a Kernel + Pimlico implementation of `SmartAccountAdapter`, with
+  capability flags for deterministic address prediction and session keys.
+
+Rationale: it reuses Privy; Kernel session keys directly unblock Sessions and
+Automation; Pimlico/Alto being self-hostable removes provider lock-in and meets the
+hard survivability requirement; and nothing novel custodies funds.
+
+### How it unblocks the roadmap
+
+- **Accounts:** real smart-account creation and deterministic address prediction.
+- **Transactions:** build, sign, and submit a UserOperation. The simulate we already
+  shipped becomes the pre-flight check.
+- **Gas:** the verifying paymaster sponsors UserOperations, bounded by the Policies
+  rules (max value, recipient allowlist) already built.
+- **Sessions:** Kernel session keys - scoped permissions with expiry.
+- **Automation:** session keys plus a scheduler.
+
+### First build step (one spike proves the whole stack)
+
+A testnet-only script, behind a feature flag, that:
+
+1. Selects a bundler: Pimlico hosted for 46630 if supported, else `docker run` Alto
+   against the Robinhood testnet RPC.
+2. Ensures a funded verifying paymaster (hosted, or deploy ours and fund with faucet
+   ETH).
+3. Uses permissionless.js to derive a Kernel account owned by a test EOA, builds a
+   no-op UserOperation (self-call, zero value), sponsors it, sends it through the
+   bundler to EntryPoint v0.7, and waits for the receipt.
+
+One confirmed UserOperation validates EntryPoint + Kernel + bundler + paymaster on
+chain 46630. Then implement the adapter and wire Accounts, Transactions, Gas, and
+Sessions in that order.
+
+### Must verify before committing spend
+
+- Hosted-bundler support for 46630 and 4663. If absent, self-host Alto; the on-chain
+  EntryPoint guarantees this path works.
+- Current provider pricing (bundler operations and paymaster gas markup) and the
+  paymaster funding model. Not stated here to avoid quoting stale numbers; confirm
+  live before enabling on mainnet.
+- Privy embedded-wallet key-export terms, which back the survivability guarantee.
+
+### Consequence to revisit
+
+Consequence #1 above says HoodStack operates no bundler or paymaster. The hosted
+path keeps that true. The self-hosted path does not: we would then operate a bundler
+and hold paymaster liquidity, and the marketing and docs must say so. Choose this
+deliberately with the provider decision.
