@@ -19,8 +19,8 @@ import type { HoodStackModuleId, ModuleDefinition } from "./types.js";
  *
  * Enabled modules span reads, simulation, configuration, verification, developer
  * tooling (SDK, CLI, reference, playground, recipes), and the dashboard surfaces.
- * Preview modules are blocked on account abstraction, payments, invitations, a
- * scheduler, or the token, and say so; any other value would misrepresent them.
+ * Preview modules are blocked on account abstraction, payments,
+ * invitations, or a scheduler, and say so; any other value would misrepresent them.
  *
  * Flipping a module to `enabled` is a deliberate act with a checklist attached;
  * see `docs/operations/module-activation.md`.
@@ -519,7 +519,7 @@ export const MODULES: Readonly<Record<HoodStackModuleId, ModuleDefinition>> = {
     appHref: app("credits"),
     docsHref: "/docs/credits",
     icon: "credit",
-    availability: "preview",
+    availability: "enabled",
     relatedModules: ["usage", "tokenUtility"],
   },
 
@@ -539,7 +539,7 @@ export const MODULES: Readonly<Record<HoodStackModuleId, ModuleDefinition>> = {
     appHref: app("token-utility"),
     docsHref: "/docs/token-utility",
     icon: "token",
-    availability: "preview",
+    availability: "enabled",
     relatedModules: ["credits", "usage"],
   },
 

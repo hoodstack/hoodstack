@@ -258,6 +258,26 @@ export const auditLog = pgTable(
   (t) => [index("audit_log_project_created_idx").on(t.projectId, t.createdAt)],
 );
 
+/**
+ * An append-only grant of usage credits to a project: the free-tier allocation
+ * today, and conventional or token-funded top-ups later. Consumption is metered
+ * separately via usage_events, so a project's balance is grants minus usage. This
+ * ledger is offchain and non-transferable.
+ */
+export const creditGrants = pgTable(
+  "credit_grants",
+  {
+    id: bigserial("id", { mode: "number" }).primaryKey(),
+    projectId: uuid("project_id")
+      .notNull()
+      .references(() => projects.id, { onDelete: "cascade" }),
+    amount: integer("amount").notNull(),
+    reason: text("reason").notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [index("credit_grants_project_idx").on(t.projectId)],
+);
+
 export type User = typeof users.$inferSelect;
 export type NewUser = typeof users.$inferInsert;
 export type Organization = typeof organizations.$inferSelect;
@@ -282,3 +302,5 @@ export type WebhookEndpoint = typeof webhookEndpoints.$inferSelect;
 export type NewWebhookEndpoint = typeof webhookEndpoints.$inferInsert;
 export type AuditLogEntry = typeof auditLog.$inferSelect;
 export type NewAuditLogEntry = typeof auditLog.$inferInsert;
+export type CreditGrant = typeof creditGrants.$inferSelect;
+export type NewCreditGrant = typeof creditGrants.$inferInsert;

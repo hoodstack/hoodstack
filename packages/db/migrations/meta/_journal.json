@@ -43,6 +43,13 @@
       "when": 1785168706510,
       "tag": "0005_shiny_lily_hollister",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1785176601323,
+      "tag": "0006_loud_steel_serpent",
+      "breakpoints": true
     }
   ]
 }

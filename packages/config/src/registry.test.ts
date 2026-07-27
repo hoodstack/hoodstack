@@ -281,6 +281,8 @@ describe("availability gating", () => {
       "playground",
       "usage",
       "projectSettings",
+      "credits",
+      "tokenUtility",
     ]);
     for (const module of MODULE_LIST) {
       expect(isModuleEnabled(module.id), module.id).toBe(enabled.has(module.id));
