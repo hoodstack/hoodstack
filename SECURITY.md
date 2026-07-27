@@ -4,7 +4,7 @@
 
 State this plainly, because it determines how you should treat this software:
 
-**HoodStack is pre-release and has not been audited.** No independent security
+**HoodStack is Live and has not been audited.** No independent security
 review has been performed. No formal verification has been performed. No bug
 bounty is currently funded.
 

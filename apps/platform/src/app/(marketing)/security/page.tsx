@@ -90,19 +90,6 @@ export default function SecurityPage() {
               when we are wrong.
             </p>
           </div>
-
-          <Reveal>
-            <div className="rounded-surface border border-line bg-status-warning-bg p-5">
-              <p className="hs-mono-label" style={{ color: "var(--hs-status-warning)" }}>
-                Current posture
-              </p>
-              <p className="mt-3 text-sm text-content-secondary">
-                Pre-release, and <strong className="text-content">not audited</strong>. No
-                independent security review. No funded bug bounty. Do not use HoodStack to
-                secure funds you cannot afford to lose.
-              </p>
-            </div>
-          </Reveal>
         </div>
       </Container>
 

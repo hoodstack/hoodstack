@@ -14,7 +14,7 @@ interface StatusItem {
 const STATUS: readonly StatusItem[] = [
   { label: "Networks", value: "Mainnet + Testnet", dot: true },
   { label: "Chain IDs", value: `${robinhood.id} · ${robinhoodTestnet.id}`, mono: true },
-  { label: "Status", value: "Pre-release" },
+  { label: "Status", value: "Live" },
   { label: "License", value: "Apache-2.0" },
 ];
 
