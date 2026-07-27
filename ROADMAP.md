@@ -58,7 +58,7 @@ Working today, each with a dashboard surface and, where it applies, a public API
 | Connectivity | Data, Explorer, Webhooks, API Keys, Environments |
 | Security | Security posture, Audit Logs |
 | Developer platform | API Reference, Playground, SDK, CLI, Recipes |
-| Network coordination | Usage |
+| Network coordination | Usage, Credits, Token Utility |
 | Settings | Project Settings |
 
 The full read, simulate, configure, verify, and audit surface is live.
