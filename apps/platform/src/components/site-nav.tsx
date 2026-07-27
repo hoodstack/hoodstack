@@ -17,6 +17,8 @@ const NAV = [
   { href: "/security", label: "Security" },
 ];
 
+const X_URL = "https://x.com/hoodstack_";
+
 /**
  * Floating navigation.
  *
@@ -94,6 +96,15 @@ export function SiteNav() {
           </ul>
 
           <div className="flex items-center gap-2 sm:gap-3">
+            <a
+              href={X_URL}
+              target="_blank"
+              rel="noreferrer noopener"
+              aria-label="HoodStack on X"
+              className="hidden size-9 items-center justify-center rounded-full text-content-secondary transition-colors hover:text-content sm:flex"
+            >
+              <XIcon />
+            </a>
             <div className="hidden sm:block">
               <ThemeToggle />
             </div>
@@ -168,7 +179,18 @@ export function SiteNav() {
               })}
             </ul>
             <div className="mt-3 flex items-center justify-between gap-3 border-t border-line pt-3">
-              <ThemeToggle />
+              <div className="flex items-center gap-1">
+                <ThemeToggle />
+                <a
+                  href={X_URL}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  aria-label="HoodStack on X"
+                  className="flex size-9 items-center justify-center rounded-full text-content-secondary transition-colors hover:text-content"
+                >
+                  <XIcon />
+                </a>
+              </div>
               <ButtonLink href="/app" variant="primary">
                 Start building
               </ButtonLink>
@@ -177,5 +199,14 @@ export function SiteNav() {
         ) : null}
       </div>
     </div>
+  );
+}
+
+/** The X (formerly Twitter) wordmark glyph. */
+function XIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="size-[1.05rem]" fill="currentColor" aria-hidden="true">
+      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+    </svg>
   );
 }
