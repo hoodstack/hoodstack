@@ -1,6 +1,6 @@
 import "server-only";
 
-import { count, desc, eq, getDb, usageEvents } from "@hoodstack/db";
+import { apiKeys, count, desc, eq, getDb, usageEvents } from "@hoodstack/db";
 
 import { getProjectForMember } from "./projects";
 
@@ -66,4 +66,58 @@ export async function getProjectUsageSummary(
     total: totals?.total ?? 0,
     lastAt: latest?.at ? latest.at.toISOString() : null,
   };
+}
+
+/** One row in the activity feed. */
+export type ActivityEvent = {
+  id: number;
+  module: string;
+  action: string;
+  status: string;
+  createdAt: string;
+  keyName: string | null;
+  keyEnvironment: string | null;
+  meta: Record<string, unknown> | null;
+};
+
+/**
+ * The project's most recent metered events, newest first, joined to the key that
+ * made each call (null for dashboard-originated reads). Membership-scoped, so it
+ * returns nothing for a project the caller cannot access.
+ */
+export async function getRecentActivity(
+  userId: string,
+  projectId: string,
+  limit = 50,
+): Promise<ActivityEvent[]> {
+  const project = await getProjectForMember(userId, projectId);
+  if (!project) return [];
+
+  const rows = await getDb()
+    .select({
+      id: usageEvents.id,
+      module: usageEvents.module,
+      action: usageEvents.action,
+      status: usageEvents.status,
+      createdAt: usageEvents.createdAt,
+      meta: usageEvents.meta,
+      keyName: apiKeys.name,
+      keyEnvironment: apiKeys.environment,
+    })
+    .from(usageEvents)
+    .leftJoin(apiKeys, eq(usageEvents.apiKeyId, apiKeys.id))
+    .where(eq(usageEvents.projectId, projectId))
+    .orderBy(desc(usageEvents.createdAt))
+    .limit(Math.min(Math.max(limit, 1), 200));
+
+  return rows.map((row) => ({
+    id: row.id,
+    module: row.module,
+    action: row.action,
+    status: row.status,
+    createdAt: row.createdAt.toISOString(),
+    keyName: row.keyName ?? null,
+    keyEnvironment: row.keyEnvironment ?? null,
+    meta: row.meta ?? null,
+  }));
 }
