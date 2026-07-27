@@ -90,6 +90,24 @@ export function HeroStack() {
         <clipPath id="hs-hero-cap-clip">
           <polygon points={topFace(CAP_CY)} />
         </clipPath>
+        {/* Crop the logo to its top face (drop the lower layers) in the image's
+            own [0,1] space, so nothing peeks below the feather. */}
+        <clipPath id="hs-hero-logo-crop" clipPathUnits="userSpaceOnUse">
+          <rect x="0" y="0.15" width="1" height="0.38" />
+        </clipPath>
+        {/* Keep only the dark feather from the logo and drop its lime card:
+            bright pixels go transparent, so the cap's own lime shows through
+            (including the arrow gap). Composited back against the logo's alpha
+            so the transparent margins stay transparent. */}
+        <filter id="hs-hero-feather" x="0" y="0" width="1" height="1">
+          <feColorMatrix
+            in="SourceGraphic"
+            type="matrix"
+            values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  -4 -4 -4 0 1"
+            result="dark"
+          />
+          <feComposite in="dark" in2="SourceGraphic" operator="in" />
+        </filter>
       </defs>
 
       {/* Backdrop: faint dot field, a soft glow, and a contact shadow. */}
@@ -162,16 +180,19 @@ export function HeroStack() {
             origin corner), and the clip trims the logo to the face. */}
         <polygon points={topFace(CAP.cy)} fill="url(#hs-hero-cap)" />
         <g clipPath="url(#hs-hero-cap-clip)">
-          <g transform={`matrix(${RX} ${-RY} ${RX} ${RY} ${CX - RX} ${CAP.cy})`}>
-            {/* Zoom into the logo's feather so the cap reads as the brand mark,
-                not a shrunken stack-on-a-stack. Centered on the feather. */}
-            <g transform="translate(0.5 0.5) scale(2.8) translate(-0.5 -0.3)">
+          {/* The feather, upright and only gently foreshortened onto the cap - no
+              45-degree shear, so it reads as itself instead of a hooded blob. The
+              logo is cropped to its top face, centered on the feather. */}
+          <g transform={`translate(${CX} ${CAP.cy - 2}) scale(1 0.72)`}>
+            <g transform="scale(230) translate(-0.5 -0.32)">
               <image
                 href="/logo.png"
                 x="0"
                 y="0"
                 width="1"
                 height="1"
+                clipPath="url(#hs-hero-logo-crop)"
+                filter="url(#hs-hero-feather)"
                 preserveAspectRatio="xMidYMid meet"
               />
             </g>
