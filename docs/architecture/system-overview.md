@@ -170,7 +170,7 @@ Non-negotiable behaviours, implemented and tested:
 
 HoodStack operates no bundler, no paymaster liquidity, no indexer, no RPC
 infrastructure, and no MPC or HSM custody. Each is a third party behind an
-adapter (ADR 0002), which normalizes errors, makes capability explicit and
+adapter, which normalizes errors, makes capability explicit and
 detectable, enables testing without network access, and keeps provider choice a
 configuration decision.
 

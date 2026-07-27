@@ -106,22 +106,6 @@ importers:
         specifier: ^5.7.2
         version: 5.9.3
 
-  examples/aa-spike:
-    dependencies:
-      '@hoodstack/network':
-        specifier: workspace:*
-        version: link:../../packages/network
-      permissionless:
-        specifier: ^0.2.10
-        version: 0.2.57(viem@2.55.4(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@3.25.76))
-      viem:
-        specifier: ^2.21.0
-        version: 2.55.4(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@3.25.76)
-    devDependencies:
-      tsx:
-        specifier: ^4.19.2
-        version: 4.23.1
-
   packages/cli:
     dependencies:
       '@hoodstack/sdk':
@@ -9028,6 +9012,7 @@ snapshots:
       '@esbuild/win32-arm64': 0.28.1
       '@esbuild/win32-ia32': 0.28.1
       '@esbuild/win32-x64': 0.28.1
+    optional: true
 
   escalade@3.2.0: {}
 
@@ -9762,6 +9747,7 @@ snapshots:
   permissionless@0.2.57(viem@2.55.4(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@3.25.76)):
     dependencies:
       viem: 2.55.4(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@3.25.76)
+    optional: true
 
   picocolors@1.1.1: {}
 
@@ -10377,6 +10363,7 @@ snapshots:
       esbuild: 0.28.1
     optionalDependencies:
       fsevents: 2.3.3
+    optional: true
 
   turbo@2.10.5:
     optionalDependencies:

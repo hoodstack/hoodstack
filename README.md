@@ -153,7 +153,7 @@ degrade silently under load.
 
 HoodStack does **not** operate RPC infrastructure, a bundler, paymaster
 liquidity, an indexer, or MPC/HSM custody. Each is a third party behind an
-adapter - see [ADR 0002](docs/adr/0002-account-abstraction-provider.md).
+adapter that normalizes it into stable interfaces.
 
 ---
 

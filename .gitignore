@@ -99,3 +99,5 @@ yarn-error.log*
 /PROJECT_STATUS.md
 /IMPLEMENTATION_PLAN.md
 /ROADMAP_INTERNAL.md
+/docs/adr/0002-account-abstraction-provider.md
+/private/
