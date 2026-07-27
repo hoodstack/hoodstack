@@ -5,8 +5,9 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { Wordmark } from "@/components/brand";
+import { NetworkSwitcher } from "@/components/network/network-switcher";
 import { ThemeToggle } from "@/components/theme-toggle";
-import { StatusBadge, cx } from "@/components/ui";
+import { cx } from "@/components/ui";
 
 import { AccountMenu } from "../../_components/account-menu";
 import { RouteProgress } from "./route-progress";
@@ -25,15 +26,11 @@ export type NavSection = { category: string; label: string; modules: NavModule[]
 export function AppChrome({
   projectName,
   email,
-  chainName,
-  isTestnet,
   sections,
   children,
 }: {
   projectName: string;
   email: string | null;
-  chainName: string;
-  isTestnet: boolean;
   sections: NavSection[];
   children: React.ReactNode;
 }) {
@@ -72,10 +69,7 @@ export function AppChrome({
           </div>
 
           <div className="flex items-center gap-2 sm:gap-3">
-            <StatusBadge tone={isTestnet ? "info" : "warning"}>
-              <span className="hidden sm:inline">{chainName}</span>
-              <span className="sm:hidden">{isTestnet ? "Testnet" : "Mainnet"}</span>
-            </StatusBadge>
+            <NetworkSwitcher />
             <div className="hidden sm:block">
               <ThemeToggle />
             </div>

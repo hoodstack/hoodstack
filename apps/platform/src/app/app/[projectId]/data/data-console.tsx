@@ -1,9 +1,9 @@
 "use client";
 
 import type { AccountSummary, TransactionSummary } from "@hoodstack/network";
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 
-import type { KeyEnvironment } from "@/lib/api-keys";
+import { useNetwork } from "@/components/network/network-provider";
 import { Button, DefinitionRow, StatusBadge, cx } from "@/components/ui";
 
 import { lookupAccountAction, lookupTransactionAction } from "./actions";
@@ -20,7 +20,7 @@ type Mode = "account" | "transaction";
  */
 export function DataConsole({ projectId }: { projectId: string }) {
   const [mode, setMode] = useState<Mode>("account");
-  const [environment, setEnvironment] = useState<KeyEnvironment>("test");
+  const { network: environment } = useNetwork();
   const [value, setValue] = useState("");
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
@@ -32,6 +32,13 @@ export function DataConsole({ projectId }: { projectId: string }) {
     setAccount(null);
     setTx(null);
   }
+
+  // A lookup belongs to the network it ran on; drop it when that changes.
+  useEffect(() => {
+    setError(null);
+    setAccount(null);
+    setTx(null);
+  }, [environment]);
 
   function run() {
     reset();
@@ -78,20 +85,6 @@ export function DataConsole({ projectId }: { projectId: string }) {
             </button>
           ))}
         </div>
-
-        {/* Network. */}
-        <select
-          value={environment}
-          onChange={(e) => {
-            setEnvironment(e.target.value as KeyEnvironment);
-            reset();
-          }}
-          disabled={pending}
-          className="h-9 rounded-control border border-line-strong bg-surface px-3 text-sm text-content focus-visible:border-line-brand focus-visible:outline-none disabled:opacity-50"
-        >
-          <option value="test">Testnet</option>
-          <option value="live">Mainnet</option>
-        </select>
       </div>
 
       <form

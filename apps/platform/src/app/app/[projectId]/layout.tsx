@@ -1,8 +1,10 @@
 import { buildAppNavigation, isModuleEnabled } from "@hoodstack/config";
-import { DEFAULT_CHAIN } from "@hoodstack/network";
+import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 
 import { getSessionUser } from "@/lib/auth/session";
+import { NETWORK_COOKIE, parseNetwork } from "@/lib/network";
+import { NetworkProvider } from "@/components/network/network-provider";
 import { getProjectForMember } from "@/server/projects";
 
 import { AppChrome, type NavSection } from "./_components/app-chrome";
@@ -32,6 +34,9 @@ export default async function AppLayout({
   const project = await getProjectForMember(session.user.id, projectId);
   if (!project) notFound();
 
+  const cookieStore = await cookies();
+  const network = parseNetwork(cookieStore.get(NETWORK_COOKIE)?.value);
+
   const sections: NavSection[] = buildAppNavigation().map((section) => ({
     category: section.category,
     label: section.label,
@@ -44,14 +49,14 @@ export default async function AppLayout({
   }));
 
   return (
-    <AppChrome
-      projectName={project.name}
-      email={session.user.email}
-      chainName={DEFAULT_CHAIN.name}
-      isTestnet={DEFAULT_CHAIN.isTestnet}
-      sections={sections}
-    >
-      {children}
-    </AppChrome>
+    <NetworkProvider initial={network}>
+      <AppChrome
+        projectName={project.name}
+        email={session.user.email}
+        sections={sections}
+      >
+        {children}
+      </AppChrome>
+    </NetworkProvider>
   );
 }

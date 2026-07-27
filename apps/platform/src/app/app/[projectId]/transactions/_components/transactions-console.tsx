@@ -2,9 +2,9 @@
 
 import type { SimulationResult, TransactionSummary } from "@hoodstack/network";
 import Link from "next/link";
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 
-import type { KeyEnvironment } from "@/lib/api-keys";
+import { useNetwork } from "@/components/network/network-provider";
 import { Button, DefinitionRow, StatusBadge, cx } from "@/components/ui";
 
 import {
@@ -21,7 +21,7 @@ type Mode = "simulate" | "track";
  */
 export function TransactionsConsole({ projectId }: { projectId: string }) {
   const [mode, setMode] = useState<Mode>("simulate");
-  const [environment, setEnvironment] = useState<KeyEnvironment>("test");
+  const { network: environment } = useNetwork();
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
   const [sim, setSim] = useState<{
@@ -35,6 +35,13 @@ export function TransactionsConsole({ projectId }: { projectId: string }) {
     setSim(null);
     setTx(null);
   }
+
+  // A simulation or lookup belongs to the network it ran on; drop it on change.
+  useEffect(() => {
+    setError(null);
+    setSim(null);
+    setTx(null);
+  }, [environment]);
 
   function simulate(formData: FormData) {
     reset();
@@ -92,18 +99,6 @@ export function TransactionsConsole({ projectId }: { projectId: string }) {
             </button>
           ))}
         </div>
-        <select
-          value={environment}
-          onChange={(e) => {
-            setEnvironment(e.target.value as KeyEnvironment);
-            reset();
-          }}
-          disabled={pending}
-          className="h-9 rounded-control border border-line-strong bg-surface px-3 text-sm text-content focus-visible:border-line-brand focus-visible:outline-none disabled:opacity-50"
-        >
-          <option value="test">Testnet</option>
-          <option value="live">Mainnet</option>
-        </select>
       </div>
 
       {mode === "simulate" ? (

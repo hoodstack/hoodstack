@@ -5,7 +5,8 @@ import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState, useTransition } from "react";
 
 import type { KeyEnvironment } from "@/lib/api-keys";
-import { Button, Skeleton, StatusBadge, cx } from "@/components/ui";
+import { useNetwork } from "@/components/network/network-provider";
+import { Button, Skeleton, StatusBadge } from "@/components/ui";
 
 import { addAccountAction, enrichAccountAction, removeAccountAction } from "../actions";
 
@@ -31,7 +32,7 @@ export function AccountsManager({
   accounts: AccountView[];
 }) {
   const router = useRouter();
-  const [environment, setEnvironment] = useState<KeyEnvironment>("test");
+  const { network: environment } = useNetwork();
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
 
@@ -57,28 +58,10 @@ export function AccountsManager({
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex items-center justify-between">
-        <p className="text-sm text-content-secondary">
-          Track the accounts your app cares about and watch their live state.
-        </p>
-        <div className="inline-flex rounded-control border border-line-strong p-0.5">
-          {(["test", "live"] as const).map((env) => (
-            <button
-              key={env}
-              type="button"
-              onClick={() => setEnvironment(env)}
-              className={cx(
-                "rounded-[calc(var(--hs-radius-control)-2px)] px-3 py-1 text-sm transition-colors",
-                environment === env
-                  ? "bg-content text-canvas"
-                  : "text-content-secondary hover:text-content",
-              )}
-            >
-              {env === "test" ? "Testnet" : "Mainnet"}
-            </button>
-          ))}
-        </div>
-      </div>
+      <p className="text-sm text-content-secondary">
+        Track the accounts your app cares about and watch their live state on the
+        network selected in the header.
+      </p>
 
       <form action={add} className="flex flex-col gap-3 sm:flex-row sm:items-start">
         <input

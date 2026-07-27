@@ -1,18 +1,24 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 
-import type { KeyEnvironment } from "@/lib/api-keys";
-import { DefinitionRow, StatusBadge, cx } from "@/components/ui";
+import { useNetwork } from "@/components/network/network-provider";
+import { DefinitionRow, StatusBadge } from "@/components/ui";
 
 import { explorerSearchAction, type ExplorerHit } from "../actions";
 
 /** Universal explorer search: one box for an address, tx hash, or block. */
 export function ExplorerSearch({ projectId }: { projectId: string }) {
-  const [environment, setEnvironment] = useState<KeyEnvironment>("test");
+  const { network: environment } = useNetwork();
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
   const [hit, setHit] = useState<ExplorerHit | null>(null);
+
+  // A result belongs to the network it was fetched on; drop it when that changes.
+  useEffect(() => {
+    setHit(null);
+    setError(null);
+  }, [environment]);
 
   function search(formData: FormData) {
     setError(null);
@@ -28,30 +34,6 @@ export function ExplorerSearch({ projectId }: { projectId: string }) {
 
   return (
     <div className="flex flex-col gap-5">
-      <div className="flex justify-end">
-        <div className="inline-flex rounded-control border border-line-strong p-0.5">
-          {(["test", "live"] as const).map((env) => (
-            <button
-              key={env}
-              type="button"
-              onClick={() => {
-                setEnvironment(env);
-                setHit(null);
-                setError(null);
-              }}
-              className={cx(
-                "rounded-[calc(var(--hs-radius-control)-2px)] px-3 py-1 text-sm transition-colors",
-                environment === env
-                  ? "bg-content text-canvas"
-                  : "text-content-secondary hover:text-content",
-              )}
-            >
-              {env === "test" ? "Testnet" : "Mainnet"}
-            </button>
-          ))}
-        </div>
-      </div>
-
       <form action={search} className="flex flex-col gap-3 sm:flex-row">
         <input
           name="query"

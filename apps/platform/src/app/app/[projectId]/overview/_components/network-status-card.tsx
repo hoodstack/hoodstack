@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 
+import { useNetwork } from "@/components/network/network-provider";
 import { Skeleton, cx } from "@/components/ui";
 
 import { getNetworkStatusAction, type NetworkStatus } from "../actions";
@@ -19,15 +20,9 @@ type State =
  * skeleton; on success the block and chain; on failure a message and a retry.
  * This is real data, so the states are the genuine article, not a demo.
  */
-export function NetworkStatusCard({
-  projectId,
-  environment,
-  isTestnet,
-}: {
-  projectId: string;
-  environment: "live" | "test";
-  isTestnet: boolean;
-}) {
+export function NetworkStatusCard({ projectId }: { projectId: string }) {
+  const { network: environment } = useNetwork();
+  const isTestnet = environment === "test";
   const [state, setState] = useState<State>({ status: "loading" });
   const [refreshing, setRefreshing] = useState(false);
 

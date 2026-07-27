@@ -1,9 +1,10 @@
-import { DEFAULT_CHAIN } from "@hoodstack/network";
 import type { Metadata } from "next";
+import { cookies } from "next/headers";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { getSessionUser } from "@/lib/auth/session";
+import { NETWORK_COOKIE, chainForNetwork, parseNetwork } from "@/lib/network";
 import { listApiKeys } from "@/server/api-keys";
 import { getProjectForMember } from "@/server/projects";
 import { getProjectUsageSummary } from "@/server/usage";
@@ -41,7 +42,8 @@ export default async function OverviewPage({
   ]);
 
   const activeKeys = keys.filter((k) => k.revokedAt === null);
-  const environment = DEFAULT_CHAIN.isTestnet ? "test" : "live";
+  const network = parseNetwork((await cookies()).get(NETWORK_COOKIE)?.value);
+  const chain = chainForNetwork(network);
 
   const steps = [
     { label: "Create a project", done: true, href: null },
@@ -72,8 +74,8 @@ export default async function OverviewPage({
             <h1 className="hs-display text-3xl text-content sm:text-4xl">
               {project.name}
             </h1>
-            <StatusBadge tone={DEFAULT_CHAIN.isTestnet ? "info" : "warning"}>
-              {DEFAULT_CHAIN.name}
+            <StatusBadge tone={chain.isTestnet ? "info" : "warning"}>
+              {chain.name}
             </StatusBadge>
           </div>
           <p className="mt-2 font-mono text-sm text-content-tertiary">{project.slug}</p>
@@ -96,11 +98,7 @@ export default async function OverviewPage({
 
       {/* Live network + quickstart. */}
       <div className="mt-6 grid gap-4 lg:grid-cols-2">
-        <NetworkStatusCard
-          projectId={project.id}
-          environment={environment}
-          isTestnet={DEFAULT_CHAIN.isTestnet}
-        />
+        <NetworkStatusCard projectId={project.id} />
 
         <div className="rounded-card border border-line bg-surface p-6">
           <div className="flex items-center justify-between">

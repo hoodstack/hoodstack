@@ -3,8 +3,8 @@
 import type { GasSummary } from "@hoodstack/network";
 import { useCallback, useEffect, useState } from "react";
 
-import type { KeyEnvironment } from "@/lib/api-keys";
-import { Skeleton, cx } from "@/components/ui";
+import { useNetwork } from "@/components/network/network-provider";
+import { Skeleton } from "@/components/ui";
 
 import { getGasAction } from "../actions";
 
@@ -15,18 +15,18 @@ type State =
 
 /** Live gas tracker with loading, success, and error states. */
 export function GasTracker({ projectId }: { projectId: string }) {
-  const [environment, setEnvironment] = useState<KeyEnvironment>("test");
+  const { network } = useNetwork();
   const [state, setState] = useState<State>({ status: "loading" });
 
   const load = useCallback(async () => {
     setState({ status: "loading" });
-    const result = await getGasAction({ projectId, environment });
+    const result = await getGasAction({ projectId, environment: network });
     setState(
       result.ok
         ? { status: "success", data: result.data }
         : { status: "error", error: result.error },
     );
-  }, [projectId, environment]);
+  }, [projectId, network]);
 
   useEffect(() => {
     void load();
@@ -36,33 +36,14 @@ export function GasTracker({ projectId }: { projectId: string }) {
     <div className="rounded-card border border-line bg-surface p-6">
       <div className="flex items-center justify-between">
         <h2 className="hs-mono-label">Live gas</h2>
-        <div className="flex items-center gap-3">
-          <div className="inline-flex rounded-control border border-line-strong p-0.5">
-            {(["test", "live"] as const).map((env) => (
-              <button
-                key={env}
-                type="button"
-                onClick={() => setEnvironment(env)}
-                className={cx(
-                  "rounded-[calc(var(--hs-radius-control)-2px)] px-3 py-1 text-sm transition-colors",
-                  environment === env
-                    ? "bg-content text-canvas"
-                    : "text-content-secondary hover:text-content",
-                )}
-              >
-                {env === "test" ? "Testnet" : "Mainnet"}
-              </button>
-            ))}
-          </div>
-          <button
-            type="button"
-            onClick={() => void load()}
-            disabled={state.status === "loading"}
-            className="text-xs text-content-tertiary transition-colors hover:text-content disabled:opacity-50"
-          >
-            Refresh
-          </button>
-        </div>
+        <button
+          type="button"
+          onClick={() => void load()}
+          disabled={state.status === "loading"}
+          className="text-xs text-content-tertiary transition-colors hover:text-content disabled:opacity-50"
+        >
+          Refresh
+        </button>
       </div>
 
       {state.status === "loading" ? (

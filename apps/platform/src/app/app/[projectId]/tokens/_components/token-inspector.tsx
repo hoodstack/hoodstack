@@ -1,19 +1,25 @@
 "use client";
 
 import type { TokenSummary } from "@hoodstack/network";
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 
-import type { KeyEnvironment } from "@/lib/api-keys";
-import { Button, DefinitionRow, StatusBadge, cx } from "@/components/ui";
+import { useNetwork } from "@/components/network/network-provider";
+import { Button, DefinitionRow, StatusBadge } from "@/components/ui";
 
 import { getTokenAction } from "../actions";
 
 /** Live ERC-20 inspector with loading, success, and error states. */
 export function TokenInspector({ projectId }: { projectId: string }) {
-  const [environment, setEnvironment] = useState<KeyEnvironment>("test");
+  const { network: environment } = useNetwork();
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
   const [token, setToken] = useState<TokenSummary | null>(null);
+
+  // A token read belongs to the network it ran on; drop it when that changes.
+  useEffect(() => {
+    setToken(null);
+    setError(null);
+  }, [environment]);
 
   function inspect(formData: FormData) {
     setError(null);
@@ -33,30 +39,6 @@ export function TokenInspector({ projectId }: { projectId: string }) {
 
   return (
     <div className="flex flex-col gap-5">
-      <div className="flex justify-end">
-        <div className="inline-flex rounded-control border border-line-strong p-0.5">
-          {(["test", "live"] as const).map((env) => (
-            <button
-              key={env}
-              type="button"
-              onClick={() => {
-                setEnvironment(env);
-                setToken(null);
-                setError(null);
-              }}
-              className={cx(
-                "rounded-[calc(var(--hs-radius-control)-2px)] px-3 py-1 text-sm transition-colors",
-                environment === env
-                  ? "bg-content text-canvas"
-                  : "text-content-secondary hover:text-content",
-              )}
-            >
-              {env === "test" ? "Testnet" : "Mainnet"}
-            </button>
-          ))}
-        </div>
-      </div>
-
       <form action={inspect} className="flex flex-col gap-3">
         <input name="address" placeholder="Token contract address 0x…" disabled={pending} className={inputClass} spellCheck={false} />
         <div className="flex flex-col gap-3 sm:flex-row">
