@@ -32,23 +32,65 @@ const ROBINHOOD_ENDPOINTS = [
 // SHA-256 of the inline theme bootstrap in src/lib/theme.ts (pnpm theme:hash).
 const THEME_SCRIPT_HASH = "'sha256-rqkRcavrYl2kObMvX5rLUxbQwuaaNVDz0K3oq1YJEHs='";
 
+/**
+ * Origins the Privy SDK (and its WalletConnect/Reown wallet plumbing) must reach
+ * for auth, embedded wallets, and the wallet picker. These loosen the policy, so
+ * they are added only on the authenticated `/app` subtree — the marketing site
+ * keeps the tight default policy with no third-party origins.
+ */
+const PRIVY_CONNECT = [
+  "https://auth.privy.io",
+  "https://api.privy.io",
+  "https://*.privy.io",
+  "https://*.rpc.privy.systems",
+  "wss://relay.walletconnect.com",
+  "wss://relay.walletconnect.org",
+  "https://explorer-api.walletconnect.com",
+  "https://pulse.walletconnect.org",
+  "https://api.web3modal.org",
+  "https://*.walletconnect.com",
+  "https://*.walletconnect.org",
+].join(" ");
+
+const PRIVY_FRAME = [
+  "https://auth.privy.io",
+  "https://verify.walletconnect.com",
+  "https://verify.walletconnect.org",
+  "https://challenges.cloudflare.com",
+].join(" ");
+
+const PRIVY_IMG = [
+  "https://explorer-api.walletconnect.com",
+  "https://*.walletconnect.com",
+  "https://imagedelivery.net",
+].join(" ");
+
 export function middleware(request: NextRequest) {
   const isDev = process.env.NODE_ENV === "development";
+  const isApp = request.nextUrl.pathname.startsWith("/app");
   const nonce = btoa(crypto.randomUUID());
 
   // Development: the Next dev server uses inline scripts and eval for HMR that a
   // nonce/strict-dynamic policy would block, so dev stays permissive for scripts.
+  // Privy's embedded wallet compiles WebAssembly, which needs 'wasm-unsafe-eval'
+  // in production (dev's 'unsafe-eval' already covers it).
   const scriptSrc = isDev
     ? "script-src 'self' 'unsafe-inline' 'unsafe-eval'"
-    : `script-src 'self' 'nonce-${nonce}' 'strict-dynamic' ${THEME_SCRIPT_HASH}`;
+    : `script-src 'self' 'nonce-${nonce}' 'strict-dynamic' ${THEME_SCRIPT_HASH}${
+        isApp ? " 'wasm-unsafe-eval'" : ""
+      }`;
 
   const csp = [
     "default-src 'self'",
     scriptSrc,
     "style-src 'self' 'unsafe-inline'",
-    "img-src 'self' data: blob:",
+    `img-src 'self' data: blob:${isApp ? " " + PRIVY_IMG : ""}`,
     "font-src 'self' data:",
-    `connect-src 'self' ${ROBINHOOD_ENDPOINTS}${isDev ? " ws: wss:" : ""}`,
+    `connect-src 'self' ${ROBINHOOD_ENDPOINTS}${isDev ? " ws: wss:" : ""}${
+      isApp ? " " + PRIVY_CONNECT : ""
+    }`,
+    `frame-src 'self'${isApp ? " " + PRIVY_FRAME : ""}`,
+    ...(isApp ? ["worker-src 'self' blob:"] : []),
     "frame-ancestors 'none'",
     "base-uri 'self'",
     "form-action 'self'",
