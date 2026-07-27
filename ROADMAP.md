@@ -5,7 +5,7 @@ product-level companion to [PROJECT_STATUS.md](PROJECT_STATUS.md) (engineering
 snapshot) and the [ADRs](docs/adr). Module facts come from the registry in
 `packages/config`, the single source of truth.
 
-**Updated:** 2026-07-27 (21 modules shipped)
+**Updated:** 2026-07-27 (23 modules shipped)
 
 ---
 
@@ -127,8 +127,8 @@ provider** (see §5 and [ADR 0002](docs/adr/0002-account-abstraction-provider.md
 | API Reference | ✅ Shipped | Documented reference for the live `/api/v1` endpoints. |
 | Playground | ✅ Shipped | Run the live read endpoints against testnet/mainnet from the dashboard. |
 | SDKs | ✅ Shipped | Typed TS client `@hoodstack/sdk` over the live API (tested). npm publish pending. |
-| CLI | 🔨 Next up (larger) | Project setup, keys, diagnostics. Buildable now; a separate package effort. |
-| Recipes | 🔨 Next up | Working end-to-end examples over the shipped API. Content-led. |
+| CLI | ✅ Shipped | Terminal client `@hoodstack/cli` over the API (tested). npm publish pending. |
+| Recipes | ✅ Shipped | Working code recipes over the shipped API. |
 
 ### Network coordination
 
@@ -150,11 +150,11 @@ provider** (see §5 and [ADR 0002](docs/adr/0002-account-abstraction-provider.md
 
 ## 4. Rollup
 
-- **Shipped (21):** Home, Projects, Activity, Accounts, Transactions, Gas,
+- **Shipped (23):** Home, Projects, Activity, Accounts, Transactions, Gas,
   Policies, Tokens, Asset Registry, Data, Explorer, Webhooks, API Keys,
   Environments, Security, Audit Logs, API Reference, Playground, Usage,
-  Project Settings, SDKs.
-- **Next up, no blocker:** CLI and Recipes.
+  Project Settings, SDKs, CLI, Recipes.
+- **Next up, no blocker:** none. Every remaining module is blocked.
 - **Backlog, blocked:** Authentication, Sessions, Agents, Treasury, Workflows
   (account abstraction); Credits, Team, Billing (billing/invites); Token Utility
   (token launch).

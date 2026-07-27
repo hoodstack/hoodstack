@@ -275,6 +275,8 @@ describe("availability gating", () => {
       "security",
       "auditLogs",
       "sdk",
+      "cli",
+      "recipes",
       "apiReference",
       "playground",
       "usage",

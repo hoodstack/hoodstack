@@ -1,0 +1,32 @@
+{
+  "name": "@hoodstack/cli",
+  "version": "0.1.0",
+  "description": "HoodStack command-line interface for Robinhood Chain.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "bin": {
+    "hoodstack": "./dist/cli.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "clean": "rimraf dist .turbo"
+  },
+  "dependencies": {
+    "@hoodstack/sdk": "workspace:*"
+  },
+  "devDependencies": {
+    "@hoodstack/tsconfig": "workspace:*",
+    "@types/node": "^22.10.2",
+    "rimraf": "^6.0.1",
+    "tsup": "^8.3.5",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
+  }
+}

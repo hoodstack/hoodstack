@@ -17,12 +17,11 @@ import type { HoodStackModuleId, ModuleDefinition } from "./types.js";
  * Modules are grouped into products by `category` - see `products.ts`. Products
  * are what developers evaluate and adopt; modules are the surfaces inside them.
  *
- * Enabled today span reads, simulation, config, verification, and the dashboard
- * surfaces (Home, Projects, Activity, Accounts, Transactions, Gas, Policies,
- * Tokens, Asset Registry, Data, Explorer, Webhooks, API Keys, Environments,
- * Security, API Reference, Playground, Usage, Project Settings). Preview modules
- * are blocked on account abstraction, payments, a scheduler, or the token, and
- * say so; any other value would misrepresent them.
+ * Enabled modules span reads, simulation, configuration, verification, developer
+ * tooling (SDK, CLI, reference, playground, recipes), and the dashboard surfaces.
+ * Preview modules are blocked on account abstraction, payments, invitations, a
+ * scheduler, or the token, and say so; any other value would misrepresent them.
+ * See ROADMAP.md for the full per-module status.
  *
  * Flipping a module to `enabled` is a deliberate act with a checklist attached;
  * see `docs/operations/module-activation.md`.
@@ -427,17 +426,18 @@ export const MODULES: Readonly<Record<HoodStackModuleId, ModuleDefinition>> = {
   cli: {
     id: "cli",
     name: "CLI",
-    shortDescription: "Project setup, keys, and diagnostics from a terminal.",
+    shortDescription: "Query the chain and your project from a terminal.",
     description:
-      "Scaffolding, project and key management, environment validation, and network " +
-      "diagnostics, with a JSON output mode and proper exit codes for CI. Secrets are " +
-      "redacted and never redisplayed after creation.",
+      "A terminal client over the HoodStack API: health, account, token, " +
+      "transaction, block, gas, rpc, and simulate, reading your key from the " +
+      "environment and printing JSON with proper exit codes for CI. Built on " +
+      "@hoodstack/sdk. Publishing to npm is in progress.",
     category: "developer",
     publicHref: "/products/cli",
     appHref: app("cli"),
     docsHref: "/docs/cli",
     icon: "terminal",
-    availability: "preview",
+    availability: "enabled",
     relatedModules: ["sdk", "environments"],
   },
 
@@ -475,19 +475,18 @@ export const MODULES: Readonly<Record<HoodStackModuleId, ModuleDefinition>> = {
   recipes: {
     id: "recipes",
     name: "Recipes",
-    shortDescription: "Complete, working solutions to common workflows.",
+    shortDescription: "Working solutions to common workflows.",
     description:
-      "Copy-paste implementations of the things applications actually build: a " +
-      "Next.js starter, gasless checkout, a treasury wallet, RWA minting, stock-token " +
-      "transfer, recurring payments, session keys. Every recipe is a runnable " +
-      "application, tested in CI, defaulting to testnet - not a fragment that omits " +
-      "the error handling.",
+      "Short, complete code recipes over the shipped API: check a balance, verify a " +
+      "token, watch a transaction to confirmation, simulate before sending, and read " +
+      "gas. Each defaults to testnet and includes the error handling. Recipes for the " +
+      "write path land as those modules ship.",
     category: "developer",
     publicHref: "/products/recipes",
     appHref: app("recipes"),
     docsHref: "/docs/recipes",
     icon: "recipe",
-    availability: "preview",
+    availability: "enabled",
     relatedModules: ["sdk", "playground", "cli"],
   },
 
