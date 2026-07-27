@@ -5,8 +5,8 @@ import type { CSSProperties } from "react";
  *
  * Robinhood's brand language is "technical illustration inspired by financial
  * graphs", and their signature is the rising line with a soft area fill. This is
- * that idea made literal and honest - the five states an actual
- * `@hoodstack/transactions` object moves through, plotted on a dot-matrix field
+ * that idea made literal and honest - the five states a transaction moves
+ * through, plotted on a dot-matrix field
  * with a gradient trace, plotted-point drop lines, a finality threshold, a
  * travelling pulse, and a breathing endpoint.
  *

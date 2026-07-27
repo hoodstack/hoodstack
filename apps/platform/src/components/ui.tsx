@@ -4,10 +4,10 @@ import type { ButtonHTMLAttributes, ReactNode } from "react";
 /**
  * Shared primitives for the platform application.
  *
- * These live in the app rather than `@hoodstack/ui` for now. `@hoodstack/ui` is
- * a published package consumed by third parties, and publishing an API before
- * the surfaces that use it have shaped it produces a bad API that is then
- * expensive to change. These get extracted once the usage patterns are real.
+ * These live in the app rather than a separate UI package for now. Publishing a
+ * component API before the surfaces that use it have shaped it produces a bad
+ * API that is then expensive to change; these get extracted once the usage
+ * patterns are real.
  */
 
 export function cx(...values: Array<string | false | null | undefined>): string {

@@ -13,7 +13,7 @@ export const metadata: Metadata = {
     "authentication, the Data API, and the network and error packages.",
 };
 
-const INSTALL = `pnpm add @hoodstack/network @hoodstack/errors`;
+const INSTALL = `pnpm add @hoodstack/sdk @hoodstack/network @hoodstack/errors`;
 
 const NETWORK_USAGE = `import {
   robinhoodTestnet,
@@ -59,13 +59,13 @@ const RPC_CURL = `curl -X POST https://www.hoodstack.io/api/v1/rpc \\
   -H "content-type: application/json" \\
   -d '{"method":"eth_blockNumber"}'`;
 
-const ERROR_USAGE = `import { HoodStackError, isHoodStackError } from "@hoodstack/errors";
+const ERROR_USAGE = `import { isHoodStackError } from "@hoodstack/errors";
 
 try {
-  await hoodstack.transactions.send(input);
+  const account = await hoodstack.data.account(address);
 } catch (error) {
   if (isHoodStackError(error)) {
-    error.code;      // e.g. "HS_CHAIN_MISMATCH" - branch on this
+    error.code;      // e.g. "HS_INVALID_API_KEY" - branch on this
     error.retryable; // whether retrying may help
     error.docsUrl;   // where to read more
     error.requestId; // correlate with server logs
@@ -132,10 +132,11 @@ export default function DocsHomePage() {
         </p>
 
         <div className="mt-6 rounded-card border border-line bg-surface-inset p-4 text-sm text-content-secondary">
-          <strong className="text-content">Status.</strong> Sign-in, projects, API keys,
-          and the Data API are live. More modules ship continuously. HoodStack is in early
-          access and not yet audited; use test keys for production-critical flows until
-          mainnet readiness is announced.
+          <strong className="text-content">Status.</strong> The full read, simulate,
+          configure, and audit surface is live across the stack, with a typed SDK and CLI
+          on npm; signed execution and automation ship continuously. HoodStack is in early
+          access and not yet audited; keep production-critical flows on testnet until a
+          mainnet readiness review is announced.
         </div>
       </div>
 
@@ -156,14 +157,14 @@ export default function DocsHomePage() {
       </DocSection>
 
       <DocSection id="installation" title="Installation">
-        <p>Requires Node 20.11+ and pnpm 10+. Install the implemented packages:</p>
+        <p>Requires Node 20.11+ and pnpm 10+. Install the packages you need:</p>
         <CodeBlock code={INSTALL} label="terminal" />
         <p className="text-sm text-content-tertiary">
-          SDK packages (<code className="font-mono">@hoodstack/sdk</code>,{" "}
-          <code className="font-mono">react</code>,{" "}
-          <code className="font-mono">server</code>,{" "}
-          <code className="font-mono">cli</code>) publish as they reach a stable
-          interface.
+          Four packages are on npm today:{" "}
+          <code className="font-mono">@hoodstack/sdk</code>,{" "}
+          <code className="font-mono">@hoodstack/cli</code>,{" "}
+          <code className="font-mono">@hoodstack/network</code>, and{" "}
+          <code className="font-mono">@hoodstack/errors</code>.
         </p>
       </DocSection>
 

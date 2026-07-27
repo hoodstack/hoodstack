@@ -15,19 +15,20 @@ import {
   SectionHeading,
 } from "@/components/ui";
 
-const SDK_EXAMPLE = `import { HoodStackProvider } from "@hoodstack/react";
-import { robinhoodTestnet } from "@hoodstack/network";
+const SDK_EXAMPLE = `import { createClient } from "@hoodstack/sdk";
 
-export function Providers({ children }) {
-  return (
-    <HoodStackProvider
-      projectId={process.env.NEXT_PUBLIC_HOODSTACK_PROJECT_ID!}
-      chain={robinhoodTestnet}
-    >
-      {children}
-    </HoodStackProvider>
-  );
-}`;
+const hoodstack = createClient({
+  apiKey: process.env.HOODSTACK_API_KEY!,
+});
+
+// Live account state: balance, nonce, contract detection.
+const account = await hoodstack.data.account("0x…");
+
+// Simulate a call and estimate gas. Nothing is signed.
+const sim = await hoodstack.tx.simulate({
+  to: "0x…",
+  valueWei: "1000000000000000",
+});`;
 
 const GUARD_EXAMPLE = `import {
   robinhoodTestnet,
@@ -142,7 +143,7 @@ export default function HomePage() {
               {[
                 ["Open source", "Apache-2.0, public repo"],
                 ["Testnet-first", "Mainnet writes off by default"],
-                ["ERC-4337 native", "Smart accounts, sponsored gas"],
+                ["ERC-4337 native", "Built for smart accounts"],
                 ["Non-custodial", "HoodStack cannot move funds"],
                 ["viem-compatible", "Drops into existing tooling"],
               ].map(([title, sub]) => (
@@ -242,7 +243,7 @@ export default function HomePage() {
                 <SectionHeading
                   eyebrow="Developer experience"
                   title="Typed from the first line."
-                  lead="One provider wires accounts, transactions, gas, and data into an application. Chain definitions extend viem's Chain, so they drop straight into viem, wagmi, and existing tooling."
+                  lead="One typed client covers accounts, gas, data, and simulation over the live API. Chain definitions extend viem's Chain, so they drop straight into viem, wagmi, and existing tooling."
                 />
                 <div className="mt-8">
                   <ButtonLink href="/products/developer" variant="secondary">
@@ -250,7 +251,7 @@ export default function HomePage() {
                   </ButtonLink>
                 </div>
               </div>
-              <CodeBlock code={SDK_EXAMPLE} label="app/providers.tsx" />
+              <CodeBlock code={SDK_EXAMPLE} label="read.ts" />
             </div>
           </Reveal>
         </Container>
