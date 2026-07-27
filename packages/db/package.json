@@ -1,5 +1,6 @@
 {
   "name": "@hoodstack/db",
+  "private": true,
   "version": "0.1.0",
   "description": "HoodStack data layer: Drizzle schema, client, and migrations over Supabase Postgres.",
   "license": "Apache-2.0",

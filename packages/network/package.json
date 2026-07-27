@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "description": "Robinhood Chain network definitions, chain validation, and RPC diagnostics.",
   "license": "Apache-2.0",
+  "publishConfig": {
+    "access": "public"
+  },
   "sideEffects": false,
   "type": "module",
   "main": "./dist/index.js",

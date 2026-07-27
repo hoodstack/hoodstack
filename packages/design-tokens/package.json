@@ -1,5 +1,6 @@
 {
   "name": "@hoodstack/design-tokens",
+  "private": true,
   "version": "0.1.0",
   "description": "HoodStack design tokens: color, typography, spacing, motion.",
   "license": "Apache-2.0",

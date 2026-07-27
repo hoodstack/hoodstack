@@ -1,5 +1,6 @@
 {
   "name": "@hoodstack/config",
+  "private": true,
   "version": "0.1.0",
   "description": "Typed module registry and shared platform configuration.",
   "license": "Apache-2.0",
