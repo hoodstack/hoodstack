@@ -86,7 +86,7 @@ export function AppChrome({
       <div className="mx-auto flex w-full max-w-[1400px]">
         {/* Desktop sidebar. */}
         <aside
-          className="sticky top-14 hidden h-[calc(100dvh-3.5rem)] w-64 shrink-0 overflow-y-auto border-r border-line px-3 py-6 lg:block"
+          className="hs-scroll-thin sticky top-14 hidden h-[calc(100dvh-3.5rem)] w-64 shrink-0 overflow-y-auto border-r border-line px-3 py-6 lg:block"
           aria-label="Project navigation"
         >
           <SidebarNav sections={sections} pathname={pathname} />

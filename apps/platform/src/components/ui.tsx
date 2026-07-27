@@ -261,3 +261,11 @@ export function DefinitionRow({ term, children }: { term: string; children: Reac
     </div>
   );
 }
+
+/**
+ * A loading placeholder. Renders a shimmering block sized by `className`, so a
+ * skeleton can mirror the shape of the content it stands in for.
+ */
+export function Skeleton({ className }: { className?: string }) {
+  return <div className={cx("hs-shimmer rounded-control", className)} aria-hidden="true" />;
+}

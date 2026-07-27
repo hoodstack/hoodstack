@@ -1,6 +1,8 @@
 import "server-only";
 
-import { getDb, usageEvents } from "@hoodstack/db";
+import { count, desc, eq, getDb, usageEvents } from "@hoodstack/db";
+
+import { getProjectForMember } from "./projects";
 
 /**
  * Record one metered unit of gateway work.
@@ -31,4 +33,37 @@ export async function recordUsage(input: {
       status: input.status ?? "ok",
       meta: input.meta,
     });
+}
+
+/** Total metered requests for a project and when the last one landed. */
+export type ProjectUsageSummary = { total: number; lastAt: string | null };
+
+/**
+ * Usage totals for a project the caller belongs to. Returns zeroes for a project
+ * the user cannot access, so it never leaks whether an id exists.
+ */
+export async function getProjectUsageSummary(
+  userId: string,
+  projectId: string,
+): Promise<ProjectUsageSummary> {
+  const project = await getProjectForMember(userId, projectId);
+  if (!project) return { total: 0, lastAt: null };
+
+  const db = getDb();
+  const [totals] = await db
+    .select({ total: count() })
+    .from(usageEvents)
+    .where(eq(usageEvents.projectId, projectId));
+
+  const [latest] = await db
+    .select({ at: usageEvents.createdAt })
+    .from(usageEvents)
+    .where(eq(usageEvents.projectId, projectId))
+    .orderBy(desc(usageEvents.createdAt))
+    .limit(1);
+
+  return {
+    total: totals?.total ?? 0,
+    lastAt: latest?.at ? latest.at.toISOString() : null,
+  };
 }
