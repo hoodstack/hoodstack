@@ -39,9 +39,14 @@ export {
   readAccountSummary,
   readTransaction,
   readBlock,
+  readGas,
+  simulateTransaction,
   type AccountSummary,
   type TransactionSummary,
   type BlockSummary,
+  type GasSummary,
+  type SimulationRequest,
+  type SimulationResult,
 } from "./reads.js";
 
 export {

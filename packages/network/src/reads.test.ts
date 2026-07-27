@@ -2,7 +2,13 @@ import { isHoodStackError } from "@hoodstack/errors";
 import { describe, expect, it, vi } from "vitest";
 
 import { robinhoodTestnet } from "./chains.js";
-import { readAccountSummary, readBlock, readTransaction } from "./reads.js";
+import {
+  readAccountSummary,
+  readBlock,
+  readGas,
+  readTransaction,
+  simulateTransaction,
+} from "./reads.js";
 
 const URLS = ["https://rpc.example.com"];
 const ADDR = "0x742d35Cc6634C0532925a3b844Bc454e4438f44e";
@@ -133,5 +139,60 @@ describe("readBlock", () => {
     expect(block.transactionCount).toBe(3);
     expect(block.gasUsed).toBe("21000");
     expect(block.timestamp).toBe(new Date(0x6553f100 * 1000).toISOString());
+  });
+});
+
+describe("readGas", () => {
+  it("decodes gas price, base fee, and a transfer cost", async () => {
+    const fetchImpl = rpcStub({
+      eth_gasPrice: "0x3b9aca00", // 1 gwei
+      eth_getBlockByNumber: { baseFeePerGas: "0x3b9aca00" },
+    });
+    const gas = await readGas(URLS, robinhoodTestnet, { fetch: fetchImpl });
+    expect(gas.gasPriceWei).toBe("1000000000");
+    expect(gas.gasPriceGwei).toBe("1");
+    expect(gas.baseFeeWei).toBe("1000000000");
+    // 1 gwei * 21000 = 21000 gwei = 0.000021 ETH
+    expect(gas.transferCostWei).toBe("21000000000000");
+    expect(gas.transferCostFormatted).toBe("0.000021 ETH");
+  });
+
+  it("tolerates a chain without a base fee", async () => {
+    const fetchImpl = rpcStub({
+      eth_gasPrice: "0x3b9aca00",
+      eth_getBlockByNumber: {},
+    });
+    const gas = await readGas(URLS, robinhoodTestnet, { fetch: fetchImpl });
+    expect(gas.baseFeeWei).toBeNull();
+  });
+});
+
+describe("simulateTransaction", () => {
+  it("reports success and a gas estimate for a passing call", async () => {
+    const fetchImpl = rpcStub({
+      eth_call: "0x",
+      eth_estimateGas: "0x5208", // 21000
+    });
+    const result = await simulateTransaction(URLS, { to: ADDR, valueWei: "1" }, {
+      fetch: fetchImpl,
+    });
+    expect(result.success).toBe(true);
+    expect(result.gasEstimate).toBe("21000");
+    expect(result.revertReason).toBeNull();
+  });
+
+  it("reports the revert reason when the call reverts", async () => {
+    const fetchImpl = rpcStub({}); // no methods -> RPC error for eth_call
+    const result = await simulateTransaction(URLS, { to: ADDR }, { fetch: fetchImpl });
+    expect(result.success).toBe(false);
+    expect(result.revertReason).toBeTruthy();
+    expect(result.gasEstimate).toBeNull();
+  });
+
+  it("rejects an invalid target address", async () => {
+    const fetchImpl = rpcStub({});
+    await expect(
+      simulateTransaction(URLS, { to: "nope" }, { fetch: fetchImpl }),
+    ).rejects.toSatisfy(isHoodStackError);
   });
 });

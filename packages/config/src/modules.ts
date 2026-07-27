@@ -17,10 +17,12 @@ import type { HoodStackModuleId, ModuleDefinition } from "./types.js";
  * Modules are grouped into products by `category` - see `products.ts`. Products
  * are what developers evaluate and adopt; modules are the surfaces inside them.
  *
- * `data` and `accounts` are `enabled`: Data ships raw-RPC reads (account,
- * transaction, block) with a public API, console, and tests; Accounts ships a
- * live account registry backed by those reads. Every other module is `preview`
- * until its implementation lands - any other value would misrepresent it.
+ * `data`, `accounts`, `transactions`, `gas`, and `policies` are `enabled`: reads
+ * and a registry (Data, Accounts), simulation and tracking (Transactions), a live
+ * gas tracker (Gas), and a policy evaluated against simulations (Policies). Each
+ * ships with a dashboard surface and, where it applies, a public API. Every other
+ * module is `preview` until its implementation lands - any other value would
+ * misrepresent it.
  *
  * Flipping a module to `enabled` is a deliberate act with a checklist attached;
  * see `docs/operations/module-activation.md`.
@@ -119,35 +121,36 @@ export const MODULES: Readonly<Record<HoodStackModuleId, ModuleDefinition>> = {
   transactions: {
     id: "transactions",
     name: "Transactions",
-    shortDescription: "Build, simulate, submit, and track execution.",
+    shortDescription: "Simulate and track transactions.",
     description:
-      "Typed builders for transfers, approvals, contract calls, and batches, with " +
-      "simulation and a readable summary before signing. A transaction is reported " +
-      "confirmed only when a receipt satisfies the configured confirmation depth.",
+      "Simulate any call with eth_call and gas estimation, and track a transaction " +
+      "with its receipt, without signing anything. Each simulation is checked against " +
+      "the project's execution policy. Signed submission and sponsored execution land " +
+      "with the account-abstraction provider.",
     category: "execution",
     publicHref: "/products/transactions",
     appHref: app("transactions"),
     docsHref: "/docs/transactions",
     icon: "arrows",
-    availability: "preview",
+    availability: "enabled",
     relatedModules: ["accounts", "gas", "policies"],
   },
 
   gas: {
     id: "gas",
     name: "Gas",
-    shortDescription: "Sponsorship policies, budgets, and abuse controls.",
+    shortDescription: "Live gas tracker for Robinhood Chain.",
     description:
-      "Removes the requirement that a new user hold ETH before their first action. " +
-      "Sponsorship runs behind a provider adapter and is bounded by per-user limits, " +
-      "per-project budgets, contract and method allowlists, and a kill switch. Gas on " +
-      "Robinhood Chain is paid in ETH.",
+      "Current gas price and base fee for Robinhood Chain, with a worked transfer " +
+      "cost, in the dashboard and the API. Gas sponsorship, paymaster policies, and " +
+      "budgets that remove the need for a new user to hold ETH land with the " +
+      "account-abstraction provider. Gas on Robinhood Chain is paid in ETH.",
     category: "execution",
     publicHref: "/products/gas",
     appHref: app("gas"),
     docsHref: "/docs/gas",
     icon: "fuel",
-    availability: "preview",
+    availability: "enabled",
     relatedModules: ["transactions", "policies", "credits"],
   },
 
@@ -189,17 +192,17 @@ export const MODULES: Readonly<Record<HoodStackModuleId, ModuleDefinition>> = {
   policies: {
     id: "policies",
     name: "Policies",
-    shortDescription: "Spending limits and allowlists enforced before signing.",
+    shortDescription: "Spending limits and recipient allowlists.",
     description:
-      "Declarative rules covering spend limits, contract and recipient allowlists, " +
-      "and rate limits. Policies are evaluated server-side before a payload is " +
-      "signed, so a compromised client cannot bypass them.",
+      "A spending ceiling and a recipient allowlist for a project, evaluated live " +
+      "against every transaction simulation today. Enforcement at signing, so a " +
+      "compromised client cannot bypass a rule, lands with signed execution.",
     category: "execution",
     publicHref: "/products/policies",
     appHref: app("policies"),
     docsHref: "/docs/policies",
     icon: "shield-check",
-    availability: "preview",
+    availability: "enabled",
     relatedModules: ["security", "gas", "sessions"],
   },
 

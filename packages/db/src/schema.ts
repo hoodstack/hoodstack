@@ -26,6 +26,9 @@ export const membershipRole = pgEnum("membership_role", ["owner", "admin", "memb
 /** Which environment an API key acts against. Mirrors the `hs_live` / `hs_test` prefix. */
 export const keyEnvironment = pgEnum("key_environment", ["live", "test"]);
 
+/** Whether the recipient allowlist is enforced during evaluation. */
+export const policyMode = pgEnum("policy_mode", ["off", "enforce"]);
+
 /**
  * A person, mirrored from Privy on first authenticated request.
  *
@@ -156,6 +159,37 @@ export const projectAccounts = pgTable(
   (t) => [uniqueIndex("project_accounts_project_address_idx").on(t.projectId, t.address)],
 );
 
+/**
+ * A project's execution policy: a spending ceiling and whether the recipient
+ * allowlist is enforced. One row per project. These rules are evaluated during
+ * transaction simulation today; enforcement at submit lands with signed
+ * execution.
+ */
+export const projectPolicies = pgTable("project_policies", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  projectId: uuid("project_id")
+    .notNull()
+    .unique()
+    .references(() => projects.id, { onDelete: "cascade" }),
+  maxValueWei: text("max_value_wei"),
+  allowlistMode: policyMode("allowlist_mode").notNull().default("off"),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+});
+
+/** An address a project's policy permits as a transaction recipient. */
+export const policyAllowlist = pgTable(
+  "policy_allowlist",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    projectId: uuid("project_id")
+      .notNull()
+      .references(() => projects.id, { onDelete: "cascade" }),
+    address: text("address").notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [uniqueIndex("policy_allowlist_project_address_idx").on(t.projectId, t.address)],
+);
+
 export type User = typeof users.$inferSelect;
 export type NewUser = typeof users.$inferInsert;
 export type Organization = typeof organizations.$inferSelect;
@@ -170,3 +204,7 @@ export type UsageEvent = typeof usageEvents.$inferSelect;
 export type NewUsageEvent = typeof usageEvents.$inferInsert;
 export type ProjectAccount = typeof projectAccounts.$inferSelect;
 export type NewProjectAccount = typeof projectAccounts.$inferInsert;
+export type ProjectPolicy = typeof projectPolicies.$inferSelect;
+export type NewProjectPolicy = typeof projectPolicies.$inferInsert;
+export type PolicyAllowlistEntry = typeof policyAllowlist.$inferSelect;
+export type NewPolicyAllowlistEntry = typeof policyAllowlist.$inferInsert;

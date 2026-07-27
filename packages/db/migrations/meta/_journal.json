@@ -15,6 +15,13 @@
       "when": 1785161796684,
       "tag": "0001_bright_overlord",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1785163553759,
+      "tag": "0002_organic_blindfold",
+      "breakpoints": true
     }
   ]
 }

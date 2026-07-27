@@ -1,5 +1,5 @@
-import { HoodStackError } from "@hoodstack/errors";
-import { getAddress, isAddress, isHash } from "viem";
+import { HoodStackError, isHoodStackError } from "@hoodstack/errors";
+import { formatGwei, getAddress, isAddress, isHash } from "viem";
 
 import { formatNative } from "./currency.js";
 import { rpcRequestWithFallback } from "./rpc.js";
@@ -204,4 +204,118 @@ export async function readBlock(
     gasUsed: fromHexQuantity(block["gasUsed"]).toString(),
     gasLimit: fromHexQuantity(block["gasLimit"]).toString(),
   };
+}
+
+export interface GasSummary {
+  gasPriceWei: string;
+  gasPriceGwei: string;
+  baseFeeWei: string | null;
+  /** Cost of a 21000-gas native transfer at the current gas price. */
+  transferCostWei: string;
+  transferCostFormatted: string;
+}
+
+/** Current gas price and base fee, with a worked example transfer cost. */
+export async function readGas(
+  urls: readonly string[],
+  chain: HoodStackChain,
+  options: RpcRequestOptions = {},
+): Promise<GasSummary> {
+  const [gasHex, block] = await Promise.all([
+    rpcRequestWithFallback<string>(urls, "eth_gasPrice", [], options),
+    rpcRequestWithFallback<Record<string, unknown> | null>(
+      urls,
+      "eth_getBlockByNumber",
+      ["latest", false],
+      options,
+    ),
+  ]);
+
+  const gasPrice = fromHexQuantity(gasHex);
+  const baseFee =
+    block && typeof block["baseFeePerGas"] === "string"
+      ? fromHexQuantity(block["baseFeePerGas"])
+      : null;
+  const transferCost = gasPrice * 21_000n;
+
+  return {
+    gasPriceWei: gasPrice.toString(),
+    gasPriceGwei: formatGwei(gasPrice),
+    baseFeeWei: baseFee !== null ? baseFee.toString() : null,
+    transferCostWei: transferCost.toString(),
+    transferCostFormatted: formatNative(transferCost, chain, { withSymbol: true }),
+  };
+}
+
+export interface SimulationRequest {
+  from?: string;
+  to: string;
+  /** Native value to send, in wei, as a decimal string. */
+  valueWei?: string;
+  /** Calldata, hex. */
+  data?: string;
+}
+
+export interface SimulationResult {
+  success: boolean;
+  gasEstimate: string | null;
+  returnData: string | null;
+  revertReason: string | null;
+}
+
+/**
+ * Simulate a transaction with `eth_call` and estimate its gas, without signing
+ * or submitting anything. On a revert, `success` is false and `revertReason`
+ * carries the node's message. This is the read-only half of execution; signed
+ * submission and sponsorship land with the account-abstraction provider.
+ */
+export async function simulateTransaction(
+  urls: readonly string[],
+  req: SimulationRequest,
+  options: RpcRequestOptions = {},
+): Promise<SimulationResult> {
+  const call: Record<string, string> = { to: assertAddress(req.to) };
+  if (req.from) call["from"] = assertAddress(req.from);
+  if (req.valueWei && req.valueWei !== "0") {
+    call["value"] = `0x${BigInt(req.valueWei).toString(16)}`;
+  }
+  if (req.data && req.data !== "0x") {
+    if (!/^0x[0-9a-fA-F]*$/.test(req.data)) {
+      throw new HoodStackError("HS_INVALID_PARAMETER", {
+        message: "`data` must be a 0x-prefixed hex string.",
+      });
+    }
+    call["data"] = req.data;
+  }
+
+  try {
+    const returnData = await rpcRequestWithFallback<string>(
+      urls,
+      "eth_call",
+      [call, "latest"],
+      options,
+    );
+
+    let gasEstimate: string | null = null;
+    try {
+      const gasHex = await rpcRequestWithFallback<string>(
+        urls,
+        "eth_estimateGas",
+        [call],
+        options,
+      );
+      gasEstimate = fromHexQuantity(gasHex).toString();
+    } catch {
+      // Estimation can fail where the call succeeds; leave it unset.
+    }
+
+    return { success: true, gasEstimate, returnData, revertReason: null };
+  } catch (error) {
+    const revertReason = isHoodStackError(error)
+      ? error.message
+      : error instanceof Error
+        ? error.message
+        : "Execution reverted.";
+    return { success: false, gasEstimate: null, returnData: null, revertReason };
+  }
 }
