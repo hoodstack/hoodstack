@@ -24,7 +24,7 @@ than a polished one sent late.
 
 ## What to expect
 
-HoodStack is a small, Live project. We will not promise a response time
+HoodStack is a small, live project. We will not promise a response time
 we cannot reliably meet, so instead of an SLA, here is our commitment:
 
 - We acknowledge reports as quickly as we are able.

@@ -4,13 +4,12 @@
 
 State this plainly, because it determines how you should treat this software:
 
-**HoodStack is Live and has not been audited.** No independent security
+**HoodStack is live and has not been audited.** No independent security
 review has been performed. No formal verification has been performed. No bug
 bounty is currently funded.
 
-Do not use HoodStack to secure funds you cannot afford to lose. Do not use it in
-production. Mainnet writes are disabled by default and should stay that way
-until this section says otherwise.
+Mainnet writes are disabled by default and should stay that way until this
+section says otherwise.
 
 HoodStack does not describe itself as bank-grade, military-grade, unhackable,
 audited, battle-tested, or institutional-grade. None of those claims would be
