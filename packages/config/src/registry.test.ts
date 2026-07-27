@@ -262,6 +262,7 @@ describe("availability gating", () => {
       "policies",
       "tokens",
       "registry",
+      "explorer",
     ]);
     for (const module of MODULE_LIST) {
       expect(isModuleEnabled(module.id), module.id).toBe(enabled.has(module.id));

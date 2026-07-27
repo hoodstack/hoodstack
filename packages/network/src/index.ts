@@ -42,6 +42,8 @@ export {
   readGas,
   readToken,
   simulateTransaction,
+  classifyExplorerQuery,
+  type ExplorerQueryKind,
   type AccountSummary,
   type TransactionSummary,
   type BlockSummary,

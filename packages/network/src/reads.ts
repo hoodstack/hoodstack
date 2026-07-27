@@ -426,3 +426,15 @@ export async function readToken(
     holderBalanceFormatted,
   };
 }
+
+export type ExplorerQueryKind = "address" | "txHash" | "blockNumber" | "unknown";
+
+/** Classify an explorer search term so the right read can be dispatched. */
+export function classifyExplorerQuery(input: string): ExplorerQueryKind {
+  const query = input.trim();
+  if (!query) return "unknown";
+  if (isAddress(query)) return "address";
+  if (isHash(query)) return "txHash";
+  if (query.toLowerCase() === "latest" || /^\d+$/.test(query)) return "blockNumber";
+  return "unknown";
+}

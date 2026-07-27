@@ -19,10 +19,10 @@ import type { HoodStackModuleId, ModuleDefinition } from "./types.js";
  *
  * Enabled today: Data and Accounts (reads and a registry), Transactions
  * (simulation and tracking), Gas (a live tracker), Policies (evaluated against
- * simulations), Tokens (ERC-20 reads), and Asset Registry (verified entries).
- * Each ships with a dashboard surface and, where it applies, a public API. Every
- * other module is `preview` until its implementation lands - any other value
- * would misrepresent it.
+ * simulations), Tokens (ERC-20 reads), Asset Registry (verified entries), and
+ * Explorer (universal chain search). Each ships with a dashboard surface and,
+ * where it applies, a public API. Every other module is `preview` until its
+ * implementation lands - any other value would misrepresent it.
  *
  * Flipping a module to `enabled` is a deliberate act with a checklist attached;
  * see `docs/operations/module-activation.md`.
@@ -266,19 +266,18 @@ export const MODULES: Readonly<Record<HoodStackModuleId, ModuleDefinition>> = {
   explorer: {
     id: "explorer",
     name: "Explorer",
-    shortDescription: "Accounts, transactions, and contracts in context.",
+    shortDescription: "Search accounts, transactions, and blocks.",
     description:
-      "A developer-oriented view of chain state that understands what HoodStack " +
-      "builds: smart accounts and their owners, user operations alongside the " +
-      "transactions that carried them, sponsorship decisions and why they were made. " +
-      "Complements Blockscout rather than replacing it - canonical block and " +
-      "transaction links continue to point there.",
+      "One search box over Robinhood Chain: paste an address, transaction hash, or " +
+      "block number and read it live, with a deep link to Blockscout for the full " +
+      "record. It complements Blockscout rather than replacing it. Smart-account and " +
+      "user-operation context lands with account abstraction.",
     category: "connectivity",
     publicHref: "/products/explorer",
     appHref: app("explorer"),
     docsHref: "/docs/explorer",
     icon: "search",
-    availability: "preview",
+    availability: "enabled",
     relatedModules: ["data", "transactions", "registry"],
   },
 

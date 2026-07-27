@@ -4,6 +4,7 @@ import { encodeFunctionResult, erc20Abi } from "viem";
 
 import { robinhoodTestnet } from "./chains.js";
 import {
+  classifyExplorerQuery,
   readAccountSummary,
   readBlock,
   readGas,
@@ -263,5 +264,16 @@ describe("readToken", () => {
     await expect(
       readToken(URLS, robinhoodTestnet, ADDR, undefined, { fetch: fetchImpl }),
     ).rejects.toSatisfy(isHoodStackError);
+  });
+});
+
+describe("classifyExplorerQuery", () => {
+  it("classifies addresses, hashes, blocks, and junk", () => {
+    expect(classifyExplorerQuery(ADDR)).toBe("address");
+    expect(classifyExplorerQuery(HASH)).toBe("txHash");
+    expect(classifyExplorerQuery("12345")).toBe("blockNumber");
+    expect(classifyExplorerQuery("latest")).toBe("blockNumber");
+    expect(classifyExplorerQuery("hello")).toBe("unknown");
+    expect(classifyExplorerQuery("")).toBe("unknown");
   });
 });
