@@ -93,3 +93,8 @@ yarn-error.log*
 *.export.json
 *.dump
 *.sql.gz
+
+# ── internal planning and status docs ───────────────────────────────────────
+# Kept locally as working documents; not published to the public repository.
+/PROJECT_STATUS.md
+/IMPLEMENTATION_PLAN.md

@@ -1,7 +1,7 @@
 # Contributing to HoodStack
 
-Thanks for your interest. HoodStack is early - see the
-[implementation plan](IMPLEMENTATION_PLAN.md) for where things stand.
+Thanks for your interest. HoodStack is in early access; see the
+[README](README.md) for where things stand.
 
 ## Before you start
 

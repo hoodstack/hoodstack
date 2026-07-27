@@ -14,7 +14,7 @@ data, automation, and production application development.
 
 [Website](https://www.hoodstack.io) · [X](https://x.com/hoodstack_) ·
 [GitHub](https://github.com/hoodstack) ·
-[Security](SECURITY.md) · [Plan](IMPLEMENTATION_PLAN.md)
+[Security](SECURITY.md)
 
 > **HoodStack is an independent developer infrastructure project and is not
 > affiliated with, endorsed by, sponsored by, or operated by Robinhood Markets,
@@ -178,7 +178,6 @@ committed empty.
 
 ## Documentation
 
-- [Implementation plan](IMPLEMENTATION_PLAN.md) - milestones, open questions, risks
 - [System overview](docs/architecture/system-overview.md) - layers, dependency graph, request path
 - [Architecture decisions](docs/adr/) - ADRs 0001-0006
 - [Threat model](docs/security/threat-model.md)

@@ -21,7 +21,6 @@ import type { HoodStackModuleId, ModuleDefinition } from "./types.js";
  * tooling (SDK, CLI, reference, playground, recipes), and the dashboard surfaces.
  * Preview modules are blocked on account abstraction, payments, invitations, a
  * scheduler, or the token, and say so; any other value would misrepresent them.
- * See ROADMAP.md for the full per-module status.
  *
  * Flipping a module to `enabled` is a deliberate act with a checklist attached;
  * see `docs/operations/module-activation.md`.

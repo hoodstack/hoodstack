@@ -1,11 +1,10 @@
 # HoodStack: product and module roadmap
 
-What HoodStack is, every module it comprises, and the status of each. This is the
-product-level companion to [PROJECT_STATUS.md](PROJECT_STATUS.md) (engineering
-snapshot) and the [ADRs](docs/adr). Module facts come from the registry in
-`packages/config`, the single source of truth.
+What HoodStack is, every module it comprises, and the status of each. Module facts
+come from the registry in `packages/config`, the single source of truth; the
+[ADRs](docs/adr) record the architecture decisions.
 
-**Updated:** 2026-07-27 (23 modules shipped)
+**Updated:** 2026-07-27 (23 of 32 modules shipped)
 
 ---
 
