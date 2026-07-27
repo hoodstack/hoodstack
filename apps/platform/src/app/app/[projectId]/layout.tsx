@@ -2,9 +2,14 @@ import { buildAppNavigation } from "@hoodstack/config";
 import { DEFAULT_CHAIN } from "@hoodstack/network";
 import Link from "next/link";
 
+import { getSessionUser } from "@/lib/auth/session";
+
 import { Wordmark } from "@/components/brand";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { StatusBadge } from "@/components/ui";
+
+import { AccountMenu } from "../_components/account-menu";
+import { SignedOut } from "../_components/signed-out";
 
 /**
  * Authenticated application shell.
@@ -22,6 +27,12 @@ export default async function AppLayout({
   params: Promise<{ projectId: string }>;
 }) {
   const { projectId } = await params;
+
+  // Gate the whole project subtree here, so every page under it can assume a
+  // session. Signed-out users get the login gate instead of the empty shell.
+  const session = await getSessionUser();
+  if (!session) return <SignedOut />;
+
   const sections = buildAppNavigation();
 
   return (
@@ -47,6 +58,7 @@ export default async function AppLayout({
             <div className="hidden sm:block">
               <ThemeToggle />
             </div>
+            <AccountMenu email={session.user.email} />
           </div>
         </div>
       </header>

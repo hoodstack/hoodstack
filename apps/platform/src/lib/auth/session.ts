@@ -11,6 +11,7 @@ import {
   type User,
 } from "@hoodstack/db";
 import { cookies, headers } from "next/headers";
+import { cache } from "react";
 
 import { getPrivyClient, PRIVY_TOKEN_COOKIE } from "./privy";
 
@@ -123,12 +124,17 @@ async function findOrProvision(identity: PrivyIdentity): Promise<SessionUser> {
   return { user, defaultOrg: org };
 }
 
-/** The current session, or null if the caller is not signed in. */
-export async function getSessionUser(): Promise<SessionUser | null> {
+/**
+ * The current session, or null if the caller is not signed in.
+ *
+ * Wrapped in React `cache` so multiple callers in one request — a layout and the
+ * page it wraps, say — share a single Privy verification and provisioning pass.
+ */
+export const getSessionUser = cache(async (): Promise<SessionUser | null> => {
   const identity = await getPrivyIdentity();
   if (!identity) return null;
   return findOrProvision(identity);
-}
+});
 
 /**
  * The current session, or throw. Use in server actions and gateway-adjacent
