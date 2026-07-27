@@ -6,9 +6,10 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
  * Reveals its children when they scroll into view.
  *
  * A restrained entrance, not a spectacle: a short rise and fade, once, the first
- * time the element is seen. Motion is fully suppressed under
- * `prefers-reduced-motion` by the `.hs-reveal` styles, so this is progressive
- * enhancement - the content is present and styled regardless of JavaScript.
+ * time the element is seen. Content already on screen at mount reveals at once;
+ * only below-the-fold blocks wait for the observer, with a timer as a backstop so
+ * nothing can stay stuck hidden. Motion is fully suppressed under
+ * `prefers-reduced-motion` by the `.hs-reveal` styles.
  */
 export function Reveal({
   children,
@@ -28,7 +29,13 @@ export function Reveal({
   useEffect(() => {
     const node = ref.current;
     if (!node) return;
-    // If already in view on mount (above the fold), reveal without waiting.
+    // Anything already on screen when we mount - the hero, the first section -
+    // reveals at once. Waiting on the observer there only adds a visible lag.
+    const inView = node.getBoundingClientRect().top < window.innerHeight;
+    if (inView) {
+      setVisible(true);
+      return;
+    }
     const observer = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
@@ -41,8 +48,14 @@ export function Reveal({
       { threshold: 0.15, rootMargin: "0px 0px -8% 0px" },
     );
     observer.observe(node);
-    return () => observer.disconnect();
-  }, []);
+    // Safety net: if the observer never fires - unsupported, a headless render,
+    // an odd device - reveal anyway so content is never stuck invisible.
+    const fallback = window.setTimeout(() => setVisible(true), delay + 700);
+    return () => {
+      observer.disconnect();
+      window.clearTimeout(fallback);
+    };
+  }, [delay]);
 
   return (
     <Tag

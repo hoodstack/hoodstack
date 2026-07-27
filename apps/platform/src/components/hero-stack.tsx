@@ -3,8 +3,9 @@ import type { CSSProperties } from "react";
 /**
  * The hero illustration: a solid isometric HoodStack.
  *
- * A hand-built SVG, crisp at any size, a few KB, themeable via design tokens,
- * and using our own layered-squares mark (never a third-party logo). A solid
+ * A hand-built SVG, crisp at any size, a few KB, and themeable via design
+ * tokens, with the HoodStack logo laid flat on the cap (the raster projected
+ * onto the top face and clipped to it). A solid
  * tower of six product layers under a brand-green cap: strong left/right wall
  * shading for mass, glowing chartreuse seams between layers, an emissive front
  * edge, a cap glow, energy traces feeding in, and a contact shadow.
@@ -85,6 +86,10 @@ export function HeroStack() {
         <pattern id="hs-hero-dots" width="26" height="26" patternUnits="userSpaceOnUse">
           <circle cx="1.5" cy="1.5" r="1" fill="var(--hs-border-strong)" />
         </pattern>
+        {/* Clip the logo to the cap's top rhombus so it sits flush on the face. */}
+        <clipPath id="hs-hero-cap-clip">
+          <polygon points={topFace(CAP_CY)} />
+        </clipPath>
       </defs>
 
       {/* Backdrop: faint dot field, a soft glow, and a contact shadow. */}
@@ -152,18 +157,26 @@ export function HeroStack() {
           );
         })}
 
-        {/* Cap top face + the stack mark (three nested iso diamonds). */}
+        {/* Cap top face, then the HoodStack logo laid flat on it. The isometric
+            matrix maps a unit square onto the cap rhombus (top vertex is the
+            origin corner), and the clip trims the logo to the face. */}
         <polygon points={topFace(CAP.cy)} fill="url(#hs-hero-cap)" />
-        {[5, -2, -9].map((dy) => (
-          <polygon
-            key={dy}
-            points={`${CX},${CAP.cy - 13 + dy} ${CX + 30},${CAP.cy + dy} ${CX},${CAP.cy + 13 + dy} ${CX - 30},${CAP.cy + dy}`}
-            fill="none"
-            stroke="var(--hs-on-brand)"
-            strokeWidth="2.25"
-            strokeLinejoin="round"
-          />
-        ))}
+        <g clipPath="url(#hs-hero-cap-clip)">
+          <g transform={`matrix(${RX} ${-RY} ${RX} ${RY} ${CX - RX} ${CAP.cy})`}>
+            {/* Zoom into the logo's feather so the cap reads as the brand mark,
+                not a shrunken stack-on-a-stack. Centered on the feather. */}
+            <g transform="translate(0.5 0.5) scale(2.8) translate(-0.5 -0.3)">
+              <image
+                href="/logo.png"
+                x="0"
+                y="0"
+                width="1"
+                height="1"
+                preserveAspectRatio="xMidYMid meet"
+              />
+            </g>
+          </g>
+        </g>
 
         {/* Glowing seams between layers, the signature layered look. Each is a
             wide soft pass (glow) under a bright thin pass. */}

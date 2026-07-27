@@ -22,6 +22,12 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    /* Nothing on any page should force the viewport to scroll sideways. */
+    overflow-x: clip;
+  }
+
+  body {
+    overflow-x: clip;
   }
 
   @media (prefers-reduced-motion: reduce) {

@@ -102,14 +102,14 @@ export default function HomePage() {
                 Robinhood Chain developer infrastructure
               </p>
 
-              <h1 className="hs-display text-[3.25rem] leading-[0.95] text-content sm:text-6xl lg:text-[4.5rem]">
+              <h1 className="hs-display text-[clamp(2.25rem,8.5vw,4.5rem)] leading-[0.98] text-content sm:leading-[0.95]">
                 Build anything on Robinhood&nbsp;Chain.
               </h1>
-              <p className="hs-display mt-3 text-3xl text-content-tertiary lg:text-[2.375rem]">
+              <p className="hs-display mt-3 text-[clamp(1.5rem,5vw,2.375rem)] text-content-tertiary">
                 Everything else is infrastructure.
               </p>
 
-              <p className="mt-8 max-w-xl text-lg text-content-secondary">
+              <p className="mt-8 max-w-xl text-base text-content-secondary sm:text-lg">
                 Stop rebuilding accounts, execution, gas, assets, automation, and tooling
                 for every project. Adopt one stack and write the part that makes your
                 application different.
@@ -120,9 +120,9 @@ export default function HomePage() {
                 <ButtonLink href="/products" variant="secondary">
                   Explore the stack
                 </ButtonLink>
-                <ButtonLink href="https://github.com/hoodstack" variant="ghost" external>
+                {/* <ButtonLink href="https://github.com/hoodstack" variant="ghost" external>
                   View GitHub
-                </ButtonLink>
+                </ButtonLink> */}
               </div>
             </div>
 
@@ -161,9 +161,11 @@ export default function HomePage() {
       {/* Status strip. */}
       <Container>
         <p className="max-w-4xl py-6 text-sm text-content-tertiary">
-          HoodStack is in early access. Sign-in, projects, API keys, and the Data API are
-          live today; the remaining modules ship continuously. Not yet audited: use test
-          keys for production-critical flows until mainnet readiness is announced.
+          HoodStack is in early access on Robinhood Chain. The full read, simulate,
+          configure, and audit surface is live today - across accounts, execution, gas,
+          assets, data, security, and developer tooling - with a typed SDK and CLI on npm.
+          Signed execution and automation ship continuously. Not yet audited: keep
+          production-critical flows on testnet until a mainnet readiness review is announced.
         </p>
       </Container>
 
@@ -235,7 +237,7 @@ export default function HomePage() {
       <Section>
         <Container>
           <Reveal>
-            <div className="grid gap-10 lg:grid-cols-2 lg:gap-16">
+            <div className="grid grid-cols-1 gap-10 lg:grid-cols-2 lg:gap-16">
               <div>
                 <SectionHeading
                   eyebrow="Developer experience"
@@ -274,7 +276,7 @@ export default function HomePage() {
       <Section>
         <Container>
           <Reveal>
-            <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
+            <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-16">
               <SectionHeading
                 eyebrow="Execution"
                 title="Watch a transaction settle."
@@ -304,7 +306,7 @@ export default function HomePage() {
       <Section>
         <Container>
           <Reveal>
-            <div className="grid gap-10 lg:grid-cols-2 lg:gap-16">
+            <div className="grid grid-cols-1 gap-10 lg:grid-cols-2 lg:gap-16">
               <div>
                 <SectionHeading
                   eyebrow="Robinhood Chain native"

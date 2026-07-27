@@ -238,7 +238,7 @@ export function StatusBadge({
 
 export function CodeBlock({ code, label }: { code: string; label?: string }) {
   return (
-    <div className="hs-lift overflow-hidden rounded-card border border-line bg-surface-inset hover:border-line-strong">
+    <div className="hs-lift min-w-0 overflow-hidden rounded-card border border-line bg-surface-inset hover:border-line-strong">
       {label ? (
         <div className="border-b border-line px-4 py-2">
           <span className="hs-mono-label">{label}</span>
