@@ -36,6 +36,15 @@ export {
 } from "./rpc.js";
 
 export {
+  readAccountSummary,
+  readTransaction,
+  readBlock,
+  type AccountSummary,
+  type TransactionSummary,
+  type BlockSummary,
+} from "./reads.js";
+
+export {
   checkRpcHealth,
   checkChainHealth,
   type RpcHealthReport,

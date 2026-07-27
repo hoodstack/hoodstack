@@ -1,14 +1,8 @@
 import { HoodStackError } from "@hoodstack/errors";
-import {
-  IDEMPOTENT_METHODS,
-  resolveRpcUrls,
-  robinhood,
-  robinhoodTestnet,
-  rpcRequestWithFallback,
-} from "@hoodstack/network";
+import { IDEMPOTENT_METHODS, rpcRequestWithFallback } from "@hoodstack/network";
 import { z } from "zod";
 
-import { serverEnv } from "@/lib/env";
+import { chainForEnvironment, rpcUrlsForEnvironment } from "@/server/chain";
 import {
   authenticateRequest,
   enforceRateLimit,
@@ -58,19 +52,8 @@ export async function POST(request: Request): Promise<Response> {
       });
     }
 
-    const chain = key.environment === "live" ? robinhood : robinhoodTestnet;
-    const env = serverEnv();
-    const override =
-      key.environment === "live"
-        ? env.HOODSTACK_RPC_URL_MAINNET
-        : env.HOODSTACK_RPC_URL_TESTNET;
-
-    const urls = resolveRpcUrls(chain, {
-      environment: "production",
-      allowPublicEndpoints: true,
-      rpcUrls: override ? [override] : [],
-    });
-
+    const chain = chainForEnvironment(key.environment);
+    const urls = rpcUrlsForEnvironment(key.environment);
     const result = await rpcRequestWithFallback(urls, method, params, { timeoutMs: 10_000 });
 
     await recordUsage({

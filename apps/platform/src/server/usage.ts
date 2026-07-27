@@ -12,7 +12,8 @@ import { getDb, usageEvents } from "@hoodstack/db";
  */
 export async function recordUsage(input: {
   projectId: string;
-  apiKeyId: string;
+  /** Null for dashboard-originated reads, which authenticate by session, not a key. */
+  apiKeyId?: string | null;
   module: string;
   action: string;
   units?: number;
@@ -23,7 +24,7 @@ export async function recordUsage(input: {
     .insert(usageEvents)
     .values({
       projectId: input.projectId,
-      apiKeyId: input.apiKeyId,
+      apiKeyId: input.apiKeyId ?? null,
       module: input.module,
       action: input.action,
       units: input.units ?? 1,

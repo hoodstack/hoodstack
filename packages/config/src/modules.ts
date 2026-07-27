@@ -17,8 +17,9 @@ import type { HoodStackModuleId, ModuleDefinition } from "./types.js";
  * Modules are grouped into products by `category` - see `products.ts`. Products
  * are what developers evaluate and adopt; modules are the surfaces inside them.
  *
- * Every entry is currently `preview`. The platform application and API have not
- * been built yet. Any other value here would misrepresent the product.
+ * `data` is `enabled`: its raw-RPC reads (account, transaction, block) ship with
+ * a public API, a dashboard console, and tests. Every other module is `preview`
+ * until its implementation lands - any other value would misrepresent it.
  *
  * Flipping a module to `enabled` is a deliberate act with a checklist attached;
  * see `docs/operations/module-activation.md`.
@@ -225,17 +226,18 @@ export const MODULES: Readonly<Record<HoodStackModuleId, ModuleDefinition>> = {
   data: {
     id: "data",
     name: "Data",
-    shortDescription: "Balances, history, and indexed account activity.",
+    shortDescription: "Account, transaction, and block reads.",
     description:
-      "Read APIs for balances, transaction history, receipts, blocks, and logs, " +
-      "served through an indexed-data adapter with raw RPC fallback for the reads " +
-      "that support it.",
+      "Read APIs for Robinhood Chain: account state (balance, nonce, and " +
+      "contract detection), transactions with their receipts, and block headers, " +
+      "served over raw RPC. Indexed transaction history and log queries are on " +
+      "the roadmap; the raw-RPC reads are available today.",
     category: "connectivity",
     publicHref: "/products/data",
     appHref: app("data"),
     docsHref: "/docs/data",
     icon: "database",
-    availability: "preview",
+    availability: "enabled",
     relatedModules: ["tokens", "webhooks"],
   },
 

@@ -249,18 +249,19 @@ describe("findModule", () => {
 });
 
 describe("availability gating", () => {
-  it("reports no module as enabled until its implementation ships", () => {
-    // The platform app and API do not exist yet. Marking anything enabled here
-    // would make the product claim a capability it does not have.
+  it("reports only implemented modules as enabled", () => {
+    // Data ships real raw-RPC reads (account, transaction, block). Everything
+    // else is a preview until its implementation lands; marking one enabled
+    // early would make the product claim a capability it does not have.
     for (const module of MODULE_LIST) {
-      expect(isModuleEnabled(module.id), module.id).toBe(false);
+      expect(isModuleEnabled(module.id), module.id).toBe(module.id === "data");
     }
   });
 
-  it("treats every non-private module as a preview route", () => {
+  it("treats every non-private, non-enabled module as a preview route", () => {
     for (const module of MODULE_LIST) {
       expect(isModulePreview(module.id), module.id).toBe(
-        module.availability !== "private",
+        module.availability !== "private" && !isModuleEnabled(module.id),
       );
     }
   });
