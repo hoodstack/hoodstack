@@ -156,11 +156,11 @@ export function DataConsole({ projectId }: { projectId: string }) {
               <span className="font-mono text-xs break-all">{tx.from}</span>
             </DefinitionRow>
             <DefinitionRow term="To">
-              <span className="font-mono text-xs break-all">{tx.to ?? "—"}</span>
+              <span className="font-mono text-xs break-all">{tx.to ?? "-"}</span>
             </DefinitionRow>
             <DefinitionRow term="Value">{tx.valueFormatted}</DefinitionRow>
             <DefinitionRow term="Block">{tx.blockNumber ?? "pending"}</DefinitionRow>
-            <DefinitionRow term="Gas used">{tx.gasUsed ?? "—"}</DefinitionRow>
+            <DefinitionRow term="Gas used">{tx.gasUsed ?? "-"}</DefinitionRow>
           </dl>
         )
       ) : null}

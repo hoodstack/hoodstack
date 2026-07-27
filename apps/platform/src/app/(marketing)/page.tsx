@@ -158,12 +158,12 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Honest status strip. */}
+      {/* Status strip. */}
       <Container>
         <p className="max-w-4xl py-6 text-sm text-content-tertiary">
-          HoodStack is pre-release and has not been audited. The network, error, and
-          registry packages are implemented and tested; the API, authentication, and SDKs
-          are in development. Product pages describe intended design, and say so.
+          HoodStack is in early access. Sign-in, projects, API keys, and the Data API are
+          live today; the remaining modules ship continuously. Not yet audited: use test
+          keys for production-critical flows until mainnet readiness is announced.
         </p>
       </Container>
 
@@ -278,7 +278,7 @@ export default function HomePage() {
               <SectionHeading
                 eyebrow="Execution"
                 title="Watch a transaction settle."
-                lead="Every transaction moves through the same states - created, simulated, sponsored, submitted, confirmed - and is only reported confirmed once a receipt satisfies the configured finality depth. Nothing is a fabricated metric; this is the real state machine."
+                lead="Every transaction moves through the same states, created, simulated, sponsored, submitted, confirmed, and is only reported confirmed once a receipt satisfies the configured finality depth."
               />
               <div className="hs-lift rounded-surface border border-line bg-surface shadow-lg hover:border-line-strong">
                 <div className="flex items-center justify-between border-b border-line px-4 py-2.5">

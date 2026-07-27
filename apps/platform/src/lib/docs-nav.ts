@@ -34,6 +34,13 @@ export const DOCS_NAV: readonly DocsNavGroup[] = [
     ],
   },
   {
+    heading: "API",
+    items: [
+      { label: "Authentication", href: "#authentication" },
+      { label: "Data API", href: "#data-api" },
+    ],
+  },
+  {
     heading: "Reference",
     items: [
       { label: "Error handling", href: "#errors" },

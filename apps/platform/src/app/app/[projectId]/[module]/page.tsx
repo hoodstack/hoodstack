@@ -3,26 +3,11 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-import {
-  ButtonLink,
-  DefinitionRow,
-  DisabledControl,
-  Panel,
-  StatusBadge,
-} from "@/components/ui";
+import { ButtonLink, Panel, StatusBadge } from "@/components/ui";
 import { moduleForSegment } from "@/lib/modules";
 
 type Params = { projectId: string; module: string };
 
-/**
- * Rendered on demand, never prerendered.
- *
- * The parent `[projectId]` is genuinely unknowable at build time. Supplying
- * `generateStaticParams` for `[module]` alone leaves the parent param
- * unresolved, which produces malformed partial prerenders and breaks the route
- * at runtime. Module validity is enforced below via `moduleForSegment`, so a
- * bad segment still 404s correctly.
- */
 export const dynamic = "force-dynamic";
 
 export async function generateMetadata({
@@ -49,25 +34,19 @@ export default async function ModulePage({ params }: { params: Promise<Params> }
           <h1 className="text-2xl font-semibold tracking-tight text-content">
             {module.name}
           </h1>
-          {!enabled ? <StatusBadge tone="pending">In development</StatusBadge> : null}
+          {enabled ? (
+            <StatusBadge tone="success">Available</StatusBadge>
+          ) : (
+            <StatusBadge tone="info">Coming soon</StatusBadge>
+          )}
         </div>
-        <p className="max-w-2xl text-content-secondary">{module.description}</p>
+        <p className="max-w-2xl text-lg text-content-secondary">{module.description}</p>
       </div>
 
-      {enabled ? (
-        // Real module interfaces mount here once a module is activated. Nothing
-        // reaches this branch today, because nothing is marked enabled.
-        <Panel className="p-6">
-          <p className="text-sm text-content-secondary">
-            Module interface not yet mounted.
-          </p>
-        </Panel>
-      ) : (
-        <PreviewInterface module={module} projectId={projectId} />
-      )}
+      {!enabled ? <ComingSoon module={module} projectId={projectId} /> : null}
 
       {related.length > 0 ? (
-        <section className="mt-10">
+        <section className="mt-12">
           <h2 className="hs-mono-label mb-4">Related</h2>
           <ul className="grid gap-px overflow-hidden rounded-card border border-line bg-line sm:grid-cols-3">
             {related.map((item) => (
@@ -93,87 +72,51 @@ export default async function ModulePage({ params }: { params: Promise<Params> }
 }
 
 /**
- * The preview interface.
+ * The preview a module shows before it ships.
  *
- * Shown for every module that is not yet implemented. It is deliberately
- * useful - specification, routes, and what to expect - rather than a "coming
- * soon" placeholder or, worse, a mock interface with fabricated data.
- *
- * Controls are rendered disabled with a stated reason. None of them submits
- * anything, and no request behind this page returns a fabricated success.
+ * Confident and forward-looking: it states what is coming and points to what is
+ * usable today, without disabled controls or fabricated data. The route, its
+ * position, and its identifier are permanent, so links made now keep working
+ * when the module lands.
  */
-function PreviewInterface({
+function ComingSoon({
   module,
   projectId,
 }: {
-  module: ReturnType<typeof moduleForSegment> & object;
+  module: NonNullable<ReturnType<typeof moduleForSegment>>;
   projectId: string;
 }) {
   return (
     <div className="space-y-6">
-      <Panel className="p-6">
-        <h2 className="text-sm font-medium text-content">Status</h2>
-        <p className="mt-3 text-sm text-content-secondary">
-          {module.name} is not implemented yet. This route shows its intended design so
-          you can evaluate the fit and give feedback while changes are still cheap.
+      <Panel className="p-6 sm:p-8">
+        <h2 className="text-sm font-medium text-content">In active development</h2>
+        <p className="mt-3 max-w-2xl text-sm text-content-secondary">
+          {module.name} is being built now. Its place in the dashboard and its API path
+          are already fixed, so you can design around it today and it will light up here
+          when it ships. Follow progress in the changelog.
         </p>
-        <ul className="mt-4 space-y-2 text-sm text-content-secondary">
-          <li>· Controls below are disabled, not silently inert.</li>
-          <li>
-            · The API returns{" "}
-            <code className="font-mono text-xs text-content">HS_FEATURE_NOT_ENABLED</code>{" "}
-            for this module - never a placeholder success.
-          </li>
-          <li>· No figure shown anywhere in this project is fabricated.</li>
-          <li>· This route and its position are permanent.</li>
-        </ul>
-      </Panel>
-
-      <Panel className="p-6">
-        <h2 className="text-sm font-medium text-content">Interface preview</h2>
-        <p className="mt-2 text-sm text-content-secondary">
-          What this module will expose once activated.
-        </p>
-        <div className="mt-5 flex flex-wrap gap-6">
-          <DisabledControl reason="Available when this module ships">
-            Configure {module.name.toLowerCase()}
-          </DisabledControl>
-          <DisabledControl reason="Available when this module ships">
-            View activity
-          </DisabledControl>
+        <div className="mt-6 flex flex-wrap gap-3">
+          <ButtonLink href={module.docsHref}>Read the docs</ButtonLink>
+          <ButtonLink href="/changelog" variant="secondary">
+            View changelog
+          </ButtonLink>
         </div>
       </Panel>
 
-      <Panel className="p-6">
-        <h2 className="text-sm font-medium text-content">Reference</h2>
-        <dl className="mt-4">
-          <DefinitionRow term="Module ID">
-            <code className="font-mono text-xs">{module.id}</code>
-          </DefinitionRow>
-          <DefinitionRow term="Route">
-            <code className="font-mono text-xs">{module.appHref(projectId)}</code>
-          </DefinitionRow>
-          <DefinitionRow term="Documentation">
-            <Link href={module.docsHref} className="text-content-brand hover:underline">
-              {module.docsHref}
-            </Link>
-          </DefinitionRow>
-          {module.publicHref ? (
-            <DefinitionRow term="Product page">
-              <Link
-                href={module.publicHref}
-                className="text-content-brand hover:underline"
-              >
-                {module.publicHref}
-              </Link>
-            </DefinitionRow>
-          ) : null}
-        </dl>
-
-        <div className="mt-6 flex flex-wrap gap-3">
-          <ButtonLink href={module.docsHref} variant="secondary">
-            Read the design
-          </ButtonLink>
+      <Panel className="p-6 sm:p-8">
+        <h2 className="text-sm font-medium text-content">Available today</h2>
+        <p className="mt-2 max-w-2xl text-sm text-content-secondary">
+          Data is live: read balances, accounts, and transactions from Robinhood Chain
+          through the same project and API key.
+        </p>
+        <div className="mt-5">
+          <Link
+            href={`/app/${projectId}/data`}
+            className="inline-flex items-center gap-2 text-sm font-medium text-content-brand hover:underline"
+          >
+            Open Data
+            <span aria-hidden="true">-&gt;</span>
+          </Link>
         </div>
       </Panel>
     </div>

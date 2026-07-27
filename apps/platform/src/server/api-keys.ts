@@ -29,7 +29,7 @@ export type AuthenticatedKey = { key: ApiKey; project: Project };
 
 /**
  * Mint a key for a project the user owns. The returned `plaintext` is the only
- * time the full key exists outside the caller — it is never stored.
+ * time the full key exists outside the caller, it is never stored.
  */
 export async function mintApiKey(
   userId: string,
@@ -84,7 +84,7 @@ export async function revokeApiKey(userId: string, keyId: string): Promise<void>
  *
  * Returns the active key and its project, or null. A shape check runs before any
  * database work so malformed input costs nothing. Only non-revoked keys match.
- * `lastUsedAt` is updated on success — awaited, because a serverless function
+ * `lastUsedAt` is updated on success, awaited, because a serverless function
  * may freeze the moment it returns, dropping a fire-and-forget write.
  */
 export async function authenticateApiKey(

@@ -10,7 +10,7 @@ import {
 import { recordUsage } from "@/server/usage";
 
 // Node runtime: the gateway uses node:crypto and the Postgres driver, neither of
-// which runs on the edge. Never prerendered — every call is authenticated.
+// which runs on the edge. Never prerendered, every call is authenticated.
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 

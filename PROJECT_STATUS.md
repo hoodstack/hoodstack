@@ -1,10 +1,10 @@
-# HoodStack — project status
+# HoodStack: project status
 
 Living snapshot of what exists, what is pending, and how we deploy. Updated as we
 ship. For the milestone plan see [IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md);
 for architecture decisions see [docs/adr](docs/adr).
 
-**Last updated:** 2026-07-20
+**Last updated:** 2026-07-27
 
 ---
 
@@ -12,13 +12,14 @@ for architecture decisions see [docs/adr](docs/adr).
 
 |          |                                                                     |
 | -------- | ------------------------------------------------------------------- |
-| Phase    | 1 (pre-release)                                                     |
-| Posture  | Deploy the marketing site + app shell now; keep shipping agile      |
-| Tests    | 117 passing (errors 29 · network 47 · config 29 · design-tokens 12) |
+| Phase    | 1 (early access, backend live)                                      |
+| Posture  | Marketing site + working dashboard + Data API live; shipping modules incrementally |
+| Tests    | 124 passing (errors 29 · network 54 · config 29 · design-tokens 12) |
 | Pipeline | `lint` · `typecheck` · `test` · `build` all green                   |
 | Audited  | No                                                                  |
 | Token    | Not launched · no contract deployed                                 |
-| Custody  | None — HoodStack cannot move user funds                             |
+| Custody  | None, HoodStack cannot move user funds                              |
+| Backend  | Privy auth · Neon Postgres (Drizzle) · Upstash rate limiting        |
 | Repo     | github.com/hoodstack/hoodstack (private-safe, no secrets)           |
 
 ---
@@ -36,28 +37,29 @@ for architecture decisions see [docs/adr](docs/adr).
 
 ### Platform application (`apps/platform`, Next.js 15)
 
-Marketing site, docs subsite, and the authenticated app shell — one deployable.
+Marketing site, docs subsite, and the authenticated app shell, one deployable.
 
-- **Landing page** — serif display type (self-hosted Fraunces/Inter/JetBrains Mono
+- **Landing page**, serif display type (self-hosted Fraunces/Inter/JetBrains Mono
   via `next/font`), animated "legacy stack → HoodStack" hero transform, product
   ledger, transaction-lifecycle signal, "Everything under the hood" architecture
   diagram, chain-native section, security posture, capacity/token model, proof
   strip. All motion respects `prefers-reduced-motion`.
-- **Products** — `/products` index and `/products/[slug]` hubs + module pages,
+- **Products**, `/products` index and `/products/[slug]` hubs + module pages,
   generated from the registry (sticky intros, self-contained module cards).
-- **Token utility** — single canonical page at **`/token-utility`**
+- **Token utility**, single canonical page at **`/token-utility`**
   (`/products/token-utility` 308-redirects here). Credits-first capacity model,
   seven utility pillars each with its constraint, hard boundaries, before/after
   evolution, `$STACK` as a provisional identifier only.
-- **Security** — posture-first editorial page (numbered guarantees, "what we do
+- **Security**, posture-first editorial page (numbered guarantees, "what we do
   not claim", reporting scope, disclosure).
-- **Changelog** — versioned timeline mirroring `CHANGELOG.md`.
-- **Docs** — its own site at `/docs`: distinct header + sidebar, opens in a new
+- **Changelog**, versioned timeline mirroring `CHANGELOG.md`.
+- **Docs**, its own site at `/docs`: distinct header + sidebar, opens in a new
   tab, honest single-page content with working `@hoodstack/network` examples.
-- **App shell** — `/app`, `/app/projects`, `/app/[projectId]/*`; permanent
-  registry-driven sidebar (8 products + overview/settings), preview-route system
-  (disabled controls, `HS_FEATURE_NOT_ENABLED`, no mocked data).
-- **Security headers** — strict CSP (dev/prod split), HSTS, frame and content
+- **Dashboard**, `/app`, `/app/projects`, `/app/[projectId]/*`; Privy sign-in,
+  first-login org/project provisioning, API key mint/reveal-once/revoke, a
+  responsive registry-driven shell (desktop sidebar + mobile drawer), and the
+  live **Data** module console. Unbuilt modules show a confident roadmap preview.
+- **Security headers**, strict CSP (dev/prod split), HSTS, frame and content
   protections, `no-store` on authenticated routes.
 
 ### Documentation & governance
@@ -78,8 +80,11 @@ isolated SSH key (no personal identity in history).
 
 ## 3. What is pending
 
-Every module below is present in navigation and honestly marked as preview; the
-work is to make it real. None is `enabled` yet.
+**Shipped:** the database + migrations, authentication + tenancy (Privy, orgs,
+projects), API keys + environments, the versioned API `/api/v1` (health, rpc,
+rate limiting, usage metering), and the **Data** module (live raw-RPC reads).
+The remaining modules below are present in navigation, marked as preview, and
+light up as each ships.
 
 | Area                            | Milestone | Notes                                                                                       |
 | ------------------------------- | --------- | ------------------------------------------------------------------------------------------- |
@@ -88,7 +93,7 @@ work is to make it real. None is `enabled` yet.
 | Authentication + tenancy        | M8        | Passkeys, email, wallet sign-in; orgs/projects; **tenant-isolation tests are a merge gate** |
 | API keys + environments         | M9        | Hashed keys, allowed origins, testnet/mainnet gate                                          |
 | Versioned API `/v1`             | M9        | OpenAPI, idempotency, rate limits, audit logging                                            |
-| Account abstraction             | M10       | Provider adapter (blocked on provider selection — ADR 0002)                                 |
+| Account abstraction             | M10       | Provider adapter (blocked on provider selection, ADR 0002)                                 |
 | Transactions + simulation       | M11       | Builders, simulation, receipt polling                                                       |
 | Gas policies + sponsorship      | M12       | Policy engine, budgets, kill switch                                                         |
 | Tokens + canonical registry     | M13       | Verified entries only; no address without a source                                          |
@@ -112,7 +117,7 @@ Three intents, and how the current state meets them.
 ### 4.1 Deploy in this state
 
 The platform builds and runs as a production Next.js app. What ships is a
-**pre-release marketing site + docs + a navigable app shell** — honest about what
+**pre-release marketing site + docs + a navigable app shell**, honest about what
 works, with every unbuilt capability shown as a preview that returns
 `HS_FEATURE_NOT_ENABLED` rather than a fake success.
 
@@ -127,7 +132,7 @@ them yet.
 The registry keeps every product route permanent, so new work **activates**
 modules in place rather than reorganizing the site (ADR 0005/0006). Shipping a
 capability = flip its availability to `enabled` after the activation checklist,
-publish its API/SDK, add a changelog entry — the URL never moves. This lets us
+publish its API/SDK, add a changelog entry, the URL never moves. This lets us
 deploy today and ship increments continuously without breaking links or mental
 models.
 
@@ -149,7 +154,7 @@ hard rule, enforced structurally:
 - **No secrets in git history / no personal identity.** Commits are authored as
   `HoodStack <…noreply…>`; pushes authenticate over a dedicated SSH key isolated
   from any personal login.
-- **Provider credentials, when added, live in the host's environment only** —
+- **Provider credentials, when added, live in the host's environment only** -
   never committed, encrypted at rest in the app, redacted in every error/log.
 
 > If "fuds" meant **FUD** (fear/uncertainty/doubt) rather than funds/secrets:

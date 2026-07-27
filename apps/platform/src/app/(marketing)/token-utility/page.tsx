@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   title: "Token utility",
   openGraph: { images: ogImages("Token utility") },
   description:
-    "How a future HoodStack token would coordinate infrastructure capacity — " +
+    "How a future HoodStack token would coordinate infrastructure capacity, " +
     "and the hard boundaries it will never cross. Technical architecture, not an offer.",
   alternates: { canonical: "/token-utility" },
 };
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 const CAPACITY_FLOW = [
   {
     step: "Fund",
-    body: "Free allocation, conventional fiat or stablecoin payment, or — after launch — verified token stake and token-funded credits.",
+    body: "Free allocation, conventional fiat or stablecoin payment, or, after launch, verified token stake and token-funded credits.",
   },
   {
     step: "Credits",
@@ -26,7 +26,7 @@ const CAPACITY_FLOW = [
   },
   {
     step: "Capacity",
-    body: "API throughput, sponsored gas, webhook delivery, account operations, simulation, data — what the credits buy.",
+    body: "API throughput, sponsored gas, webhook delivery, account operations, simulation, data, what the credits buy.",
   },
   {
     step: "Infrastructure",
@@ -80,7 +80,7 @@ const PILLARS = [
     n: "07",
     title: "Governance",
     body: "Bounded protocol matters: ecosystem grants, supported modules, operator requirements, treasury policy, fee ranges, public-goods funding, and registry proposals.",
-    constraint: "Strictly bounded — see what governance can never touch, below.",
+    constraint: "Strictly bounded, see what governance can never touch, below.",
   },
 ];
 
@@ -113,7 +113,7 @@ export default function TokenUtilityPage() {
             Coordinate capacity. Never gate safety.
           </h1>
           <p className="mt-5 max-w-2xl text-lg text-content-secondary">
-            A future HoodStack token exists to coordinate infrastructure usage — developer
+            A future HoodStack token exists to coordinate infrastructure usage, developer
             capacity, sponsored gas, operator bonding, agent collateral, and bounded
             governance. It is designed around real service consumption, not speculation,
             and it never stands between you and your own funds.
@@ -121,7 +121,7 @@ export default function TokenUtilityPage() {
         </div>
       </Container>
 
-      {/* Current state — prominent and honest. */}
+      {/* Current state, prominent and honest. */}
       <Container>
         <Reveal>
           <div className="mt-8 rounded-surface border border-line bg-status-warning-bg p-6 lg:p-8">
@@ -143,7 +143,7 @@ export default function TokenUtilityPage() {
                 allocation and conventional payment.
               </p>
               <p>
-                A token launches only after Phase 1 is stable — never automatically, and
+                A token launches only after Phase 1 is stable, never automatically, and
                 never before the product stands on its own.
               </p>
             </div>
@@ -158,7 +158,7 @@ export default function TokenUtilityPage() {
             <SectionHeading
               eyebrow="The abstraction"
               title="Credits are the unit. The token is one way to fund them."
-              lead="Service capacity is denominated in usage credits — today, and after any token launch. A token becomes an additional funding source that translates into credits through an entitlement adapter; it never becomes a second, parallel system."
+              lead="Service capacity is denominated in usage credits, today, and after any token launch. A token becomes an additional funding source that translates into credits through an entitlement adapter; it never becomes a second, parallel system."
             />
           </Reveal>
 
@@ -227,7 +227,7 @@ export default function TokenUtilityPage() {
             <SectionHeading
               eyebrow="The boundaries"
               title="What the token never does."
-              lead="Token accounting is a separate system from authentication, wallet ownership, recovery, and user balances. These lines are architectural, not policy — they cannot be voted away."
+              lead="Token accounting is a separate system from authentication, wallet ownership, recovery, and user balances. These lines are architectural, not policy, they cannot be voted away."
             />
           </Reveal>
 
@@ -293,7 +293,7 @@ export default function TokenUtilityPage() {
                   <p className="text-sm text-content-secondary">
                     Capacity runs entirely on the offchain credit ledger, funded by free
                     allocation and conventional payment. Your dashboard shows real usage,
-                    real credit balance, and current capacity — never a fake balance,
+                    real credit balance, and current capacity, never a fake balance,
                     stake, APR, reward, or governance proposal.
                   </p>
                 </div>

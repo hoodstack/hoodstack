@@ -8,8 +8,8 @@ import { Wordmark } from "@/components/brand";
  *
  * Everything under `/app` is dynamic and per-user, so this subtree is wrapped in
  * the Privy provider. Before Privy is provisioned (no app id), we render an
- * honest configuration notice instead of mounting the provider — which would
- * otherwise throw in the browser — so the marketing build stays unaffected.
+ * honest configuration notice instead of mounting the provider, which would
+ * otherwise throw in the browser, so the marketing build stays unaffected.
  */
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   if (!publicEnv.privyAppId) {

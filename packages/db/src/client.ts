@@ -21,7 +21,7 @@ const globalForDb = globalThis as unknown as {
  *
  * `connectionString` defaults to `DATABASE_URL`, which in production should be
  * Supabase's *pooled* connection (transaction mode, port 6543). `prepare: false`
- * is required for that pooler — PgBouncer in transaction mode cannot support
+ * is required for that pooler, PgBouncer in transaction mode cannot support
  * prepared statements, and Drizzle/postgres-js would otherwise use them.
  */
 export function getDb(connectionString: string | undefined = process.env.DATABASE_URL): Database {

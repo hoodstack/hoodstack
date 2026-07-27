@@ -529,7 +529,7 @@ export const MODULES: Readonly<Record<HoodStackModuleId, ModuleDefinition>> = {
       "has been deployed, and the platform is fully usable without one. Nothing here " +
       "is required to create an account, sign in, recover access, or withdraw funds.",
     category: "network",
-    // Single canonical route for token utility — top-level, not under /products.
+    // Single canonical route for token utility, top-level, not under /products.
     // /products/token-utility 308-redirects here (see next.config.mjs).
     publicHref: "/token-utility",
     appHref: app("token-utility"),

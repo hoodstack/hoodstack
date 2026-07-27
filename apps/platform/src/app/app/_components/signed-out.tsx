@@ -12,7 +12,7 @@ import { Button } from "@/components/ui";
  *
  * Rendered by a server page when no valid session cookie is present. Once Privy
  * authenticates in the browser it sets the session cookie, so we refresh the
- * route — the server component re-runs, now sees the session, and renders the
+ * route, the server component re-runs, now sees the session, and renders the
  * real dashboard.
  */
 export function SignedOut() {

@@ -13,7 +13,7 @@ export const dynamic = "force-dynamic";
 
 /**
  * The Data module: read balances, accounts, and transactions from Robinhood
- * Chain. This is the first module wired to real infrastructure — the console
+ * Chain. This is the first module wired to real infrastructure, the console
  * below and the public API share one read path in @hoodstack/network.
  */
 export default async function DataPage({
@@ -41,7 +41,7 @@ export default async function DataPage({
       </h1>
       <p className="mt-3 max-w-2xl text-content-secondary">
         Look up an account or transaction on Robinhood Chain. These are live
-        raw-RPC reads — the same ones the Data API serves — metered against this
+        raw-RPC reads, the same ones the Data API serves, metered against this
         project.
       </p>
 

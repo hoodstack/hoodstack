@@ -6,7 +6,7 @@ import { serverEnv } from "@/lib/env";
 
 /**
  * Server-side Privy client, lazily constructed so a missing secret only errors
- * when auth is actually exercised — not at module load, which would break the
+ * when auth is actually exercised, not at module load, which would break the
  * whole app before it is provisioned.
  */
 let client: PrivyClient | undefined;

@@ -3,7 +3,7 @@ import type { CSSProperties } from "react";
 /**
  * The hero illustration: a solid isometric HoodStack.
  *
- * A hand-built SVG — crisp at any size, a few KB, themeable via design tokens,
+ * A hand-built SVG, crisp at any size, a few KB, themeable via design tokens,
  * and using our own layered-squares mark (never a third-party logo). A solid
  * tower of six product layers under a brand-green cap: strong left/right wall
  * shading for mass, glowing chartreuse seams between layers, an emissive front
@@ -37,7 +37,7 @@ const leftFace = (cy: number) =>
   `${CX - RX},${cy} ${CX},${cy + RY} ${CX},${cy + RY + D} ${CX - RX},${cy + D}`;
 const rightFace = (cy: number) =>
   `${CX},${cy + RY} ${CX + RX},${cy} ${CX + RX},${cy + D} ${CX},${cy + RY + D}`;
-// The V-shaped front edges of a layer's top rhombus — drawn glowing as a seam.
+// The V-shaped front edges of a layer's top rhombus, drawn glowing as a seam.
 const seam = (cy: number) => `M${CX - RX} ${cy} L${CX} ${cy + RY} L${CX + RX} ${cy}`;
 
 const CAP = { cy: CAP_CY };
@@ -53,8 +53,8 @@ export function HeroStack() {
     >
       <title id="herostack-title">The HoodStack</title>
       <desc id="herostack-desc">
-        A solid stack of six product layers — accounts, execution, gas, assets, data and
-        automation, and security — under the HoodStack cap, with energy converging in from
+        A solid stack of six product layers, accounts, execution, gas, assets, data and
+        automation, and security, under the HoodStack cap, with energy converging in from
         fragmented legacy infrastructure.
       </desc>
 
@@ -165,7 +165,7 @@ export function HeroStack() {
           />
         ))}
 
-        {/* Glowing seams between layers — the signature layered look. Each is a
+        {/* Glowing seams between layers, the signature layered look. Each is a
             wide soft pass (glow) under a bright thin pass. */}
         {LAYERS.map((_, i) => {
           const cy = cyFor(i + 1);

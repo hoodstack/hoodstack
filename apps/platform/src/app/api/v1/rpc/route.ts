@@ -25,7 +25,7 @@ const bodySchema = z.object({
  *
  * A read-only, authenticated proxy to Robinhood Chain. The key's environment
  * selects the network (live → mainnet, test → testnet). Only idempotent JSON-RPC
- * methods are forwarded — this endpoint never submits a transaction — and every
+ * methods are forwarded, this endpoint never submits a transaction, and every
  * call is metered. This is the first real capability of the platform: one spine
  * that authentication, rate limiting, chain access, and usage all run through.
  */

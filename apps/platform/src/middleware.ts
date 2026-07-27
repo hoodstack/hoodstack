@@ -5,15 +5,15 @@ import { NextResponse, type NextRequest } from "next/server";
  *
  * The App Router streams pages via dynamically-generated inline scripts, which
  * cannot be covered by a static hash. A hash-only `script-src` therefore blocks
- * hydration in the browser and the page renders blank after its first paint —
+ * hydration in the browser and the page renders blank after its first paint -
  * exactly the failure this replaces.
  *
  * The fix is a per-request nonce. Middleware generates one, puts the CSP (with
  * the nonce) on the request headers, and Next.js reads it and stamps the nonce
  * onto every script it emits. `'strict-dynamic'` lets those trusted scripts load
  * the chunk files, so `'self'`/host allowlisting is not relied on in modern
- * browsers. The one inline script we author ourselves — the theme bootstrap in
- * layout.tsx — is allowed by its hash, which is honoured even under
+ * browsers. The one inline script we author ourselves, the theme bootstrap in
+ * layout.tsx, is allowed by its hash, which is honoured even under
  * `'strict-dynamic'`.
  *
  * Using a nonce forces dynamic rendering. That is an accepted trade for a
@@ -109,7 +109,7 @@ export function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    // Run on documents; skip static assets, the image optimizer, and icons —
+    // Run on documents; skip static assets, the image optimizer, and icons -
     // they are not HTML and do not carry inline scripts.
     {
       source:

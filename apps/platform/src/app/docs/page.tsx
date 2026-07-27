@@ -9,8 +9,8 @@ export const metadata: Metadata = {
   title: "Documentation",
   openGraph: { images: ogImages("Documentation") },
   description:
-    "Guides and reference for building on Robinhood Chain with HoodStack. " +
-    "Architecture and security docs are complete; product guides are in progress.",
+    "Guides and reference for building on Robinhood Chain with HoodStack: " +
+    "authentication, the Data API, and the network and error packages.",
 };
 
 const INSTALL = `pnpm add @hoodstack/network @hoodstack/errors`;
@@ -35,19 +35,29 @@ assertWriteAllowed(chain, { allowMainnetWrites: false });
 
 const url = getExplorerTxUrl(chain, txHash);`;
 
-const QUICKSTART = `import { HoodStackProvider } from "@hoodstack/react";
-import { robinhoodTestnet } from "@hoodstack/network";
+const HEALTH_CURL = `curl https://www.hoodstack.io/api/v1/health \\
+  -H "Authorization: Bearer hs_test_your_key"`;
 
-export function Providers({ children }) {
-  return (
-    <HoodStackProvider
-      projectId={process.env.NEXT_PUBLIC_HOODSTACK_PROJECT_ID!}
-      chain={robinhoodTestnet}
-    >
-      {children}
-    </HoodStackProvider>
-  );
+const ACCOUNT_CURL = `curl 'https://www.hoodstack.io/api/v1/data/account?address=0xYOUR_ADDRESS' \\
+  -H "Authorization: Bearer hs_test_your_key"`;
+
+const ACCOUNT_RESPONSE = `{
+  "ok": true,
+  "requestId": "b1a7…",
+  "data": {
+    "address": "0x742d35Cc6634C0532925a3b844Bc454e4438f44e",
+    "chainId": 46630,
+    "balanceWei": "1000000000000000000",
+    "balanceFormatted": "1 ETH",
+    "nonce": 42,
+    "isContract": false
+  }
 }`;
+
+const RPC_CURL = `curl -X POST https://www.hoodstack.io/api/v1/rpc \\
+  -H "Authorization: Bearer hs_test_your_key" \\
+  -H "content-type: application/json" \\
+  -d '{"method":"eth_blockNumber"}'`;
 
 const ERROR_USAGE = `import { HoodStackError, isHoodStackError } from "@hoodstack/errors";
 
@@ -84,16 +94,12 @@ function DocSection({
 }
 
 const PACKAGES = [
-  ["@hoodstack/errors", "Normalized HS_ error taxonomy", "Implemented"],
-  ["@hoodstack/network", "Chain definitions, validation, RPC utilities", "Implemented"],
-  ["@hoodstack/config", "Typed product and module registry", "Implemented"],
-  ["@hoodstack/design-tokens", "Themed design tokens", "Implemented"],
-  [
-    "@hoodstack/sdk · react · server",
-    "Browser, React, and server SDKs",
-    "In development",
-  ],
-  ["@hoodstack/cli", "Project setup and diagnostics", "In development"],
+  ["@hoodstack/network", "Chain definitions, RPC utilities, and reads", "Available"],
+  ["@hoodstack/errors", "Normalized HS_ error taxonomy", "Available"],
+  ["@hoodstack/config", "Typed product and module registry", "Available"],
+  ["@hoodstack/design-tokens", "Themed design tokens", "Available"],
+  ["@hoodstack/sdk · react", "Browser and React SDKs", "Coming soon"],
+  ["@hoodstack/cli", "Project setup and diagnostics", "Coming soon"],
 ];
 
 export default function DocsHomePage() {
@@ -105,15 +111,15 @@ export default function DocsHomePage() {
           Build on HoodStack
         </h1>
         <p className="mt-4 text-lg text-content-secondary">
-          Developer infrastructure for Robinhood Chain. This page is honest about what is
-          implemented today; guides deepen as each module ships.
+          Developer infrastructure for Robinhood Chain. Create a project, mint an API
+          key, and read chain state through the Data API in minutes.
         </p>
 
         <div className="mt-6 rounded-card border border-line bg-surface-inset p-4 text-sm text-content-secondary">
-          <strong className="text-content">Status.</strong> The network, error, registry,
-          and design-token packages are implemented and tested. The API, authentication,
-          and SDKs are in development. Every code sample below that references an
-          implemented package runs as written; forthcoming APIs are labelled.
+          <strong className="text-content">Status.</strong> Sign-in, projects, API keys,
+          and the Data API are live. More modules ship continuously. HoodStack is in early
+          access and not yet audited; use test keys for production-critical flows until
+          mainnet readiness is announced.
         </div>
       </div>
 
@@ -189,11 +195,84 @@ export default function DocsHomePage() {
       </DocSection>
 
       <DocSection id="quickstart" title="Quickstart">
+        <p>Three steps take you from nothing to a live read against the chain.</p>
+        <ol className="ml-1 mt-2 space-y-3 text-content-secondary">
+          <li className="flex gap-3">
+            <span className="font-mono text-sm text-content-brand">1</span>
+            <span>
+              Sign in to the{" "}
+              <Link href="/app/projects" className="text-content-brand hover:underline">
+                dashboard
+              </Link>{" "}
+              and create a project.
+            </span>
+          </li>
+          <li className="flex gap-3">
+            <span className="font-mono text-sm text-content-brand">2</span>
+            <span>
+              In the project, create a <strong className="text-content">Test</strong> API
+              key. Copy it once; it is shown only at creation.
+            </span>
+          </li>
+          <li className="flex gap-3">
+            <span className="font-mono text-sm text-content-brand">3</span>
+            <span>Call the gateway with your key.</span>
+          </li>
+        </ol>
+        <CodeBlock code={HEALTH_CURL} label="verify your key" />
         <p>
-          Wrap your application in the provider once, then use the hooks and clients
-          throughout. This API is forthcoming - the React SDK is in development:
+          A <code className="font-mono">200</code> confirms the key resolves and reports
+          the chain it acts against. Test keys act against Robinhood Chain testnet; live
+          keys against mainnet.
         </p>
-        <CodeBlock code={QUICKSTART} label="app/providers.tsx · forthcoming" />
+      </DocSection>
+
+      <DocSection id="authentication" title="Authentication">
+        <p>
+          Every API request carries a project API key as a bearer token. Keys are stored
+          only as a hash, so a lost key is rotated, never recovered; create a new one and
+          revoke the old.
+        </p>
+        <CodeBlock
+          code={'Authorization: Bearer hs_test_…   (or hs_live_… for mainnet)'}
+          label="header"
+        />
+        <p>
+          A missing or revoked key returns{" "}
+          <code className="font-mono">HS_INVALID_API_KEY</code>; requests are rate limited
+          per key. Keys can also be sent as{" "}
+          <code className="font-mono">x-api-key</code>.
+        </p>
+      </DocSection>
+
+      <DocSection id="data-api" title="Data API">
+        <p>
+          Read chain state over raw RPC. Responses share one envelope:{" "}
+          <code className="font-mono">{"{ ok, requestId, data }"}</code> on success, and{" "}
+          <code className="font-mono">{"{ ok: false, error }"}</code> with a stable{" "}
+          <code className="font-mono">HS_</code> code on failure.
+        </p>
+        <ul className="ml-1 space-y-1.5 text-sm">
+          <li>
+            <code className="font-mono text-content">GET /api/v1/data/account?address=</code>{" "}
+            balance, nonce, and contract detection
+          </li>
+          <li>
+            <code className="font-mono text-content">GET /api/v1/data/transaction?hash=</code>{" "}
+            a transaction with its receipt
+          </li>
+          <li>
+            <code className="font-mono text-content">GET /api/v1/data/block?number=latest</code>{" "}
+            a block header
+          </li>
+        </ul>
+        <CodeBlock code={ACCOUNT_CURL} label="account read" />
+        <CodeBlock code={ACCOUNT_RESPONSE} label="response" />
+        <p>
+          For arbitrary read-only JSON-RPC, post to{" "}
+          <code className="font-mono">/api/v1/rpc</code>:
+        </p>
+        <CodeBlock code={RPC_CURL} label="raw RPC" />
       </DocSection>
 
       <DocSection id="errors" title="Error handling">
@@ -219,7 +298,7 @@ export default function DocsHomePage() {
               </div>
               <span
                 className={`shrink-0 font-mono text-xs ${
-                  status === "Implemented"
+                  status === "Available"
                     ? "text-content-brand"
                     : "text-content-tertiary"
                 }`}

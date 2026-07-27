@@ -20,8 +20,13 @@ export function Providers({ children }: { children: React.ReactNode }) {
         appearance: {
           theme: "dark",
           accentColor: "#ccfe00",
+          logo: "/logo.png",
         },
-        loginMethods: ["email", "google", "github", "wallet"],
+        // Email and social only for launch. External wallet connectors
+        // (WalletConnect/Reown) pull in a large bundle; keeping them out makes
+        // the dashboard load noticeably faster. Embedded wallets are still
+        // created for users who sign in without one.
+        loginMethods: ["email", "google", "github"],
         embeddedWallets: { createOnLogin: "users-without-wallets" },
       }}
     >

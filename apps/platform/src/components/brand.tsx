@@ -1,47 +1,19 @@
+import Image from "next/image";
 import Link from "next/link";
 
 /**
- * Brand mark - PLACEHOLDER.
+ * The HoodStack brand mark.
  *
- * The approved HoodStack icon has not been supplied. Per the brand rules the
- * icon must not be redrawn or substituted with a generic stack glyph, so this
- * renders a deliberately neutral geometric placeholder that is obviously not a
- * finished logo.
- *
- * Replace with the real vector at `public/brand/icon.svg` before any public
- * launch. Tracked in IMPLEMENTATION_PLAN.md under open questions.
+ * Renders the logo from `public/logo.png`, optimized and served responsively by
+ * next/image. The mark is decorative wherever it sits beside the wordmark, so it
+ * is hidden from assistive technology there; the accompanying text carries the
+ * name.
  */
 export function BrandMark({ className = "size-6" }: { className?: string }) {
   return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      className={className}
-      role="img"
-      aria-label="HoodStack (placeholder mark)"
-    >
-      {/* Three stacked planes - a structural stand-in, not the brand icon. */}
-      <path
-        d="M3 7.5 12 3l9 4.5-9 4.5-9-4.5Z"
-        stroke="currentColor"
-        strokeWidth="1.25"
-        strokeLinejoin="round"
-      />
-      <path
-        d="m3 12 9 4.5 9-4.5"
-        stroke="currentColor"
-        strokeWidth="1.25"
-        strokeLinejoin="round"
-        opacity="0.6"
-      />
-      <path
-        d="m3 16.5 9 4.5 9-4.5"
-        stroke="currentColor"
-        strokeWidth="1.25"
-        strokeLinejoin="round"
-        opacity="0.3"
-      />
-    </svg>
+    <span className={`relative inline-block shrink-0 ${className}`} aria-hidden="true">
+      <Image src="/logo.png" alt="" fill sizes="48px" className="object-contain" />
+    </span>
   );
 }
 
@@ -51,7 +23,7 @@ export function Wordmark({ href = "/" }: { href?: string }) {
       href={href}
       className="flex items-center gap-2 text-content transition-colors hover:text-content-brand"
     >
-      <BrandMark className="size-5 text-content-brand" />
+      <BrandMark className="size-6" />
       <span className="text-md font-semibold tracking-tight">HoodStack</span>
     </Link>
   );

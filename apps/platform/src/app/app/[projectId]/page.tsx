@@ -16,7 +16,7 @@ export const dynamic = "force-dynamic";
  * A project's overview: its keys, and how to call the gateway with them.
  *
  * The surrounding shell (header, sidebar, sign-out) comes from the layout, which
- * also gates the session — so this renders content only. `getProjectForMember`
+ * also gates the session, so this renders content only. `getProjectForMember`
  * returns null for a project the caller doesn't belong to, surfaced as a 404, so
  * an unauthorized id is indistinguishable from a nonexistent one.
  */
@@ -67,7 +67,7 @@ export default async function ProjectPage({
       <section className="mt-12">
         <h2 className="text-md font-medium text-content">Call the gateway</h2>
         <p className="mt-1 mb-4 max-w-2xl text-sm text-content-secondary">
-          The health endpoint is the smallest authenticated call — it confirms your key
+          The health endpoint is the smallest authenticated call, it confirms your key
           resolves and reports which chain it acts against.
         </p>
         <Panel className="p-0">

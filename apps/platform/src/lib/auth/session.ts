@@ -127,8 +127,8 @@ async function findOrProvision(identity: PrivyIdentity): Promise<SessionUser> {
 /**
  * The current session, or null if the caller is not signed in.
  *
- * Wrapped in React `cache` so multiple callers in one request — a layout and the
- * page it wraps, say — share a single Privy verification and provisioning pass.
+ * Wrapped in React `cache` so multiple callers in one request, a layout and the
+ * page it wraps, say, share a single Privy verification and provisioning pass.
  */
 export const getSessionUser = cache(async (): Promise<SessionUser | null> => {
   const identity = await getPrivyIdentity();

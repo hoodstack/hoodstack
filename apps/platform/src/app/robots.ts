@@ -5,7 +5,7 @@ const BASE = "https://www.hoodstack.io";
 /**
  * robots.txt.
  *
- * Marketing and docs are indexable. The authenticated app is not — it is
+ * Marketing and docs are indexable. The authenticated app is not, it is
  * per-tenant, uncacheable, and behind auth, so it is disallowed.
  */
 export default function robots(): MetadataRoute.Robots {

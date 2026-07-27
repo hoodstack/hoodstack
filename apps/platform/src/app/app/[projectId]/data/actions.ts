@@ -17,7 +17,7 @@ import { recordUsage } from "@/server/usage";
  * Dashboard reads for the Data module.
  *
  * These run the same @hoodstack/network read logic the public API uses, but
- * authenticate by session + project membership rather than an API key — so the
+ * authenticate by session + project membership rather than an API key, so the
  * developer can explore chain state without pasting a key into their own
  * dashboard. Usage is still metered (with no key attributed).
  */

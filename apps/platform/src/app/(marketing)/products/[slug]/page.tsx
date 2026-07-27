@@ -92,6 +92,7 @@ export default async function ProductRoute({ params }: { params: Promise<Params>
 
 function ProductHub({ product }: { product: ProductDefinition }) {
   const modules = getProductModules(product.id);
+  const liveModules = modules.filter((module) => isModuleEnabled(module.id));
 
   return (
     <>
@@ -165,14 +166,24 @@ function ProductHub({ product }: { product: ProductDefinition }) {
 
       <Container>
         <Panel className="mb-16 p-6">
-          <h2 className="text-sm font-medium text-content">What is built today</h2>
-          <p className="mt-3 max-w-3xl text-sm text-content-secondary">
-            {product.name} is in development. Its routes exist and describe intended
-            design; its controls in the dashboard are disabled, and its API returns{" "}
-            <code className="font-mono text-content">HS_FEATURE_NOT_ENABLED</code> rather
-            than a placeholder response. Nothing on these pages reports fabricated
-            activity or metrics.
-          </p>
+          <h2 className="text-sm font-medium text-content">Availability</h2>
+          {liveModules.length > 0 ? (
+            <p className="mt-3 max-w-3xl text-sm text-content-secondary">
+              {liveModules.length} of {modules.length}{" "}
+              {modules.length === 1 ? "module" : "modules"} in {product.name}{" "}
+              {liveModules.length === 1 ? "is" : "are"} available now:{" "}
+              <span className="text-content">
+                {liveModules.map((m) => m.name).join(", ")}
+              </span>
+              . The rest are in active development and appear here as they ship.
+            </p>
+          ) : (
+            <p className="mt-3 max-w-3xl text-sm text-content-secondary">
+              {product.name} is in active development. Its routes and API paths are
+              fixed now, so you can design around it today, and each module lights up
+              here as it ships.
+            </p>
+          )}
         </Panel>
       </Container>
     </>
@@ -233,18 +244,12 @@ function ModulePage({ module }: { module: ModuleDefinition }) {
       {!enabled ? (
         <Container>
           <Panel className="mb-4 p-6">
-            <h2 className="text-sm font-medium text-content">What is built today</h2>
+            <h2 className="text-sm font-medium text-content">Coming soon</h2>
             <p className="mt-3 max-w-3xl text-sm text-content-secondary">
-              This page describes intended design. {module.name} is not yet implemented,
-              so its controls in the dashboard are disabled and its API returns{" "}
-              <code className="font-mono text-content">HS_FEATURE_NOT_ENABLED</code>{" "}
-              rather than a placeholder response. Nothing here reports fabricated activity
-              or metrics.
-            </p>
-            <p className="mt-3 max-w-3xl text-sm text-content-secondary">
-              The route, its position in the application, and its identifier are
-              permanent. When the module ships, this page deepens - the URL does not
-              change.
+              {module.name} is in active development. Its route, its position in the
+              application, and its API path are fixed now, so you can build around it
+              today and it will light up when it ships. The URL never changes as the
+              module deepens. Follow progress in the changelog.
             </p>
           </Panel>
         </Container>

@@ -11,7 +11,7 @@ export function ogImages(title: string) {
       url: `/api/og?title=${encodeURIComponent(title)}`,
       width: 1200,
       height: 630,
-      alt: `HoodStack — ${title}`,
+      alt: `HoodStack, ${title}`,
     },
   ];
 }

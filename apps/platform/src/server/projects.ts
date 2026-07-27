@@ -22,7 +22,7 @@ function projectSlug(name: string): string {
   return `${base || "project"}-${suffix}`;
 }
 
-/** Projects in an org, newest first — empty if the user is not a member. */
+/** Projects in an org, newest first, empty if the user is not a member. */
 export async function listProjects(userId: string, orgId: string): Promise<Project[]> {
   const member = await orgMembership(userId, orgId);
   if (!member) return [];
@@ -51,7 +51,7 @@ export async function createProject(
   return project!;
 }
 
-/** A single project, only if the user belongs to its org — otherwise null. */
+/** A single project, only if the user belongs to its org, otherwise null. */
 export async function getProjectForMember(
   userId: string,
   projectId: string,

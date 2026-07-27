@@ -25,25 +25,29 @@ data, automation, and production application development.
 
 ## Release status
 
-Pre-release. The table below is the authoritative record of what is implemented.
+Early access. The table below is the authoritative record of what is implemented.
 Everything else in this document describes intended architecture.
 
-| Package                    | Status      | What works                                                                         |
+| Package / surface          | Status      | What works                                                                         |
 | -------------------------- | ----------- | ---------------------------------------------------------------------------------- |
-| `@hoodstack/errors`        | Implemented | `HS_*` error taxonomy, redaction, normalization, retry classification              |
-| `@hoodstack/network`       | Implemented | Chain definitions, chain validation, explorer links, RPC health, endpoint fallback |
-| `@hoodstack/config`        | Implemented | Typed module registry driving navigation, routing, and gating                      |
-| `@hoodstack/design-tokens` | Implemented | Themed token system, dark + light, Tailwind preset                                 |
-| `apps/platform`            | Partial     | Landing page, 15 product routes, app shell, preview system, CSP                    |
-| API (`/v1`)                | Not started | -                                                                                  |
-| Auth, dashboard, SDKs, CLI | Not started | -                                                                                  |
+| `@hoodstack/errors`        | Available   | `HS_*` error taxonomy, redaction, normalization, retry classification              |
+| `@hoodstack/network`       | Available   | Chain definitions, validation, explorer links, RPC health, fallback, chain reads   |
+| `@hoodstack/config`        | Available   | Typed module registry driving navigation, routing, and gating                      |
+| `@hoodstack/design-tokens` | Available   | Themed token system, dark + light, Tailwind preset                                 |
+| `@hoodstack/db`            | Available   | Drizzle schema and client (orgs, projects, keys, usage) over Postgres              |
+| Auth + dashboard           | Available   | Privy sign-in, org/project provisioning, API key mint/revoke, responsive shell     |
+| API (`/api/v1`)            | Available   | Authenticated gateway: `health`, `rpc`, and the Data API (`account`, `transaction`, `block`) with rate limiting and usage metering |
+| Data module                | Available   | Live raw-RPC reads on Robinhood Chain, in the dashboard and the API                |
+| Other modules              | Preview     | Route, position, and API path fixed; light up as each ships                        |
+| SDKs, CLI                  | Coming soon | -                                                                                  |
 
-**106 tests passing.** Every module in the registry is `preview`; none is
-`enabled`, because no backing implementation exists yet. The application shell
-renders and navigates, but there is no authentication and no backend behind it.
+The Data module is `enabled` and backed by a live API; every other module is
+`preview` until its implementation ships. Sign-in, projects, API keys, and the
+gateway are working end to end.
 
-**Not production-ready. Not audited. No token has launched and no token contract
-has been deployed.** Do not use this to secure funds you cannot afford to lose.
+**Not yet audited. No token has launched and no token contract has been
+deployed.** Use test keys for production-critical flows until mainnet readiness
+is announced. Do not use this to secure funds you cannot afford to lose.
 
 ---
 

@@ -15,7 +15,7 @@ export const metadata: Metadata = { title: "Projects" };
 export const dynamic = "force-dynamic";
 
 /**
- * The project list — the dashboard's home.
+ * The project list, the dashboard's home.
  *
  * The session is resolved from the request cookie server-side. No session means
  * render the signed-out gate; a session means the user (and their default org)

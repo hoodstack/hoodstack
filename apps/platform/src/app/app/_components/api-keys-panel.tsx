@@ -21,7 +21,7 @@ export type KeyView = {
  * API key management for a project.
  *
  * Minting returns the plaintext exactly once; it is shown in a dismissible
- * reveal with a copy button and then is unrecoverable — thereafter only the
+ * reveal with a copy button and then is unrecoverable, thereafter only the
  * prefix and last four are ever displayed. Revoked keys stay listed (struck
  * through) so their past usage remains legible.
  */
@@ -71,7 +71,7 @@ export function ApiKeysPanel({
         <div className="rounded-card border border-line-brand bg-surface p-4">
           <div className="flex items-center justify-between gap-3">
             <p className="text-sm font-medium text-content">
-              Copy your key now — it won't be shown again.
+              Copy your key now, it won't be shown again.
             </p>
             <button
               type="button"

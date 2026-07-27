@@ -8,7 +8,7 @@ import { createHash, randomBytes, timingSafeEqual } from "node:crypto";
  * A key looks like `hs_live_<secret>` or `hs_test_<secret>`, where `<secret>` is
  * 24 random bytes in base64url (~32 chars). We never store the plaintext: only a
  * SHA-256 hash for constant-time lookup, plus a non-secret display prefix and
- * last four characters. SHA-256 (not bcrypt) is deliberate — these are
+ * last four characters. SHA-256 (not bcrypt) is deliberate, these are
  * high-entropy random tokens, not human passwords, so a fast hash is correct and
  * lets us look a key up by its hash on every gateway request.
  */

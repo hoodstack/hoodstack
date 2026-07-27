@@ -16,7 +16,7 @@ import {
  * HoodStack relational schema.
  *
  * The identity boundary is deliberate: authentication lives in Privy, not here.
- * `users.privyDid` is the only link back to it — everything else (orgs, projects,
+ * `users.privyDid` is the only link back to it, everything else (orgs, projects,
  * keys, usage) is HoodStack-owned and queried through Drizzle with authorization
  * enforced in server code, so the gateway and the dashboard share one data path.
  */
@@ -66,7 +66,7 @@ export const memberships = pgTable(
 
 /**
  * A project isolates API keys, environments, and usage. No project can read
- * another project's data — that boundary is enforced on every query by scoping
+ * another project's data, that boundary is enforced on every query by scoping
  * to the caller's org membership.
  */
 export const projects = pgTable(

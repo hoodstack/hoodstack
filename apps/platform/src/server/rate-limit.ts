@@ -9,7 +9,7 @@ import { serverEnv } from "@/lib/env";
  * Per-key rate limiting, backed by Upstash Redis.
  *
  * When Upstash is not configured (both env vars absent) the limiter is disabled
- * and every request is allowed — so local development and a pre-provisioning
+ * and every request is allowed, so local development and a pre-provisioning
  * deploy still work, just without a ceiling. In production, set the Upstash env
  * vars and the sliding-window limit engages automatically.
  */
