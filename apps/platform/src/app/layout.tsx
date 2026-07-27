@@ -99,9 +99,15 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           Applies the stored theme before first paint. Must stay inline and
           synchronous - deferring it reintroduces the flash it exists to prevent.
           Allowed by the CSP via both its nonce and its pinned hash (middleware).
+
+          suppressHydrationWarning: the browser strips a script's nonce value from
+          the DOM after applying the CSP, so the client reads an empty nonce while
+          the server rendered the real one. That mismatch is expected and benign;
+          the script has already run. Suppressing it silences the false warning.
         */}
         <script
           nonce={nonce}
+          suppressHydrationWarning
           dangerouslySetInnerHTML={{ __html: THEME_BOOTSTRAP_SCRIPT }}
         />
       </head>
