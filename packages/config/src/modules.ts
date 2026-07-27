@@ -409,18 +409,18 @@ export const MODULES: Readonly<Record<HoodStackModuleId, ModuleDefinition>> = {
   sdk: {
     id: "sdk",
     name: "SDKs",
-    shortDescription: "TypeScript, React, and server libraries.",
+    shortDescription: "Typed TypeScript client for the API.",
     description:
-      "A browser SDK limited to browser-safe operations, a server SDK for " +
-      "privileged project APIs, and React hooks with optional components. The " +
-      "browser/server split is enforced by package boundaries so a server secret " +
-      "cannot reach a client bundle by accident.",
+      "A small, typed client over the HoodStack API: create it with a project key " +
+      "and call accounts, transactions, blocks, tokens, gas, and simulation with full " +
+      "types and typed errors. React and server helpers build on the same core. " +
+      "Publishing to npm is in progress.",
     category: "developer",
     publicHref: "/products/sdk",
     appHref: app("sdks"),
     docsHref: "/docs/sdk",
     icon: "package",
-    availability: "preview",
+    availability: "enabled",
     relatedModules: ["cli", "apiReference"],
   },
 

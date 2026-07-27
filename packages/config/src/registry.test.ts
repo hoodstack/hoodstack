@@ -274,6 +274,7 @@ describe("availability gating", () => {
       // Security, developer, network, settings surfaces.
       "security",
       "auditLogs",
+      "sdk",
       "apiReference",
       "playground",
       "usage",
