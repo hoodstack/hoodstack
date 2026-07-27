@@ -36,6 +36,13 @@
       "when": 1785166311038,
       "tag": "0004_abnormal_jackpot",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1785168706510,
+      "tag": "0005_shiny_lily_hollister",
+      "breakpoints": true
     }
   ]
 }

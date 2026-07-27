@@ -3,6 +3,7 @@ import "server-only";
 import { and, asc, eq, getDb, webhookEndpoints, type WebhookEndpoint } from "@hoodstack/db";
 import { createHmac, randomBytes } from "node:crypto";
 
+import { recordAudit } from "./audit";
 import { getProjectForMember } from "./projects";
 import { recordUsage } from "./usage";
 
@@ -88,6 +89,12 @@ export async function addWebhook(
     .insert(webhookEndpoints)
     .values({ projectId, url: parsed.toString(), secret: generateWebhookSecret() })
     .returning();
+  await recordAudit({
+    projectId,
+    actorUserId: userId,
+    action: "webhook.add",
+    target: row!.url,
+  }).catch(() => {});
   return row!;
 }
 
@@ -101,6 +108,12 @@ export async function removeWebhook(
   await getDb()
     .delete(webhookEndpoints)
     .where(and(eq(webhookEndpoints.id, id), eq(webhookEndpoints.projectId, projectId)));
+  await recordAudit({
+    projectId,
+    actorUserId: userId,
+    action: "webhook.remove",
+    target: id,
+  }).catch(() => {});
 }
 
 export type DeliveryResult = {

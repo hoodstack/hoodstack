@@ -4,6 +4,8 @@ import { eq, getDb, projects, type Project } from "@hoodstack/db";
 
 import { orgMembership } from "@/lib/auth/session";
 
+import { recordAudit } from "./audit";
+
 /**
  * Project data access.
  *
@@ -48,6 +50,14 @@ export async function createProject(
     .insert(projects)
     .values({ orgId, name: trimmed, slug: projectSlug(trimmed) })
     .returning();
+
+  await recordAudit({
+    projectId: project!.id,
+    actorUserId: userId,
+    action: "project.create",
+    target: project!.name,
+  }).catch(() => {});
+
   return project!;
 }
 
@@ -75,6 +85,12 @@ export async function renameProject(
   const trimmed = name.trim();
   if (!trimmed) throw new Error("Project name is required.");
   await getDb().update(projects).set({ name: trimmed }).where(eq(projects.id, projectId));
+  await recordAudit({
+    projectId,
+    actorUserId: userId,
+    action: "project.rename",
+    target: trimmed,
+  }).catch(() => {});
 }
 
 /** Delete a project and everything scoped to it (keys, usage, policies, ...). */

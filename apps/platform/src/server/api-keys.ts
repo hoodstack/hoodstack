@@ -19,6 +19,7 @@ import {
   type KeyEnvironment,
 } from "@/lib/api-keys";
 
+import { recordAudit } from "./audit";
 import { getProjectForMember } from "./projects";
 
 /** A freshly minted key: the stored record plus its one-time plaintext. */
@@ -53,6 +54,14 @@ export async function mintApiKey(
     })
     .returning();
 
+  await recordAudit({
+    projectId,
+    actorUserId: userId,
+    action: "key.mint",
+    target: record!.name,
+    meta: { environment, keyId: record!.id },
+  }).catch(() => {});
+
   return { record: record!, plaintext: generated.plaintext };
 }
 
@@ -77,6 +86,13 @@ export async function revokeApiKey(userId: string, keyId: string): Promise<void>
     .update(apiKeys)
     .set({ revokedAt: new Date() })
     .where(eq(apiKeys.id, keyId));
+
+  await recordAudit({
+    projectId: key.projectId,
+    actorUserId: userId,
+    action: "key.revoke",
+    target: key.name,
+  }).catch(() => {});
 }
 
 /**

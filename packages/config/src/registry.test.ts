@@ -273,6 +273,7 @@ describe("availability gating", () => {
       "webhooks",
       // Security, developer, network, settings surfaces.
       "security",
+      "auditLogs",
       "apiReference",
       "playground",
       "usage",

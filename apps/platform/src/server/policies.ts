@@ -10,6 +10,7 @@ import {
 } from "@hoodstack/db";
 import { getAddress, isAddress } from "viem";
 
+import { recordAudit } from "./audit";
 import { getProjectForMember } from "./projects";
 
 /**
@@ -80,6 +81,13 @@ export async function updatePolicy(
         updatedAt: new Date(),
       },
     });
+
+  await recordAudit({
+    projectId,
+    actorUserId: userId,
+    action: "policy.update",
+    meta: { maxValueWei: input.maxValueWei, allowlistMode: input.allowlistMode },
+  }).catch(() => {});
 }
 
 export async function addAllowlistAddress(
@@ -97,6 +105,13 @@ export async function addAllowlistAddress(
     .onConflictDoNothing({
       target: [policyAllowlist.projectId, policyAllowlist.address],
     });
+
+  await recordAudit({
+    projectId,
+    actorUserId: userId,
+    action: "policy.allowlist.add",
+    target: getAddress(trimmed),
+  }).catch(() => {});
 }
 
 export async function removeAllowlistAddress(
@@ -111,6 +126,12 @@ export async function removeAllowlistAddress(
     .where(
       and(eq(policyAllowlist.id, entryId), eq(policyAllowlist.projectId, projectId)),
     );
+  await recordAudit({
+    projectId,
+    actorUserId: userId,
+    action: "policy.allowlist.remove",
+    target: entryId,
+  }).catch(() => {});
 }
 
 export type PolicyViolation = { rule: "max_value" | "allowlist"; message: string };

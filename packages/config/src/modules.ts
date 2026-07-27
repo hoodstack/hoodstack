@@ -393,14 +393,14 @@ export const MODULES: Readonly<Record<HoodStackModuleId, ModuleDefinition>> = {
     name: "Audit Logs",
     shortDescription: "Append-only record of privileged actions.",
     description:
-      "Who did what, when, from where, across key creation, policy changes, " +
-      "environment configuration, and access grants. Append-only, so the record of " +
-      "an incident cannot be edited after it.",
+      "Who did what, and when, across key creation and revocation, policy and " +
+      "allowlist changes, webhook and asset changes, and project changes. " +
+      "Append-only, so the record of an incident cannot be edited after it.",
     category: "security",
     appHref: app("audit-logs"),
     docsHref: "/docs/audit-logs",
     icon: "scroll",
-    availability: "preview",
+    availability: "enabled",
     relatedModules: ["security", "team"],
   },
 

@@ -4,6 +4,7 @@ import { and, asc, eq, getDb, projectAssets, type ProjectAsset } from "@hoodstac
 import { readToken } from "@hoodstack/network";
 
 import type { KeyEnvironment } from "@/lib/api-keys";
+import { recordAudit } from "./audit";
 import { chainForEnvironment, rpcUrlsForEnvironment } from "./chain";
 import { getProjectForMember } from "./projects";
 import { recordUsage } from "./usage";
@@ -78,7 +79,15 @@ export async function addAsset(
       target: [projectAssets.projectId, projectAssets.chainId, projectAssets.address],
     })
     .returning();
-  if (inserted) return inserted;
+  if (inserted) {
+    await recordAudit({
+      projectId,
+      actorUserId: userId,
+      action: "asset.add",
+      target: `${inserted.symbol} (${inserted.address})`,
+    }).catch(() => {});
+    return inserted;
+  }
 
   const existing = await getDb().query.projectAssets.findFirst({
     where: and(
@@ -102,4 +111,10 @@ export async function removeAsset(
   await getDb()
     .delete(projectAssets)
     .where(and(eq(projectAssets.id, assetId), eq(projectAssets.projectId, projectId)));
+  await recordAudit({
+    projectId,
+    actorUserId: userId,
+    action: "asset.remove",
+    target: assetId,
+  }).catch(() => {});
 }

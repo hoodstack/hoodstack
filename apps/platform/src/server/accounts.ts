@@ -3,6 +3,7 @@ import "server-only";
 import { and, asc, eq, getDb, projectAccounts, type ProjectAccount } from "@hoodstack/db";
 import { getAddress, isAddress } from "viem";
 
+import { recordAudit } from "./audit";
 import { getProjectForMember } from "./projects";
 
 /**
@@ -55,7 +56,16 @@ export async function addAccount(
       target: [projectAccounts.projectId, projectAccounts.address],
     })
     .returning();
-  if (inserted) return inserted;
+  if (inserted) {
+    await recordAudit({
+      projectId,
+      actorUserId: userId,
+      action: "account.add",
+      target: inserted.address,
+      meta: { label: inserted.label },
+    }).catch(() => {});
+    return inserted;
+  }
 
   const existing = await getDb().query.projectAccounts.findFirst({
     where: and(
@@ -80,4 +90,10 @@ export async function removeAccount(
     .where(
       and(eq(projectAccounts.id, accountId), eq(projectAccounts.projectId, projectId)),
     );
+  await recordAudit({
+    projectId,
+    actorUserId: userId,
+    action: "account.remove",
+    target: accountId,
+  }).catch(() => {});
 }

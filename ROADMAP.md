@@ -5,7 +5,7 @@ product-level companion to [PROJECT_STATUS.md](PROJECT_STATUS.md) (engineering
 snapshot) and the [ADRs](docs/adr). Module facts come from the registry in
 `packages/config`, the single source of truth.
 
-**Updated:** 2026-07-27 (19 modules shipped)
+**Updated:** 2026-07-27 (20 modules shipped)
 
 ---
 
@@ -118,7 +118,7 @@ provider** (see §5 and [ADR 0002](docs/adr/0002-account-abstraction-provider.md
 | Module | Status | Ships / blocker |
 | --- | --- | --- |
 | Security | ✅ Shipped | Posture view over policies, allowlists, keys, and webhooks. Enforcement-at-submit needs AA. |
-| Audit Logs | 🔨 Next up | Append-only record of privileged actions (key, policy, webhook, asset changes). |
+| Audit Logs | ✅ Shipped | Append-only record of privileged actions (keys, policies, webhooks, assets, accounts, projects). |
 
 ### Developer platform
 
@@ -150,10 +150,11 @@ provider** (see §5 and [ADR 0002](docs/adr/0002-account-abstraction-provider.md
 
 ## 4. Rollup
 
-- **Shipped (19):** Home, Projects, Activity, Accounts, Transactions, Gas,
+- **Shipped (20):** Home, Projects, Activity, Accounts, Transactions, Gas,
   Policies, Tokens, Asset Registry, Data, Explorer, Webhooks, API Keys,
-  Environments, Security, API Reference, Playground, Usage, Project Settings.
-- **Next up, no blocker:** Audit Logs, and the larger SDK / CLI / Recipes.
+  Environments, Security, Audit Logs, API Reference, Playground, Usage,
+  Project Settings.
+- **Next up, no blocker:** the larger SDK / CLI / Recipes efforts.
 - **Backlog, blocked:** Authentication, Sessions, Agents, Treasury, Workflows
   (account abstraction); Credits, Team, Billing (billing/invites); Token Utility
   (token launch).
