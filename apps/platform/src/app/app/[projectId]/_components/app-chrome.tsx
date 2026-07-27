@@ -9,6 +9,7 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import { StatusBadge, cx } from "@/components/ui";
 
 import { AccountMenu } from "../../_components/account-menu";
+import { RouteProgress } from "./route-progress";
 
 export type NavModule = { id: string; name: string; href: string; live: boolean };
 export type NavSection = { category: string; label: string; modules: NavModule[] };
@@ -50,7 +51,7 @@ export function AppChrome({
 
   return (
     <div className="min-h-dvh bg-canvas">
-      <header className="sticky top-0 z-sticky border-b border-line bg-[var(--hs-nav-bg)] backdrop-blur">
+      <header className="sticky top-0 z-sticky border-b border-line bg-[var(--hs-nav-bg)] backdrop-blur relative">
         <div className="flex h-14 items-center justify-between gap-3 px-4 lg:px-6">
           <div className="flex min-w-0 items-center gap-2 sm:gap-3">
             <button
@@ -81,6 +82,7 @@ export function AppChrome({
             <AccountMenu email={email} />
           </div>
         </div>
+        <RouteProgress />
       </header>
 
       <div className="mx-auto flex w-full max-w-[1400px]">
