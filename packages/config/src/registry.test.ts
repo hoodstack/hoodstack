@@ -255,6 +255,13 @@ describe("availability gating", () => {
     // its implementation lands; marking one enabled early would make the product
     // claim a capability it does not have.
     const enabled = new Set([
+      // Overview + connectivity dashboard surfaces.
+      "home",
+      "projects",
+      "activity",
+      "apiKeys",
+      "environments",
+      // Read / simulate / config capabilities.
       "data",
       "accounts",
       "transactions",
@@ -264,6 +271,12 @@ describe("availability gating", () => {
       "registry",
       "explorer",
       "webhooks",
+      // Security, developer, network, settings surfaces.
+      "security",
+      "apiReference",
+      "playground",
+      "usage",
+      "projectSettings",
     ]);
     for (const module of MODULE_LIST) {
       expect(isModuleEnabled(module.id), module.id).toBe(enabled.has(module.id));

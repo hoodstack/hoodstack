@@ -1,6 +1,6 @@
 import "server-only";
 
-import { apiKeys, count, desc, eq, getDb, usageEvents } from "@hoodstack/db";
+import { and, apiKeys, count, desc, eq, getDb, gte, usageEvents } from "@hoodstack/db";
 
 import { getProjectForMember } from "./projects";
 
@@ -120,4 +120,51 @@ export async function getRecentActivity(
     keyEnvironment: row.keyEnvironment ?? null,
     meta: row.meta ?? null,
   }));
+}
+
+export type UsageBreakdown = {
+  total: number;
+  last7d: number;
+  byModule: { key: string; count: number }[];
+  byAction: { key: string; count: number }[];
+};
+
+/** Usage totals for a project, broken down by module and action. */
+export async function getUsageBreakdown(
+  userId: string,
+  projectId: string,
+): Promise<UsageBreakdown> {
+  const project = await getProjectForMember(userId, projectId);
+  if (!project) return { total: 0, last7d: 0, byModule: [], byAction: [] };
+
+  const db = getDb();
+  const where = eq(usageEvents.projectId, projectId);
+  const since = new Date(Date.now() - 7 * 86_400_000);
+
+  const [totals] = await db.select({ total: count() }).from(usageEvents).where(where);
+  const [recent] = await db
+    .select({ total: count() })
+    .from(usageEvents)
+    .where(and(where, gte(usageEvents.createdAt, since)));
+
+  const byModule = await db
+    .select({ key: usageEvents.module, count: count() })
+    .from(usageEvents)
+    .where(where)
+    .groupBy(usageEvents.module);
+  const byAction = await db
+    .select({ key: usageEvents.action, count: count() })
+    .from(usageEvents)
+    .where(where)
+    .groupBy(usageEvents.action);
+
+  const sort = (rows: { key: string; count: number }[]) =>
+    [...rows].sort((a, b) => b.count - a.count);
+
+  return {
+    total: totals?.total ?? 0,
+    last7d: recent?.total ?? 0,
+    byModule: sort(byModule),
+    byAction: sort(byAction),
+  };
 }

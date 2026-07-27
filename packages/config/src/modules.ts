@@ -17,13 +17,12 @@ import type { HoodStackModuleId, ModuleDefinition } from "./types.js";
  * Modules are grouped into products by `category` - see `products.ts`. Products
  * are what developers evaluate and adopt; modules are the surfaces inside them.
  *
- * Enabled today: Data and Accounts (reads and a registry), Transactions
- * (simulation and tracking), Gas (a live tracker), Policies (evaluated against
- * simulations), Tokens (ERC-20 reads), Asset Registry (verified entries), and
- * Explorer (universal chain search), and Webhooks (signed endpoints with test
- * delivery). Each ships with a dashboard surface and, where it applies, a public
- * API. Every other module is `preview` until its implementation lands - any other
- * value would misrepresent it.
+ * Enabled today span reads, simulation, config, verification, and the dashboard
+ * surfaces (Home, Projects, Activity, Accounts, Transactions, Gas, Policies,
+ * Tokens, Asset Registry, Data, Explorer, Webhooks, API Keys, Environments,
+ * Security, API Reference, Playground, Usage, Project Settings). Preview modules
+ * are blocked on account abstraction, payments, a scheduler, or the token, and
+ * say so; any other value would misrepresent them.
  *
  * Flipping a module to `enabled` is a deliberate act with a checklist attached;
  * see `docs/operations/module-activation.md`.
@@ -47,7 +46,7 @@ export const MODULES: Readonly<Record<HoodStackModuleId, ModuleDefinition>> = {
     appHref: app("overview"),
     docsHref: "/docs",
     icon: "home",
-    availability: "preview",
+    availability: "enabled",
   },
 
   projects: {
@@ -62,7 +61,7 @@ export const MODULES: Readonly<Record<HoodStackModuleId, ModuleDefinition>> = {
     appHref: () => "/app/projects",
     docsHref: "/docs/projects",
     icon: "grid",
-    availability: "preview",
+    availability: "enabled",
     relatedModules: ["environments", "apiKeys"],
   },
 
@@ -78,7 +77,7 @@ export const MODULES: Readonly<Record<HoodStackModuleId, ModuleDefinition>> = {
     appHref: app("activity"),
     docsHref: "/docs/activity",
     icon: "pulse",
-    availability: "preview",
+    availability: "enabled",
     relatedModules: ["transactions", "auditLogs"],
   },
 
@@ -296,7 +295,7 @@ export const MODULES: Readonly<Record<HoodStackModuleId, ModuleDefinition>> = {
     appHref: app("api-keys"),
     docsHref: "/docs/api-keys",
     icon: "api-key",
-    availability: "preview",
+    availability: "enabled",
     relatedModules: ["environments", "security"],
   },
 
@@ -312,7 +311,7 @@ export const MODULES: Readonly<Record<HoodStackModuleId, ModuleDefinition>> = {
     appHref: app("environments"),
     docsHref: "/docs/environments",
     icon: "layers",
-    availability: "preview",
+    availability: "enabled",
     relatedModules: ["apiKeys", "projects"],
   },
 
@@ -385,7 +384,7 @@ export const MODULES: Readonly<Record<HoodStackModuleId, ModuleDefinition>> = {
     appHref: app("security"),
     docsHref: "/docs/security",
     icon: "shield",
-    availability: "preview",
+    availability: "enabled",
     relatedModules: ["policies", "auditLogs", "auth"],
   },
 
@@ -453,7 +452,7 @@ export const MODULES: Readonly<Record<HoodStackModuleId, ModuleDefinition>> = {
     appHref: app("api-reference"),
     docsHref: "/docs/api",
     icon: "book",
-    availability: "preview",
+    availability: "enabled",
     relatedModules: ["sdk"],
   },
 
@@ -469,7 +468,7 @@ export const MODULES: Readonly<Record<HoodStackModuleId, ModuleDefinition>> = {
     appHref: app("playground"),
     docsHref: "/docs/playground",
     icon: "play",
-    availability: "preview",
+    availability: "enabled",
     relatedModules: ["apiReference", "sdk"],
   },
 
@@ -506,7 +505,7 @@ export const MODULES: Readonly<Record<HoodStackModuleId, ModuleDefinition>> = {
     appHref: app("usage"),
     docsHref: "/docs/usage",
     icon: "chart",
-    availability: "preview",
+    availability: "enabled",
     relatedModules: ["credits", "gas"],
   },
 
@@ -587,7 +586,7 @@ export const MODULES: Readonly<Record<HoodStackModuleId, ModuleDefinition>> = {
     appHref: app("settings"),
     docsHref: "/docs/project-settings",
     icon: "settings",
-    availability: "preview",
+    availability: "enabled",
     relatedModules: ["environments", "security"],
   },
 };

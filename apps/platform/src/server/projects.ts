@@ -63,3 +63,23 @@ export async function getProjectForMember(
   const member = await orgMembership(userId, project.orgId);
   return member ? project : null;
 }
+
+/** Rename a project the user belongs to. */
+export async function renameProject(
+  userId: string,
+  projectId: string,
+  name: string,
+): Promise<void> {
+  const project = await getProjectForMember(userId, projectId);
+  if (!project) throw new Error("Not authorized.");
+  const trimmed = name.trim();
+  if (!trimmed) throw new Error("Project name is required.");
+  await getDb().update(projects).set({ name: trimmed }).where(eq(projects.id, projectId));
+}
+
+/** Delete a project and everything scoped to it (keys, usage, policies, ...). */
+export async function deleteProject(userId: string, projectId: string): Promise<void> {
+  const project = await getProjectForMember(userId, projectId);
+  if (!project) throw new Error("Not authorized.");
+  await getDb().delete(projects).where(eq(projects.id, projectId));
+}
