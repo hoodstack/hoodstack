@@ -12,6 +12,8 @@ HoodStack is a Robinhood Chain-native developer infrastructure stack for
 accounts, transaction orchestration, gas sponsorship, token utilities, chain
 data, automation, and production application development.
 
+CA: 0x690145b6952fbe1eb90b5b98dffd6cd7622ce538
+
 [Website](https://www.hoodstack.io) · [X](https://x.com/hoodstack_) ·
 [GitHub](https://github.com/hoodstack) ·
 [Security](SECURITY.md)
