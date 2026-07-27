@@ -1,4 +1,4 @@
-import { robinhoodTestnet } from "@hoodstack/network";
+import { robinhood, robinhoodTestnet } from "@hoodstack/network";
 import Link from "next/link";
 
 import { BrandMark } from "@/components/brand";
@@ -12,8 +12,8 @@ interface StatusItem {
 }
 
 const STATUS: readonly StatusItem[] = [
-  { label: "Network", value: robinhoodTestnet.name, dot: true },
-  { label: "Chain ID", value: String(robinhoodTestnet.id), mono: true },
+  { label: "Networks", value: "Mainnet + Testnet", dot: true },
+  { label: "Chain IDs", value: `${robinhood.id} · ${robinhoodTestnet.id}`, mono: true },
   { label: "Status", value: "Pre-release" },
   { label: "License", value: "Apache-2.0" },
 ];

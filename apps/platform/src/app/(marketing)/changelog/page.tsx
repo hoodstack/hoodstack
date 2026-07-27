@@ -13,9 +13,9 @@ export const metadata: Metadata = {
 /**
  * Changelog.
  *
- * Mirrors CHANGELOG.md. Nothing has been released, so this shows the unreleased
- * entry rather than inventing version history. Rendered as a timeline: a ruled
- * rail on the left with a marker per entry, sectioned by change type.
+ * Mirrors CHANGELOG.md. Rendered as a timeline: a ruled rail on the left with a
+ * marker per entry, sectioned by change type. Every item is real; nothing is
+ * invented.
  */
 type ChangeGroup = {
   label: string;
@@ -26,28 +26,37 @@ type ChangeGroup = {
 interface Entry {
   version: string;
   date: string;
-  tone: "pending";
+  tone: "success" | "pending";
   summary: string;
   groups: ChangeGroup[];
 }
 
 const ENTRIES: Entry[] = [
   {
-    version: "Unreleased",
-    date: "In development",
-    tone: "pending",
+    version: "0.1.0",
+    date: "2026-07-27",
+    tone: "success",
     summary:
-      "Foundation packages and the platform shell. Nothing has been published to npm; no module is enabled.",
+      "First public packages on npm and the early-access platform: the full read, simulate, configure, and audit surface across the stack.",
     groups: [
       {
-        label: "Added",
+        label: "Published to npm",
         tone: "success",
         items: [
           "@hoodstack/errors - normalized error taxonomy with stable HS_ codes, construction-time redaction, and wire round-trip.",
-          "@hoodstack/network - Robinhood Chain definitions, chain validation, explorer helpers, RPC health probes, and endpoint fallback.",
-          "@hoodstack/config - typed product and module registry driving navigation, routing, and fail-closed availability gating.",
-          "@hoodstack/design-tokens - themed token system with dark and light modes and self-hosted typography.",
-          "Platform application: landing page, product catalog, docs subsite, and the preview-route system.",
+          "@hoodstack/network - Robinhood Chain mainnet (4663) and testnet (46630) definitions, chain validation, explorer and faucet helpers, and a JSON-RPC client with health probes and endpoint fallback.",
+          "@hoodstack/sdk - typed TypeScript client over the live REST API: health, gas, RPC, account, transaction, block, and token reads, and transaction simulation.",
+          "@hoodstack/cli - the hoodstack terminal client over the same API.",
+        ],
+      },
+      {
+        label: "Live in the platform",
+        tone: "success",
+        items: [
+          "25 modules across Identity, Execution, Assets, Connectivity, Security, Developer platform, and Network coordination, each with a dashboard console and, where it applies, a REST endpoint under /api/v1.",
+          "One gateway: every request is authenticated by project API key, rate limited, and metered.",
+          "A global network switch aligns the whole dashboard to Robinhood Chain testnet or mainnet.",
+          "Interactive playground, API reference, and working code recipes over the live endpoints.",
         ],
       },
       {
@@ -65,8 +74,9 @@ const ENTRIES: Entry[] = [
         label: "Notes",
         tone: "neutral",
         items: [
+          "Signed execution and automation (authentication, sessions, sponsored gas, agents, treasury, workflows) are in development, blocked on the account-abstraction write path.",
           "No token has launched and no token contract has been deployed.",
-          "No security audit has been performed.",
+          "No security audit has been performed; keep production-critical flows on testnet.",
         ],
       },
     ],
@@ -90,7 +100,7 @@ export default function ChangelogPage() {
               What changed.
             </h1>
             <p className="mt-5 text-lg text-content-secondary">
-              Every module activation is recorded here. This mirrors{" "}
+              Every package release and module activation is recorded here. This mirrors{" "}
               <a
                 href="https://github.com/hoodstack/hoodstack/blob/main/CHANGELOG.md"
                 target="_blank"
@@ -99,7 +109,16 @@ export default function ChangelogPage() {
               >
                 CHANGELOG.md
               </a>
-              . Nothing has been published to npm yet.
+              . The first packages are{" "}
+              <a
+                href="https://www.npmjs.com/~hoodstack"
+                target="_blank"
+                rel="noreferrer noopener"
+                className="text-content-brand hover:underline"
+              >
+                live on npm
+              </a>
+              .
             </p>
           </div>
         </div>
