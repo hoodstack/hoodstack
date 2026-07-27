@@ -190,6 +190,36 @@ export const policyAllowlist = pgTable(
   (t) => [uniqueIndex("policy_allowlist_project_address_idx").on(t.projectId, t.address)],
 );
 
+/**
+ * A verified asset in a project's registry: an ERC-20 identified by chain ID and
+ * contract address (never by ticker, which is spoofable), with metadata captured
+ * from chain at registration and the source the developer recorded. Unique per
+ * (project, chain, address).
+ */
+export const projectAssets = pgTable(
+  "project_assets",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    projectId: uuid("project_id")
+      .notNull()
+      .references(() => projects.id, { onDelete: "cascade" }),
+    chainId: integer("chain_id").notNull(),
+    address: text("address").notNull(),
+    symbol: text("symbol").notNull(),
+    name: text("name").notNull(),
+    decimals: integer("decimals").notNull(),
+    source: text("source").notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [
+    uniqueIndex("project_assets_project_chain_address_idx").on(
+      t.projectId,
+      t.chainId,
+      t.address,
+    ),
+  ],
+);
+
 export type User = typeof users.$inferSelect;
 export type NewUser = typeof users.$inferInsert;
 export type Organization = typeof organizations.$inferSelect;
@@ -208,3 +238,5 @@ export type ProjectPolicy = typeof projectPolicies.$inferSelect;
 export type NewProjectPolicy = typeof projectPolicies.$inferInsert;
 export type PolicyAllowlistEntry = typeof policyAllowlist.$inferSelect;
 export type NewPolicyAllowlistEntry = typeof policyAllowlist.$inferInsert;
+export type ProjectAsset = typeof projectAssets.$inferSelect;
+export type NewProjectAsset = typeof projectAssets.$inferInsert;

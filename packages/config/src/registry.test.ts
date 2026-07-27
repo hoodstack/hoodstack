@@ -254,7 +254,15 @@ describe("availability gating", () => {
     // gas tracker, and policy evaluation). Every other module is a preview until
     // its implementation lands; marking one enabled early would make the product
     // claim a capability it does not have.
-    const enabled = new Set(["data", "accounts", "transactions", "gas", "policies"]);
+    const enabled = new Set([
+      "data",
+      "accounts",
+      "transactions",
+      "gas",
+      "policies",
+      "tokens",
+      "registry",
+    ]);
     for (const module of MODULE_LIST) {
       expect(isModuleEnabled(module.id), module.id).toBe(enabled.has(module.id));
     }

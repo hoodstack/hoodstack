@@ -17,12 +17,12 @@ import type { HoodStackModuleId, ModuleDefinition } from "./types.js";
  * Modules are grouped into products by `category` - see `products.ts`. Products
  * are what developers evaluate and adopt; modules are the surfaces inside them.
  *
- * `data`, `accounts`, `transactions`, `gas`, and `policies` are `enabled`: reads
- * and a registry (Data, Accounts), simulation and tracking (Transactions), a live
- * gas tracker (Gas), and a policy evaluated against simulations (Policies). Each
- * ships with a dashboard surface and, where it applies, a public API. Every other
- * module is `preview` until its implementation lands - any other value would
- * misrepresent it.
+ * Enabled today: Data and Accounts (reads and a registry), Transactions
+ * (simulation and tracking), Gas (a live tracker), Policies (evaluated against
+ * simulations), Tokens (ERC-20 reads), and Asset Registry (verified entries).
+ * Each ships with a dashboard surface and, where it applies, a public API. Every
+ * other module is `preview` until its implementation lands - any other value
+ * would misrepresent it.
  *
  * Flipping a module to `enabled` is a deliberate act with a checklist attached;
  * see `docs/operations/module-activation.md`.
@@ -157,18 +157,19 @@ export const MODULES: Readonly<Record<HoodStackModuleId, ModuleDefinition>> = {
   tokens: {
     id: "tokens",
     name: "Tokens",
-    shortDescription: "Balances, transfers, and a canonical asset registry.",
+    shortDescription: "ERC-20 metadata and balance reads.",
     description:
-      "ERC-20 reads and builders plus a canonical asset registry that records the " +
-      "source and verification date for every entry. Assets are identified by chain " +
-      "ID and contract address; a ticker alone is never sufficient, because symbols " +
-      "are not unique and are trivially spoofed.",
+      "Read ERC-20 metadata, name, symbol, decimals, and total supply, plus holder " +
+      "balances, for any token, in the dashboard and the API. Assets are identified " +
+      "by chain ID and contract address, never by ticker, which is spoofable. " +
+      "Transfers and approvals, which require signing, land with the " +
+      "account-abstraction provider.",
     category: "assets",
     publicHref: "/products/tokens",
     appHref: app("tokens"),
     docsHref: "/docs/tokens",
     icon: "coins",
-    availability: "preview",
+    availability: "enabled",
     relatedModules: ["transactions", "data"],
   },
 
@@ -209,19 +210,19 @@ export const MODULES: Readonly<Record<HoodStackModuleId, ModuleDefinition>> = {
   registry: {
     id: "registry",
     name: "Asset Registry",
-    shortDescription: "Verified contracts, assets, and metadata.",
+    shortDescription: "Verified ERC-20 entries with source.",
     description:
-      "A canonical record of what a contract on Robinhood Chain actually is. Every " +
-      "entry carries its source, verification method, and last-verified date, so a " +
-      "consumer can judge how much to trust it. Symbols are attacker-controlled and " +
-      "trivially spoofed, so nothing is identified by ticker - entries are keyed by " +
-      "chain ID and contract address.",
+      "A project registry of ERC-20 assets, keyed by chain ID and contract address. " +
+      "Metadata is read from chain at registration and stored with the source you " +
+      "record, so a consumer can judge how much to trust an entry. Symbols are " +
+      "attacker-controlled and spoofable, so nothing is identified by ticker. " +
+      "Cross-project canonical verification lands later.",
     category: "assets",
     publicHref: "/products/registry",
     appHref: app("registry"),
     docsHref: "/docs/registry",
     icon: "badge-check",
-    availability: "preview",
+    availability: "enabled",
     relatedModules: ["tokens", "security", "explorer"],
   },
 

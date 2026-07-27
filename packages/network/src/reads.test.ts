@@ -1,11 +1,13 @@
 import { isHoodStackError } from "@hoodstack/errors";
 import { describe, expect, it, vi } from "vitest";
+import { encodeFunctionResult, erc20Abi } from "viem";
 
 import { robinhoodTestnet } from "./chains.js";
 import {
   readAccountSummary,
   readBlock,
   readGas,
+  readToken,
   readTransaction,
   simulateTransaction,
 } from "./reads.js";
@@ -193,6 +195,73 @@ describe("simulateTransaction", () => {
     const fetchImpl = rpcStub({});
     await expect(
       simulateTransaction(URLS, { to: "nope" }, { fetch: fetchImpl }),
+    ).rejects.toSatisfy(isHoodStackError);
+  });
+});
+
+describe("readToken", () => {
+  /** A fetch stub that answers ERC-20 eth_calls by decoding the selector. */
+  function tokenStub(values: {
+    name: string;
+    symbol: string;
+    decimals: number;
+    totalSupply: bigint;
+    balance?: bigint;
+  }) {
+    const bySelector: Record<string, string> = {
+      "0x06fdde03": encodeFunctionResult({ abi: erc20Abi, functionName: "name", result: values.name }),
+      "0x95d89b41": encodeFunctionResult({ abi: erc20Abi, functionName: "symbol", result: values.symbol }),
+      "0x313ce567": encodeFunctionResult({ abi: erc20Abi, functionName: "decimals", result: values.decimals }),
+      "0x18160ddd": encodeFunctionResult({ abi: erc20Abi, functionName: "totalSupply", result: values.totalSupply }),
+      "0x70a08231": encodeFunctionResult({ abi: erc20Abi, functionName: "balanceOf", result: values.balance ?? 0n }),
+    };
+    return vi.fn(async (_url: string, init?: RequestInit) => {
+      const body = JSON.parse(String(init?.body)) as { params: [{ data: string }] };
+      const selector = body.params[0].data.slice(0, 10);
+      const result = bySelector[selector];
+      if (!result) {
+        return new Response(
+          JSON.stringify({ jsonrpc: "2.0", id: 1, error: { code: 3, message: "reverted" } }),
+          { status: 200 },
+        );
+      }
+      return new Response(JSON.stringify({ jsonrpc: "2.0", id: 1, result }), { status: 200 });
+    }) as unknown as typeof globalThis.fetch;
+  }
+
+  it("decodes ERC-20 metadata and formats total supply", async () => {
+    const fetchImpl = tokenStub({
+      name: "Test Token",
+      symbol: "TEST",
+      decimals: 18,
+      totalSupply: 1_000_000_000000000000000000n,
+    });
+    const token = await readToken(URLS, robinhoodTestnet, ADDR, undefined, {
+      fetch: fetchImpl,
+    });
+    expect(token.name).toBe("Test Token");
+    expect(token.symbol).toBe("TEST");
+    expect(token.decimals).toBe(18);
+    expect(token.totalSupplyFormatted).toBe("1000000");
+    expect(token.holderBalance).toBeNull();
+  });
+
+  it("reads a holder balance when a holder is given", async () => {
+    const fetchImpl = tokenStub({
+      name: "Test Token",
+      symbol: "TEST",
+      decimals: 6,
+      totalSupply: 0n,
+      balance: 2_500000n,
+    });
+    const token = await readToken(URLS, robinhoodTestnet, ADDR, ADDR, { fetch: fetchImpl });
+    expect(token.holderBalanceFormatted).toBe("2.5");
+  });
+
+  it("errors clearly when the address is not an ERC-20", async () => {
+    const fetchImpl = rpcStub({}); // every eth_call reverts
+    await expect(
+      readToken(URLS, robinhoodTestnet, ADDR, undefined, { fetch: fetchImpl }),
     ).rejects.toSatisfy(isHoodStackError);
   });
 });

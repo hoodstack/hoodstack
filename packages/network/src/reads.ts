@@ -1,5 +1,14 @@
 import { HoodStackError, isHoodStackError } from "@hoodstack/errors";
-import { formatGwei, getAddress, isAddress, isHash } from "viem";
+import {
+  decodeFunctionResult,
+  encodeFunctionData,
+  erc20Abi,
+  formatGwei,
+  formatUnits,
+  getAddress,
+  isAddress,
+  isHash,
+} from "viem";
 
 import { formatNative } from "./currency.js";
 import { rpcRequestWithFallback } from "./rpc.js";
@@ -318,4 +327,102 @@ export async function simulateTransaction(
         : "Execution reverted.";
     return { success: false, gasEstimate: null, returnData: null, revertReason };
   }
+}
+
+export interface TokenSummary {
+  address: `0x${string}`;
+  chainId: number;
+  name: string;
+  symbol: string;
+  decimals: number;
+  totalSupply: string;
+  totalSupplyFormatted: string;
+  holder: `0x${string}` | null;
+  holderBalance: string | null;
+  holderBalanceFormatted: string | null;
+}
+
+/**
+ * ERC-20 metadata for a token contract, and optionally a holder's balance.
+ *
+ * Reads name, symbol, decimals, and total supply with `eth_call`, decoding via
+ * the standard ERC-20 ABI. If the calls do not decode, the address is not a
+ * conforming ERC-20 and a clear error is thrown rather than a garbled result.
+ */
+export async function readToken(
+  urls: readonly string[],
+  chain: HoodStackChain,
+  tokenAddress: string,
+  holder: string | undefined = undefined,
+  options: RpcRequestOptions = {},
+): Promise<TokenSummary> {
+  const token = assertAddress(tokenAddress);
+
+  const call = (
+    functionName: "name" | "symbol" | "decimals" | "totalSupply" | "balanceOf",
+    args?: readonly [`0x${string}`],
+  ) =>
+    rpcRequestWithFallback<`0x${string}`>(
+      urls,
+      "eth_call",
+      [
+        { to: token, data: encodeFunctionData({ abi: erc20Abi, functionName, args }) },
+        "latest",
+      ],
+      options,
+    );
+
+  let name: string;
+  let symbol: string;
+  let decimals: number;
+  let totalSupply: bigint;
+  try {
+    const [nameHex, symbolHex, decimalsHex, supplyHex] = await Promise.all([
+      call("name"),
+      call("symbol"),
+      call("decimals"),
+      call("totalSupply"),
+    ]);
+    name = decodeFunctionResult({ abi: erc20Abi, functionName: "name", data: nameHex });
+    symbol = decodeFunctionResult({ abi: erc20Abi, functionName: "symbol", data: symbolHex });
+    decimals = decodeFunctionResult({ abi: erc20Abi, functionName: "decimals", data: decimalsHex });
+    totalSupply = decodeFunctionResult({
+      abi: erc20Abi,
+      functionName: "totalSupply",
+      data: supplyHex,
+    });
+  } catch {
+    throw new HoodStackError("HS_INVALID_REQUEST", {
+      message: "No ERC-20 metadata at this address. It may not be a token contract.",
+      details: { address: token },
+    });
+  }
+
+  let holderAddress: `0x${string}` | null = null;
+  let holderBalance: string | null = null;
+  let holderBalanceFormatted: string | null = null;
+  if (holder) {
+    holderAddress = assertAddress(holder);
+    const balanceHex = await call("balanceOf", [holderAddress]);
+    const balance = decodeFunctionResult({
+      abi: erc20Abi,
+      functionName: "balanceOf",
+      data: balanceHex,
+    });
+    holderBalance = balance.toString();
+    holderBalanceFormatted = formatUnits(balance, decimals);
+  }
+
+  return {
+    address: token,
+    chainId: chain.id,
+    name,
+    symbol,
+    decimals,
+    totalSupply: totalSupply.toString(),
+    totalSupplyFormatted: formatUnits(totalSupply, decimals),
+    holder: holderAddress,
+    holderBalance,
+    holderBalanceFormatted,
+  };
 }
