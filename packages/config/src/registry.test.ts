@@ -250,11 +250,12 @@ describe("findModule", () => {
 
 describe("availability gating", () => {
   it("reports only implemented modules as enabled", () => {
-    // Data ships real raw-RPC reads (account, transaction, block). Everything
-    // else is a preview until its implementation lands; marking one enabled
-    // early would make the product claim a capability it does not have.
+    // Data ships raw-RPC reads; Accounts ships a live account registry. Every
+    // other module is a preview until its implementation lands; marking one
+    // enabled early would make the product claim a capability it does not have.
+    const enabled = new Set(["data", "accounts"]);
     for (const module of MODULE_LIST) {
-      expect(isModuleEnabled(module.id), module.id).toBe(module.id === "data");
+      expect(isModuleEnabled(module.id), module.id).toBe(enabled.has(module.id));
     }
   });
 

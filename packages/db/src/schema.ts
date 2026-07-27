@@ -136,6 +136,26 @@ export const usageEvents = pgTable(
   (t) => [index("usage_events_project_created_idx").on(t.projectId, t.createdAt)],
 );
 
+/**
+ * An address a project tracks: its own contracts, user wallets, treasury, or any
+ * account it wants to monitor. HoodStack enriches each with live on-chain state
+ * on demand. Unique per (project, address), so the same address is registered
+ * once. This is the account registry; smart-account creation lands later.
+ */
+export const projectAccounts = pgTable(
+  "project_accounts",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    projectId: uuid("project_id")
+      .notNull()
+      .references(() => projects.id, { onDelete: "cascade" }),
+    address: text("address").notNull(),
+    label: text("label").notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [uniqueIndex("project_accounts_project_address_idx").on(t.projectId, t.address)],
+);
+
 export type User = typeof users.$inferSelect;
 export type NewUser = typeof users.$inferInsert;
 export type Organization = typeof organizations.$inferSelect;
@@ -148,3 +168,5 @@ export type ApiKey = typeof apiKeys.$inferSelect;
 export type NewApiKey = typeof apiKeys.$inferInsert;
 export type UsageEvent = typeof usageEvents.$inferSelect;
 export type NewUsageEvent = typeof usageEvents.$inferInsert;
+export type ProjectAccount = typeof projectAccounts.$inferSelect;
+export type NewProjectAccount = typeof projectAccounts.$inferInsert;

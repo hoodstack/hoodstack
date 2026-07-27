@@ -17,8 +17,9 @@ import type { HoodStackModuleId, ModuleDefinition } from "./types.js";
  * Modules are grouped into products by `category` - see `products.ts`. Products
  * are what developers evaluate and adopt; modules are the surfaces inside them.
  *
- * `data` is `enabled`: its raw-RPC reads (account, transaction, block) ship with
- * a public API, a dashboard console, and tests. Every other module is `preview`
+ * `data` and `accounts` are `enabled`: Data ships raw-RPC reads (account,
+ * transaction, block) with a public API, console, and tests; Accounts ships a
+ * live account registry backed by those reads. Every other module is `preview`
  * until its implementation lands - any other value would misrepresent it.
  *
  * Flipping a module to `enabled` is a deliberate act with a checklist attached;
@@ -83,18 +84,18 @@ export const MODULES: Readonly<Record<HoodStackModuleId, ModuleDefinition>> = {
   accounts: {
     id: "accounts",
     name: "Accounts",
-    shortDescription: "Smart accounts for users, teams, and agents.",
+    shortDescription: "Track and monitor on-chain accounts.",
     description:
-      "ERC-4337 smart accounts on Robinhood Chain, created and addressed through a " +
-      "provider adapter rather than a bespoke account implementation. Covers " +
-      "creation, deterministic address prediction where the provider supports it, " +
-      "lookup, and the user-operation lifecycle.",
+      "A registry for the accounts your app cares about, contracts, user wallets, " +
+      "and treasuries, each enriched with live on-chain state, balance, nonce, and " +
+      "contract detection, through the HoodStack gateway. ERC-4337 smart-account " +
+      "creation and the user-operation lifecycle are on the roadmap.",
     category: "identity",
     publicHref: "/products/accounts",
     appHref: app("accounts"),
     docsHref: "/docs/accounts",
     icon: "wallet",
-    availability: "preview",
+    availability: "enabled",
     relatedModules: ["auth", "transactions", "sessions"],
   },
 
