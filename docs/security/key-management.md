@@ -66,9 +66,10 @@ repository, never in CI, and never in an environment variable in an application
 process. `contracts/broadcast/` is gitignored because broadcast logs record
 deployment transactions and signer addresses.
 
-No token contract has been deployed. When contract deployment happens, it will
-require a multisig with published requirements, and the deployment procedure
-will be documented before it is executed, not after.
+The HSTACK token contract is deployed on Robinhood Chain mainnet at
+`0x690145b6952fbe1eb90b5b98dffd6cd7622ce538`. Any further privileged contract
+deployment requires a multisig with published requirements, and the deployment
+procedure is documented before it is executed, not after.
 
 ## Rotation
 

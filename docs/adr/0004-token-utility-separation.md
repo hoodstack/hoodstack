@@ -13,7 +13,10 @@ becomes load-bearing for basic product function. Users then cannot use the
 product without acquiring it, cannot recover accounts without it, and cannot
 withdraw funds if its systems fail.
 
-No token has been launched. No contract has been deployed.
+The HSTACK token is live on Robinhood Chain mainnet (4663) at
+`0x690145b6952fbe1eb90b5b98dffd6cd7622ce538`. Usage credits remain the unit of
+capacity; the entitlement adapter that translates stake into credits is in
+development, and the platform is fully usable without the token.
 
 ## Decision
 
@@ -75,9 +78,10 @@ Prohibited on every surface: price predictions, market-cap targets, guaranteed
 buybacks, APY promises, revenue-sharing promises, exchange listings, countdowns,
 and fabricated staking figures.
 
-`$HSTACK` is a provisional internal identifier only. Ticker, supply, allocation,
-vesting, launch date, deployment address, liquidity strategy, and exchange plans
-are undetermined and must not appear anywhere until explicitly supplied.
+`HSTACK` is the live token symbol (name HoodStack), and the ticker, decimals,
+total supply, and deployment address are on-chain facts read live from the
+contract. Allocation, vesting, liquidity strategy, and exchange plans remain
+undetermined and must not appear anywhere until explicitly supplied.
 
 Until launch, `/products/token-utility` and `/app/[projectId]/token-utility`
 state clearly that no token exists. They show real usage, real credit balance,

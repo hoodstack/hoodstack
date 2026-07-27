@@ -151,8 +151,8 @@ export function SiteFooter() {
             HoodStack does not provide brokerage services and does not provide investment
             advice. Asset availability may depend on jurisdiction. Developers remain
             responsible for their own legal and compliance obligations. Token utility
-            documentation is technical architecture, not an offer. The HoodStack token has
-            not launched.
+            documentation is technical architecture, not an offer or investment advice, and
+            states no price, market cap, or return.
           </p>
           <p className="pt-2">© {new Date().getFullYear()} HoodStack · Apache-2.0</p>
         </div>

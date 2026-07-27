@@ -407,7 +407,7 @@ export default function HomePage() {
             <SectionHeading
               eyebrow="Network"
               title="Capacity, not speculation."
-              lead="Service capacity is denominated in credits. A future token becomes another way to fund them, never a requirement to use the platform, and never a requirement to touch your own funds."
+              lead="Service capacity is denominated in credits. The HSTACK token is one way to fund them, never a requirement to use the platform, and never a requirement to touch your own funds."
             />
           </Reveal>
 
@@ -436,7 +436,10 @@ export default function HomePage() {
             <Panel className="mt-8 p-6">
               <h3 className="text-sm font-medium text-content">Current state</h3>
               <ul className="mt-4 grid gap-3 text-sm text-content-secondary sm:grid-cols-2">
-                <li>No token has launched. No contract has been deployed.</li>
+                <li>
+                  The HSTACK token is live on Robinhood Chain; usage credits remain the
+                  unit of capacity.
+                </li>
                 <li>
                   No token is required to create a wallet, sign in, recover access, export
                   an account, or withdraw funds.

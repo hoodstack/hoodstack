@@ -75,7 +75,7 @@ const ENTRIES: Entry[] = [
         tone: "neutral",
         items: [
           "Signed execution and automation (authentication, sessions, sponsored gas, agents, treasury, workflows) are in development, blocked on the account-abstraction write path.",
-          "No token has launched and no token contract has been deployed.",
+          "The HSTACK token is live on Robinhood Chain; usage credits remain the unit of capacity and the platform is fully usable without it.",
           "No security audit has been performed; keep production-critical flows on testnet.",
         ],
       },

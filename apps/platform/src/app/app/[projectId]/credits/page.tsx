@@ -92,7 +92,7 @@ export default async function CreditsPage({
       </section>
 
       <p className="mt-6 text-sm text-content-secondary">
-        See how credits relate to a future token in{" "}
+        See how credits relate to the HSTACK token in{" "}
         <Link
           href={`/app/${project.id}/token-utility`}
           className="text-content-brand hover:underline"

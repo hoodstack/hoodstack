@@ -26,9 +26,9 @@ const FUNDING = [
   },
   {
     label: "Verified token stake and token-funded credits",
-    state: "After launch",
+    state: "In development",
     tone: "neutral" as const,
-    body: "A future token becomes one funding source that translates into the same credits.",
+    body: "The HSTACK token is live on Robinhood Chain; the entitlement adapter that translates stake into credits is being built.",
   },
 ];
 
@@ -39,9 +39,10 @@ const BOUNDARIES = [
 ];
 
 /**
- * The Token Utility module: how a project's capacity is funded, and how a future
- * token would fit. Credits are the unit; the token is one funding source. No
- * token has launched and no contract is deployed, and the balance shown is real.
+ * The Token Utility module: how a project's capacity is funded, and how the
+ * token fits. Credits are the unit; the token is one funding source. The HSTACK
+ * token is live on Robinhood Chain; the balance shown here is the real credit
+ * balance, and capacity does not depend on the token.
  */
 export default async function TokenUtilityPage({
   params,
@@ -66,14 +67,18 @@ export default async function TokenUtilityPage({
             Credits are the unit. A token is one way to fund them.
           </h1>
         </div>
-        <StatusBadge tone="warning">No token launched</StatusBadge>
+        <StatusBadge tone="success">HSTACK live on mainnet</StatusBadge>
       </div>
 
       <p className="mb-8 max-w-2xl text-content-secondary">
-        Service capacity is denominated in usage credits, today and after any future
-        token launch. A token would become an additional funding source that translates
-        into the same credits; it never becomes a second, parallel system. No token has
-        launched and no contract is deployed. The platform is fully usable without one.
+        Service capacity is denominated in usage credits, whether or not the token funds
+        them. The token is an additional funding source that translates into the same
+        credits; it never becomes a second, parallel system. The HSTACK token is live on
+        Robinhood Chain, and the platform is fully usable without it. See the{" "}
+        <a href="/token-utility" target="_blank" rel="noreferrer noopener" className="text-content-brand hover:underline">
+          token page
+        </a>{" "}
+        for the live contract.
       </p>
 
       {/* Real current capacity. */}

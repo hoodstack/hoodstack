@@ -66,6 +66,7 @@ First public packages on npm and the early-access platform.
 
 - Signed execution and automation are in development, blocked on the
   account-abstraction write path.
-- No token has been launched. No token contract has been deployed.
+- The HSTACK token is live on Robinhood Chain (4663); usage credits remain the
+  unit of capacity and the platform is fully usable without it.
 - No security audit has been performed; keep production-critical flows on
   testnet.

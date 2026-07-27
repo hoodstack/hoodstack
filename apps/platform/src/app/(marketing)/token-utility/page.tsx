@@ -1,24 +1,50 @@
+import {
+  getExplorerTokenUrl,
+  readToken,
+  robinhood,
+  type TokenSummary,
+} from "@hoodstack/network";
 import type { Metadata } from "next";
 import { ogImages } from "@/lib/og";
 import Link from "next/link";
 
 import { Reveal } from "@/components/reveal";
 import { ButtonLink, Container, Section, SectionHeading } from "@/components/ui";
+import { HSTACK } from "@/lib/hstack";
+import { rpcUrlsForEnvironment } from "@/server/chain";
 
 export const metadata: Metadata = {
   title: "Token utility",
   openGraph: { images: ogImages("Token utility") },
   description:
-    "How a future HoodStack token would coordinate infrastructure capacity, " +
-    "and the hard boundaries it will never cross. Technical architecture, not an offer.",
+    "The HoodStack token (HSTACK) on Robinhood Chain: how it coordinates " +
+    "infrastructure capacity, and the hard boundaries it never crosses. " +
+    "Technical architecture, not an offer.",
   alternates: { canonical: "/token-utility" },
 };
+
+// Read the token live from the chain on each request.
+export const dynamic = "force-dynamic";
+
+async function readHstack(): Promise<TokenSummary | null> {
+  try {
+    return await readToken(
+      rpcUrlsForEnvironment("live"),
+      robinhood,
+      HSTACK.address,
+      undefined,
+      { timeoutMs: 10_000 },
+    );
+  } catch {
+    return null;
+  }
+}
 
 /** The capacity model: credits are the abstraction; the token is one funding source. */
 const CAPACITY_FLOW = [
   {
     step: "Fund",
-    body: "Free allocation, conventional fiat or stablecoin payment, or, after launch, verified token stake and token-funded credits.",
+    body: "Free allocation, conventional fiat or stablecoin payment, or verified token stake and token-funded credits.",
   },
   {
     step: "Credits",
@@ -102,7 +128,39 @@ const GOVERNANCE_NEVER = [
   "Unrestricted contract upgrades",
 ];
 
-export default function TokenUtilityPage() {
+/** Group the integer part with thousands separators, preserving any fraction. */
+function withGroups(value: string): string {
+  const [int, frac] = value.split(".");
+  const grouped = (int ?? "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  return frac ? `${grouped}.${frac}` : grouped;
+}
+
+function TokenStat({
+  label,
+  value,
+  sub,
+}: {
+  label: string;
+  value: string;
+  sub?: string;
+}) {
+  return (
+    <div>
+      <dt className="text-xs text-content-tertiary">{label}</dt>
+      <dd className="mt-1 hs-display text-2xl tabular-nums text-content">{value}</dd>
+      {sub ? <dd className="mt-0.5 text-xs text-content-tertiary">{sub}</dd> : null}
+    </div>
+  );
+}
+
+export default async function TokenUtilityPage() {
+  const token = await readHstack();
+  const symbol = token?.symbol ?? HSTACK.symbol;
+  const name = token?.name ?? HSTACK.name;
+  const decimals = token?.decimals ?? HSTACK.decimals;
+  const supply = token?.totalSupplyFormatted ?? null;
+  const explorerUrl = getExplorerTokenUrl(robinhood, HSTACK.address);
+
   return (
     <>
       {/* Hero. */}
@@ -113,7 +171,8 @@ export default function TokenUtilityPage() {
             Coordinate capacity. Never gate safety.
           </h1>
           <p className="mt-5 max-w-2xl text-lg text-content-secondary">
-            A future HoodStack token exists to coordinate infrastructure usage, developer
+            The HoodStack token (<span className="font-mono">{symbol}</span>) is live on
+            Robinhood Chain. It exists to coordinate infrastructure usage, developer
             capacity, sponsored gas, operator bonding, agent collateral, and bounded
             governance. It is designed around real service consumption, not speculation,
             and it never stands between you and your own funds.
@@ -121,32 +180,61 @@ export default function TokenUtilityPage() {
         </div>
       </Container>
 
-      {/* Current state, prominent and honest. */}
+      {/* Live token, read from the chain. */}
       <Container>
         <Reveal>
-          <div className="mt-8 rounded-surface border border-line bg-status-warning-bg p-6 lg:p-8">
-            <p className="hs-mono-label" style={{ color: "var(--hs-status-warning)" }}>
-              Current state
-            </p>
-            <div className="mt-4 grid gap-4 text-sm text-content-secondary sm:grid-cols-2">
-              <p>
-                <strong className="text-content">No token has launched.</strong> No token
-                contract has been deployed. Nothing on this page is an offer.
+          <div className="mt-8 rounded-surface border border-[var(--hs-border-brand-strong)] bg-surface p-6 lg:p-8">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <p className="hs-mono-label flex items-center gap-2 text-content-brand">
+                <span
+                  aria-hidden="true"
+                  className="inline-block size-1.5 rounded-pill bg-brand"
+                />
+                Live on Robinhood Chain
               </p>
-              <p>
-                <strong className="text-content">Nothing here is decided.</strong> Ticker,
-                supply, allocation, vesting, and launch timing are undetermined and are
-                not stated anywhere.
-              </p>
-              <p>
-                The platform is fully usable today without any token, funded by free
-                allocation and conventional payment.
-              </p>
-              <p>
-                A token launches only after Phase 1 is stable, never automatically, and
-                never before the product stands on its own.
-              </p>
+              <a
+                href={explorerUrl}
+                target="_blank"
+                rel="noreferrer noopener"
+                className="hs-link text-sm text-content-brand"
+              >
+                View on Blockscout ↗
+              </a>
             </div>
+
+            <dl className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+              <TokenStat label="Token" value={symbol} sub={name} />
+              <TokenStat
+                label="Total supply"
+                value={supply ? withGroups(supply) : "—"}
+                sub={symbol}
+              />
+              <TokenStat label="Decimals" value={String(decimals)} />
+              <TokenStat
+                label="Network"
+                value="Robinhood Chain"
+                sub={`Mainnet · ${HSTACK.chainId}`}
+              />
+            </dl>
+
+            <div className="mt-6 rounded-control border border-line bg-surface-inset p-4">
+              <p className="text-xs text-content-tertiary">Contract</p>
+              <a
+                href={explorerUrl}
+                target="_blank"
+                rel="noreferrer noopener"
+                className="mt-1 block break-all font-mono text-sm text-content transition-colors hover:text-content-brand"
+              >
+                {HSTACK.address}
+              </a>
+            </div>
+
+            <p className="mt-4 max-w-3xl text-xs leading-relaxed text-content-tertiary">
+              Values read live from Robinhood Chain. This is not an offer, a solicitation,
+              or investment advice, and no price, market cap, or return is stated. The
+              utility mechanisms below are being built; usage credits remain the unit of
+              capacity today, and the platform is fully usable without the token.
+            </p>
           </div>
         </Reveal>
       </Container>
@@ -158,7 +246,7 @@ export default function TokenUtilityPage() {
             <SectionHeading
               eyebrow="The abstraction"
               title="Credits are the unit. The token is one way to fund them."
-              lead="Service capacity is denominated in usage credits, today, and after any token launch. A token becomes an additional funding source that translates into credits through an entitlement adapter; it never becomes a second, parallel system."
+              lead="Service capacity is denominated in usage credits, whether or not the token funds them. A token becomes an additional funding source that translates into credits through an entitlement adapter; it never becomes a second, parallel system."
             />
           </Reveal>
 
@@ -192,7 +280,7 @@ export default function TokenUtilityPage() {
             <SectionHeading
               eyebrow="What it coordinates"
               title="Seven utilities, each with a limit."
-              lead="Every pillar carries the constraint that keeps it from becoming a way to bypass a control or manufacture speculation."
+              lead="These mechanisms are the roadmap for what the token coordinates as they ship. Every pillar carries the constraint that keeps it from becoming a way to bypass a control or manufacture speculation."
             />
           </Reveal>
 
@@ -284,21 +372,22 @@ export default function TokenUtilityPage() {
             <div className="grid gap-10 lg:grid-cols-[22rem_1fr] lg:gap-16">
               <SectionHeading
                 eyebrow="How it evolves"
-                title="Same route, before and after."
+                title="Same route, as it deepens."
                 lead="Nothing about this changes the URL or breaks what already works."
               />
               <div className="space-y-6">
                 <div className="border-l-2 border-line pl-5">
-                  <p className="hs-mono-label mb-2">Today, before any token</p>
+                  <p className="hs-mono-label mb-2">Today, credits are the unit</p>
                   <p className="text-sm text-content-secondary">
-                    Capacity runs entirely on the offchain credit ledger, funded by free
-                    allocation and conventional payment. Your dashboard shows real usage,
-                    real credit balance, and current capacity, never a fake balance,
-                    stake, APR, reward, or governance proposal.
+                    Capacity runs on the offchain credit ledger, funded by free allocation
+                    and conventional payment. Your dashboard shows real usage, real credit
+                    balance, and current capacity, never a fake balance, stake, APR,
+                    reward, or governance proposal. The token is live on-chain; its
+                    entitlements are not wired into capacity yet.
                   </p>
                 </div>
                 <div className="border-l-2 border-line-brand pl-5">
-                  <p className="hs-mono-label mb-2">After launch</p>
+                  <p className="hs-mono-label mb-2">As the adapter ships</p>
                   <p className="text-sm text-content-secondary">
                     A token entitlement adapter translates verified stake, token-funded
                     credits, and operator bonds into the same credits, reconciled only
@@ -314,24 +403,23 @@ export default function TokenUtilityPage() {
         </Container>
       </Section>
 
-      {/* Naming + legal. */}
+      {/* Token facts + legal. */}
       <Section>
         <Container>
           <Reveal>
             <div className="rounded-surface border border-line bg-surface p-6 lg:p-8">
-              <h3 className="text-sm font-medium text-content">On naming</h3>
+              <h3 className="text-sm font-medium text-content">The token</h3>
               <p className="mt-3 max-w-3xl text-sm text-content-secondary">
-                Internally we refer to a future token as{" "}
-                <code className="font-mono text-content">$HSTACK</code>. This is a
-                provisional working identifier, not a final ticker. Nothing about the
-                name, supply, allocation, vesting, price, liquidity, or listing is
-                decided, and none of it appears anywhere on this site.
+                <code className="font-mono text-content">{symbol}</code> is the token
+                symbol on Robinhood Chain (name {name}), deployed at the contract above.
+                Total supply and decimals are read from the contract. Allocation, vesting,
+                liquidity, and any exchange listing are not decided or stated here.
               </p>
               <p className="mt-4 max-w-3xl text-xs leading-relaxed text-content-tertiary">
                 This page is technical architecture, not an offer, a solicitation, or a
                 promise of any return. It contains no price prediction, market-cap target,
                 buyback, yield, or revenue-share commitment. HoodStack does not provide
-                investment advice. The HoodStack token has not launched.
+                investment advice.
               </p>
               <div className="mt-6 flex flex-wrap gap-3">
                 <ButtonLink href="/products/network" variant="secondary">
