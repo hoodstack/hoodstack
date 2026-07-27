@@ -263,6 +263,7 @@ describe("availability gating", () => {
       "tokens",
       "registry",
       "explorer",
+      "webhooks",
     ]);
     for (const module of MODULE_LIST) {
       expect(isModuleEnabled(module.id), module.id).toBe(enabled.has(module.id));

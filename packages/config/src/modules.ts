@@ -20,9 +20,10 @@ import type { HoodStackModuleId, ModuleDefinition } from "./types.js";
  * Enabled today: Data and Accounts (reads and a registry), Transactions
  * (simulation and tracking), Gas (a live tracker), Policies (evaluated against
  * simulations), Tokens (ERC-20 reads), Asset Registry (verified entries), and
- * Explorer (universal chain search). Each ships with a dashboard surface and,
- * where it applies, a public API. Every other module is `preview` until its
- * implementation lands - any other value would misrepresent it.
+ * Explorer (universal chain search), and Webhooks (signed endpoints with test
+ * delivery). Each ships with a dashboard surface and, where it applies, a public
+ * API. Every other module is `preview` until its implementation lands - any other
+ * value would misrepresent it.
  *
  * Flipping a module to `enabled` is a deliberate act with a checklist attached;
  * see `docs/operations/module-activation.md`.
@@ -249,17 +250,19 @@ export const MODULES: Readonly<Record<HoodStackModuleId, ModuleDefinition>> = {
   webhooks: {
     id: "webhooks",
     name: "Webhooks",
-    shortDescription: "Signed, retried delivery of platform events.",
+    shortDescription: "Signed endpoints and delivery verification.",
     description:
-      "Signed and timestamped payloads with replay protection, exponential backoff, " +
-      "a full delivery log, dead-letter handling, manual redelivery, and secret " +
-      "rotation - so an endpoint outage does not silently lose events.",
+      "Register HTTPS endpoints and send signed test events to confirm your receiver " +
+      "verifies and responds. Every payload is signed with HMAC-SHA256 over a " +
+      "timestamp and body, so a receiver can authenticate it and reject replays. " +
+      "Automatic delivery of your chosen events, with retries, a delivery log, and " +
+      "dead-letter handling, lands with the delivery worker.",
     category: "connectivity",
     publicHref: "/products/webhooks",
     appHref: app("webhooks"),
     docsHref: "/docs/webhooks",
     icon: "webhook",
-    availability: "preview",
+    availability: "enabled",
     relatedModules: ["data", "transactions"],
   },
 

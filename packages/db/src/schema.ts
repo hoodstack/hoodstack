@@ -220,6 +220,21 @@ export const projectAssets = pgTable(
   ],
 );
 
+/**
+ * A destination a project receives signed event deliveries at. The secret is the
+ * HMAC signing key, shown to the developer so they can verify signatures. Only
+ * public HTTPS URLs are accepted (validated in application code).
+ */
+export const webhookEndpoints = pgTable("webhook_endpoints", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  projectId: uuid("project_id")
+    .notNull()
+    .references(() => projects.id, { onDelete: "cascade" }),
+  url: text("url").notNull(),
+  secret: text("secret").notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+});
+
 export type User = typeof users.$inferSelect;
 export type NewUser = typeof users.$inferInsert;
 export type Organization = typeof organizations.$inferSelect;
@@ -240,3 +255,5 @@ export type PolicyAllowlistEntry = typeof policyAllowlist.$inferSelect;
 export type NewPolicyAllowlistEntry = typeof policyAllowlist.$inferInsert;
 export type ProjectAsset = typeof projectAssets.$inferSelect;
 export type NewProjectAsset = typeof projectAssets.$inferInsert;
+export type WebhookEndpoint = typeof webhookEndpoints.$inferSelect;
+export type NewWebhookEndpoint = typeof webhookEndpoints.$inferInsert;
