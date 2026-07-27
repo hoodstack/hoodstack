@@ -412,7 +412,7 @@ export const MODULES: Readonly<Record<HoodStackModuleId, ModuleDefinition>> = {
       "A small, typed client over the HoodStack API: create it with a project key " +
       "and call accounts, transactions, blocks, tokens, gas, and simulation with full " +
       "types and typed errors. React and server helpers build on the same core. " +
-      "Publishing to npm is in progress.",
+      "Published on npm as @hoodstack/sdk.",
     category: "developer",
     publicHref: "/products/sdk",
     appHref: app("sdks"),
@@ -430,7 +430,7 @@ export const MODULES: Readonly<Record<HoodStackModuleId, ModuleDefinition>> = {
       "A terminal client over the HoodStack API: health, account, token, " +
       "transaction, block, gas, rpc, and simulate, reading your key from the " +
       "environment and printing JSON with proper exit codes for CI. Built on " +
-      "@hoodstack/sdk. Publishing to npm is in progress.",
+      "@hoodstack/sdk, published on npm as @hoodstack/cli.",
     category: "developer",
     publicHref: "/products/cli",
     appHref: app("cli"),

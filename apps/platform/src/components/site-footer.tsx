@@ -35,6 +35,7 @@ const COLUMNS = [
       { href: "/docs", label: "Documentation", external: true },
       { href: "/docs#quickstart", label: "Quickstart", external: true },
       { href: "/docs#errors", label: "Error handling", external: true },
+      { href: "https://www.npmjs.com/~hoodstack", label: "npm", external: true },
       { href: "/changelog", label: "Changelog" },
     ],
   },

@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { getSessionUser } from "@/lib/auth/session";
 import { getProjectForMember } from "@/server/projects";
 
-import { CodeBlock, Panel, StatusBadge } from "@/components/ui";
+import { CodeBlock, Panel } from "@/components/ui";
 
 export const metadata: Metadata = { title: "SDKs" };
 export const dynamic = "force-dynamic";
@@ -62,7 +62,14 @@ export default async function SdksPage({
             TypeScript client
           </h1>
         </div>
-        <StatusBadge tone="info">Publishing to npm in progress</StatusBadge>
+        <a
+          href="https://www.npmjs.com/package/@hoodstack/sdk"
+          target="_blank"
+          rel="noreferrer noopener"
+          className="font-mono text-sm text-content-brand hover:underline"
+        >
+          @hoodstack/sdk on npm ↗
+        </a>
       </div>
 
       <p className="mb-8 max-w-2xl text-content-secondary">

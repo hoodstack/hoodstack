@@ -93,13 +93,29 @@ function DocSection({
   );
 }
 
-const PACKAGES = [
-  ["@hoodstack/network", "Chain definitions, RPC utilities, and reads", "Available"],
-  ["@hoodstack/errors", "Normalized HS_ error taxonomy", "Available"],
-  ["@hoodstack/config", "Typed product and module registry", "Available"],
-  ["@hoodstack/design-tokens", "Themed design tokens", "Available"],
-  ["@hoodstack/sdk · react", "Browser and React SDKs", "Coming soon"],
-  ["@hoodstack/cli", "Project setup and diagnostics", "Coming soon"],
+const NPM = "https://www.npmjs.com/package";
+
+const PACKAGES: { name: string; desc: string; npm: string }[] = [
+  {
+    name: "@hoodstack/sdk",
+    desc: "Typed TypeScript client for the API",
+    npm: `${NPM}/@hoodstack/sdk`,
+  },
+  {
+    name: "@hoodstack/cli",
+    desc: "The hoodstack terminal client",
+    npm: `${NPM}/@hoodstack/cli`,
+  },
+  {
+    name: "@hoodstack/network",
+    desc: "Robinhood Chain definitions and read helpers",
+    npm: `${NPM}/@hoodstack/network`,
+  },
+  {
+    name: "@hoodstack/errors",
+    desc: "Normalized HS_ error taxonomy",
+    npm: `${NPM}/@hoodstack/errors`,
+  },
 ];
 
 export default function DocsHomePage() {
@@ -286,25 +302,32 @@ export default function DocsHomePage() {
       </DocSection>
 
       <DocSection id="packages" title="Packages">
+        <p>Published on npm, Apache-2.0.</p>
         <ul className="divide-y divide-line overflow-hidden rounded-card border border-line">
-          {PACKAGES.map(([name, desc, status]) => (
+          {PACKAGES.map((pkg) => (
             <li
-              key={name}
+              key={pkg.name}
               className="flex flex-col gap-1 bg-surface p-4 sm:flex-row sm:items-center sm:justify-between"
             >
               <div>
-                <code className="font-mono text-sm text-content">{name}</code>
-                <p className="text-xs text-content-tertiary">{desc}</p>
+                <a
+                  href={pkg.npm}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="font-mono text-sm text-content hover:text-content-brand"
+                >
+                  {pkg.name}
+                </a>
+                <p className="text-xs text-content-tertiary">{pkg.desc}</p>
               </div>
-              <span
-                className={`shrink-0 font-mono text-xs ${
-                  status === "Available"
-                    ? "text-content-brand"
-                    : "text-content-tertiary"
-                }`}
+              <a
+                href={pkg.npm}
+                target="_blank"
+                rel="noreferrer noopener"
+                className="shrink-0 font-mono text-xs text-content-brand hover:underline"
               >
-                {status}
-              </span>
+                npm ↗
+              </a>
             </li>
           ))}
         </ul>
