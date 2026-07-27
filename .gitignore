@@ -98,3 +98,4 @@ yarn-error.log*
 # Kept locally as working documents; not published to the public repository.
 /PROJECT_STATUS.md
 /IMPLEMENTATION_PLAN.md
+/ROADMAP_INTERNAL.md
