@@ -19,6 +19,12 @@ const serverSchema = z.object({
   UPSTASH_REDIS_REST_TOKEN: z.string().min(1).optional(),
   HOODSTACK_RPC_URL_MAINNET: z.string().url().optional().or(z.literal("")),
   HOODSTACK_RPC_URL_TESTNET: z.string().url().optional().or(z.literal("")),
+  // Relayer EOAs that submit UserOperations (handleOps) and pay gas. Server-only,
+  // never the client. A relayer can never move account funds - it only relays
+  // signed ops - so its blast radius is its own gas float. Absent = writes stay
+  // preview for that network.
+  HOODSTACK_RELAYER_KEY_TESTNET: z.string().optional().or(z.literal("")),
+  HOODSTACK_RELAYER_KEY_MAINNET: z.string().optional().or(z.literal("")),
   NEXT_PUBLIC_PRIVY_APP_ID: z.string().min(1, "NEXT_PUBLIC_PRIVY_APP_ID is required"),
 });
 
