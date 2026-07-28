@@ -1,19 +1,11 @@
 # Security policy
 
-## Current security posture
+## Security posture
 
-State this plainly, because it determines how you should treat this software:
-
-**HoodStack is live and has not been audited.** No independent security
-review has been performed. No formal verification has been performed. No bug
-bounty is currently funded.
-
-Mainnet writes are disabled by default and should stay that way until this
-section says otherwise.
-
-HoodStack does not describe itself as bank-grade, military-grade, unhackable,
-audited, battle-tested, or institutional-grade. None of those claims would be
-true, and this document will be updated when any of them becomes verifiable.
+HoodStack is live and actively developed. It has not completed an independent
+security audit or formal verification, no bug bounty is currently funded, and
+mainnet writes are disabled by default. This document is updated as that posture
+changes.
 
 ## Reporting a vulnerability
 
