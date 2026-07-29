@@ -20,6 +20,9 @@ import {
 import { privateKeyToAccount } from "viem/accounts";
 
 import type { KeyEnvironment } from "@/lib/api-keys";
+import type { CallRequest, SerializedUserOp, SubmitResult } from "@/lib/aa-types";
+
+export type { CallRequest, SerializedUserOp, SubmitResult } from "@/lib/aa-types";
 
 /**
  * The smart-account adapter: the platform's write path.
@@ -34,29 +37,6 @@ import type { KeyEnvironment } from "@/lib/api-keys";
  * No standalone bundler: for a single-operator platform, submitting handleOps
  * directly from a server action is the whole bundler. Verified on-chain first.
  */
-
-export type CallRequest = { to: Address; valueWei: string; data?: Hex };
-
-/** A UserOperation with numeric fields as hex strings, safe to send over the wire. */
-export type SerializedUserOp = {
-  sender: Address;
-  nonce: Hex;
-  factory?: Address;
-  factoryData?: Hex;
-  callData: Hex;
-  callGasLimit: Hex;
-  verificationGasLimit: Hex;
-  preVerificationGas: Hex;
-  maxFeePerGas: Hex;
-  maxPriorityFeePerGas: Hex;
-  signature: Hex;
-};
-
-export type SubmitResult = {
-  userOpHash: Hex;
-  transactionHash: Hex;
-  success: boolean;
-};
 
 const KERNEL = { version: "0.3.1", useMetaFactory: false } as const;
 const EP = { address: entryPoint07Address, version: "0.7" } as const;

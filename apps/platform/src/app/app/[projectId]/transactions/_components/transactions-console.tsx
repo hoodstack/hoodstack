@@ -7,13 +7,15 @@ import { useEffect, useState, useTransition } from "react";
 import { useNetwork } from "@/components/network/network-provider";
 import { Button, DefinitionRow, StatusBadge, cx } from "@/components/ui";
 
+import { SubmitTransaction } from "./submit-transaction";
+
 import {
   lookupTransactionAction,
   simulateTransactionAction,
 } from "../actions";
 import type { PolicyViolation } from "@/server/policies";
 
-type Mode = "simulate" | "track";
+type Mode = "simulate" | "track" | "submit";
 
 /**
  * Transactions console: simulate a call against the chain (with a policy check)
@@ -80,7 +82,7 @@ export function TransactionsConsole({ projectId }: { projectId: string }) {
     <div className="flex flex-col gap-5">
       <div className="flex flex-wrap items-center gap-3">
         <div className="inline-flex rounded-control border border-line-strong p-0.5">
-          {(["simulate", "track"] as const).map((m) => (
+          {(["simulate", "track", "submit"] as const).map((m) => (
             <button
               key={m}
               type="button"
@@ -114,16 +116,20 @@ export function TransactionsConsole({ projectId }: { projectId: string }) {
             </Button>
           </div>
         </form>
-      ) : (
+      ) : mode === "track" ? (
         <form action={track} className="flex flex-col gap-3 sm:flex-row">
           <input name="hash" placeholder="0x… transaction hash" disabled={pending} className={inputClass} spellCheck={false} />
           <Button type="submit" disabled={pending}>
             {pending ? "Looking up" : "Look up"}
           </Button>
         </form>
+      ) : (
+        <SubmitTransaction projectId={projectId} environment={environment} />
       )}
 
-      {error ? <p className="text-sm text-status-danger">{error}</p> : null}
+      {mode !== "submit" && error ? (
+        <p className="text-sm text-status-danger">{error}</p>
+      ) : null}
 
       {sim ? <SimulationCard result={sim} projectId={projectId} /> : null}
       {tx ? <TransactionCard tx={tx} /> : null}
