@@ -1,6 +1,8 @@
 import Link from "next/link";
 import type { ButtonHTMLAttributes, ReactNode } from "react";
 
+import { LinkPending } from "@/components/link-pending";
+
 /**
  * Shared primitives for the platform application.
  *
@@ -123,6 +125,7 @@ export function ButtonLink({
   return (
     <Link href={href} className={classes}>
       {children}
+      <LinkPending />
     </Link>
   );
 }

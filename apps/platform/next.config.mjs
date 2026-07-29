@@ -6,6 +6,7 @@
  * provide. It lives in `src/middleware.ts`. Everything below is request-agnostic
  * and safe to set statically.
  */
+import { fileURLToPath } from "node:url";
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -22,7 +23,7 @@ const nextConfig = {
 
   // Pin the workspace root. Next.js otherwise walks up and can select an
   // unrelated lockfile outside the repository as the trace root.
-  outputFileTracingRoot: new URL("../../", import.meta.url).pathname,
+  outputFileTracingRoot: fileURLToPath(new URL("../../", import.meta.url)),
 
   async redirects() {
     return [
