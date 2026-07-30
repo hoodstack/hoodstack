@@ -48,9 +48,11 @@ metered.
 ```ts
 const client = createClient({
   apiKey: string,
-  baseUrl?: string,   // defaults to https://www.hoodstack.io
+  baseUrl?: string,     // defaults to https://www.hoodstack.io
   fetch?: typeof fetch,
-  timeoutMs?: number, // defaults to 15000
+  timeoutMs?: number,   // per-request timeout, defaults to 15000
+  maxRetries?: number,  // transient-failure retries, defaults to 2 (0 disables)
+  retryBaseMs?: number, // backoff base, doubled per attempt, defaults to 200
 });
 
 client.health();                          // key check + chain
@@ -62,6 +64,17 @@ client.data.block(number = "latest");     // a block header
 client.data.token(address, holder?);      // ERC-20 metadata + holder balance
 client.tx.simulate({ to, from?, valueWei?, data? });
 ```
+
+## Reliability & performance
+
+- **Retries.** Network errors, timeouts, and retryable API errors (rate limits,
+  transient upstream failures) are retried with exponential backoff and jitter,
+  honoring a `Retry-After` header. Only idempotent reads are retried. Tune with
+  `maxRetries` / `retryBaseMs`, or set `maxRetries: 0` to disable.
+- **Coalescing.** Concurrent identical `GET` reads share one round-trip, so a UI
+  that requests the same account from several components hits the API once.
+- **Connection reuse.** On Node the global `fetch` (undici) pools connections,
+  so repeated calls reuse the socket. No configuration needed.
 
 ## Errors
 

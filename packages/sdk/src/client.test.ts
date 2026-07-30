@@ -78,11 +78,92 @@ describe("HoodStackClient", () => {
     const fetchImpl = stub(() => {
       throw new Error("network down");
     });
-    const client = new HoodStackClient({ apiKey: "hs_test_abc", fetch: fetchImpl });
+    const client = new HoodStackClient({
+      apiKey: "hs_test_abc",
+      fetch: fetchImpl,
+      maxRetries: 0,
+    });
 
     await expect(client.gas()).rejects.toMatchObject({
       code: "HS_PROVIDER_UNAVAILABLE",
       retryable: true,
     });
+  });
+
+  it("retries a transient network failure, then succeeds", async () => {
+    let calls = 0;
+    const fetchImpl = stub(() => {
+      calls += 1;
+      if (calls === 1) throw new Error("flaky");
+      return ok({ gasPriceGwei: "1" });
+    });
+    const client = new HoodStackClient({ apiKey: "k", fetch: fetchImpl, retryBaseMs: 0 });
+
+    const gas = await client.gas();
+    expect(calls).toBe(2);
+    expect(gas.gasPriceGwei).toBe("1");
+  });
+
+  it("retries a retryable API error (rate limit), then succeeds", async () => {
+    let calls = 0;
+    const fetchImpl = stub(() => {
+      calls += 1;
+      if (calls === 1)
+        return new Response(
+          JSON.stringify({ ok: false, requestId: "r1", error: { code: "HS_RATE_LIMITED" } }),
+          { status: 429, headers: { "retry-after": "0" } },
+        );
+      return ok({ gasPriceGwei: "1" });
+    });
+    const client = new HoodStackClient({ apiKey: "k", fetch: fetchImpl, retryBaseMs: 0 });
+
+    await client.gas();
+    expect(calls).toBe(2);
+  });
+
+  it("does not retry a non-retryable error", async () => {
+    let calls = 0;
+    const fetchImpl = stub(() => {
+      calls += 1;
+      return fail(401, "HS_INVALID_API_KEY");
+    });
+    const client = new HoodStackClient({ apiKey: "bad", fetch: fetchImpl, retryBaseMs: 0 });
+
+    await expect(client.health()).rejects.toMatchObject({ code: "HS_INVALID_API_KEY" });
+    expect(calls).toBe(1);
+  });
+
+  it("stops after maxRetries", async () => {
+    let calls = 0;
+    const fetchImpl = stub(() => {
+      calls += 1;
+      throw new Error("down");
+    });
+    const client = new HoodStackClient({
+      apiKey: "k",
+      fetch: fetchImpl,
+      maxRetries: 1,
+      retryBaseMs: 0,
+    });
+
+    await expect(client.gas()).rejects.toMatchObject({ code: "HS_PROVIDER_UNAVAILABLE" });
+    expect(calls).toBe(2);
+  });
+
+  it("coalesces concurrent identical GET reads onto one round-trip", async () => {
+    let calls = 0;
+    const fetchImpl = stub(() => {
+      calls += 1;
+      return ok({ address: "0xabc", balanceFormatted: "1 ETH", nonce: 0, isContract: false });
+    });
+    const client = new HoodStackClient({ apiKey: "k", fetch: fetchImpl });
+
+    const [a, b] = await Promise.all([
+      client.data.account("0xabc"),
+      client.data.account("0xabc"),
+    ]);
+    expect(calls).toBe(1);
+    expect(a.address).toBe("0xabc");
+    expect(b.address).toBe("0xabc");
   });
 });

@@ -9,6 +9,13 @@ Module activations are recorded here - see
 
 ## [Unreleased]
 
+### Changed
+
+- `@hoodstack/sdk` 0.2.0 - retry transient failures (network errors, timeouts,
+  and retryable API errors) with jittered exponential backoff, honoring a
+  `Retry-After` header; coalesce concurrent identical reads onto one round-trip;
+  and add `maxRetries` / `retryBaseMs` options. No new dependencies.
+
 ### In development
 
 - The account-abstraction write path: authentication, sessions, sponsored gas,
