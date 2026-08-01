@@ -41,6 +41,10 @@ export const DOCS_NAV: readonly DocsNavGroup[] = [
     ],
   },
   {
+    heading: "Guides",
+    items: [{ label: "AI agents", href: "#agents" }],
+  },
+  {
     heading: "Reference",
     items: [
       { label: "Error handling", href: "#errors" },

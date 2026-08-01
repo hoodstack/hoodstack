@@ -59,6 +59,38 @@ const RPC_CURL = `curl -X POST https://www.hoodstack.io/api/v1/rpc \\
   -H "content-type: application/json" \\
   -d '{"method":"eth_blockNumber"}'`;
 
+const AGENT_MCP = `{
+  "mcpServers": {
+    "hoodstack": {
+      "command": "npx",
+      "args": ["-y", "@hoodstack/agent-kit", "hoodstack-mcp"],
+      "env": { "HOODSTACK_API_KEY": "hs_test_your_key" }
+    }
+  }
+}`;
+
+const AGENT_TOOLKIT = `import { createHoodStackAgent } from "@hoodstack/agent-kit";
+
+const agent = createHoodStackAgent({ apiKey: process.env.HOODSTACK_API_KEY! });
+
+// Every tool is a read or a simulation - nothing is signed or submitted.
+const gas = await agent.run("hoodstack_get_gas", {});
+const sim = await agent.run("hoodstack_simulate_transaction", {
+  to: "0x…",
+  valueWei: "10000000000000000",
+});`;
+
+const AGENT_TOOLS: readonly (readonly [string, string])[] = [
+  ["hoodstack_health", "Verify the key and report the network and project"],
+  ["hoodstack_get_account", "Balance, nonce, and contract detection for an address"],
+  ["hoodstack_get_transaction", "A transaction and its receipt, by hash"],
+  ["hoodstack_get_block", "A block header (latest by default)"],
+  ["hoodstack_get_token", "ERC-20 metadata and an optional holder balance"],
+  ["hoodstack_get_gas", "Current gas price, base fee, and transfer cost"],
+  ["hoodstack_simulate_transaction", "Simulate a call and estimate gas, no signing"],
+  ["hoodstack_rpc", "A read-only JSON-RPC call for anything else"],
+];
+
 const ERROR_USAGE = `import { isHoodStackError } from "@hoodstack/errors";
 
 try {
@@ -290,6 +322,44 @@ export default function DocsHomePage() {
           <code className="font-mono">/api/v1/rpc</code>:
         </p>
         <CodeBlock code={RPC_CURL} label="raw RPC" />
+      </DocSection>
+
+      <DocSection id="agents" title="AI agents">
+        <p>
+          <code className="font-mono">@hoodstack/agent-kit</code> gives an AI agent safe,
+          typed access to Robinhood Chain through a project API key. One small package ships
+          two things: an <strong className="text-content">MCP server</strong> for any Model
+          Context Protocol client, and a{" "}
+          <strong className="text-content">framework-agnostic toolkit</strong> for the Vercel
+          AI SDK, LangChain, or a raw function-calling loop.
+        </p>
+        <p>
+          Every tool is a <strong className="text-content">read or a simulation</strong>, so
+          an agent can plan and verify before anything is signed. There is no signing key in
+          the package, and HoodStack cannot move user funds.
+        </p>
+        <p>Point an MCP client (Claude Desktop, Claude Code) at it and set your key:</p>
+        <CodeBlock code={AGENT_MCP} label="claude_desktop_config.json" />
+        <p>Or import the tools into your own agent:</p>
+        <CodeBlock code={AGENT_TOOLKIT} label="agent.ts" />
+        <p>Eight tools, each authenticated by your key and metered through the gateway:</p>
+        <ul className="ml-1 space-y-1.5 text-sm">
+          {AGENT_TOOLS.map(([name, desc]) => (
+            <li key={name}>
+              <code className="font-mono text-content">{name}</code> — {desc}
+            </li>
+          ))}
+        </ul>
+        <p className="text-sm text-content-tertiary">
+          Signed, policy-bounded execution — an agent submitting from a smart account it
+          owns, bounded by server-side spend limits and allowlists, relayed by HoodStack — is
+          on the account-abstraction roadmap. It stays non-custodial: the agent signs, the
+          relayer only relays. Read the overview on the{" "}
+          <Link href="/agents" className="text-content-brand hover:underline">
+            AI Agents page
+          </Link>
+          .
+        </p>
       </DocSection>
 
       <DocSection id="errors" title="Error handling">
